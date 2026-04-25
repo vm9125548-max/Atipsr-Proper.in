@@ -279,4 +279,62 @@ GitHub par `index.html` mein update kar do bhai, ye ekdum secure aur corporate l
         /* Deep Sync & Lock System */
         .upload-area { border: 2px dashed #444; border-radius: 15px; padding: 50px; cursor: pointer; transition: 0.3s; position: relative; margin: 20px 0; }
         .upload-area:hover { background: rgba(66, 133, 244, 0.05); border-color: var(--google-blue); }
-        .btn-start { background: linear-gradient(90deg, #4
+        .btn-start { background: linear-gradient(90deg, #4 <script>
+async function processNandikaAI() {
+    let input = document.getElementById('user-box').value.toLowerCase().trim();
+    let outputArea = document.getElementById('ai-output');
+    let response = "";
+
+    // 1. TENSION FREE & HEALING (With Privacy Guarantee)
+    if(input.includes("dard") || input.includes("sad") || input.includes("tension") || input.includes("pareshan") || input.includes("dikkat")) {
+        response = "आप फिक्र मत कीजिए, मैं हूँ न। वैभव जी ने यही कहा है कि हम आपसे बात करें और आपके काम को आसान करें। आपको जो भी परेशानी या दिक्कत हो, आप हमसे शेयर कर सकते हैं। आपकी बात कहीं और लीक नहीं होती है, सिर्फ हमारे पास ही रहती है। यह हम दोनों के बीच की बात है। सब ठीक हो जाएगा, मुस्कुराइए!";
+    }
+
+    // 2. IDENTITY (The Personal Assistant)
+    else if(input.includes("kaun ho") || input.includes("naam") || input.includes("intro") || input.includes("malik")) {
+        response = "मेरा नाम नंदिका है। मैं वैभव जी की पर्सनल असिस्टेंट हूँ। उन्होंने मुझे आपकी सेवा और हर मुश्किल काम को आसान बनाने के लिए बनाया है। मैं आपको हर विषय की पूरी जानकारी दे सकती हूँ।";
+    }
+
+    // 3. SMART KNOWLEDGE LOGIC (Google AI की तरह जवाब देने के लिए)
+    else if(input.includes("kya hai") || input.includes("kaun hai") || input.includes("kaise") || input.includes("batao")) {
+        if(input.includes("google")) response = "गूगल दुनिया का सबसे बड़ा सर्च इंजन है, जिसके CEO सुंदर पिचाई हैं। यह इंटरनेट की हर जानकारी को आप तक पहुँचाता है।";
+        else if(input.includes("ai")) response = "AI यानी आर्टिफिशियल इंटेलिजेंस, एक ऐसी तकनीक है जिससे मशीनें इंसानों की तरह सोच और समझ सकती हैं। मैं भी इसी तकनीक पर आधारित हूँ।";
+        else if(input.includes("internet")) response = "इंटरनेट पूरी दुनिया के कंप्यूटरों का एक जाल है, जिससे हम पल भर में कोई भी जानकारी शेयर कर सकते हैं।";
+        else if(input.includes("weather") || input.includes("mausam")) response = "मौसम की जानकारी के लिए आपको अपने शहर का नाम बताना होगा, ताकि मैं आपको सटीक जानकारी दे सकूँ।";
+        else {
+            response = "आपने बहुत ही अच्छा सवाल पूछा है। इसके बारे में विस्तार से जानकारी देना मेरा काम है। क्या आप चाहते हैं कि मैं इसके मुख्य बिंदुओं के बारे में बताऊँ?";
+        }
+    }
+
+    // 4. CARE & GREETINGS
+    else if(input.includes("hello") || input.includes("hi") || input.includes("namaste") || input.includes("kaise ho")) {
+        response = "नमस्ते! मैं नंदिका हूँ। वैभव जी की कृपा से मैं बहुत अच्छी हूँ। आप बताइए, आज मैं आपके काम को कैसे आसान बना सकती हूँ?";
+    }
+
+    // 5. BHOJPURI TOUCH
+    else if(input.includes("ka haal ba") || input.includes("ka ho")) {
+        response = "हाल-चाल एकदम मस्त बा हो! महादेव की कृपा बनल रहे। रउवा बताईं, कवन सेवा करीं?";
+    }
+
+    // DEFAULT RESPONSE (AI Thinking Style)
+    else {
+        response = "आपकी बात मैं समझ रही हूँ। वैभव जी ने मुझे सिखाया है कि मैं आपकी हर बात का गहराई से जवाब दूँ। कृपया अपनी बात को थोड़ा और विस्तार से कहें ताकि मैं आपको पूरी जानकारी दे सकूँ।";
+    }
+
+    // VOICE & OUTPUT SETTINGS
+    outputArea.innerText = response;
+    window.speechSynthesis.cancel(); 
+
+    let voice = new SpeechSynthesisUtterance(response);
+    voice.lang = "hi-IN";
+    voice.rate = 0.9; 
+    voice.pitch = 1.1; 
+
+    let voices = window.speechSynthesis.getVoices();
+    let femaleVoice = voices.find(v => (v.name.includes('Female') || v.name.includes('Hindi')) && v.lang === 'hi-IN');
+    if (femaleVoice) voice.voice = femaleVoice;
+
+    window.speechSynthesis.speak(voice);
+}
+</script>
+    
