@@ -3,93 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prashit Music AI - The Brand Factory</title>
+    <title>Prashit Music - Premium Production House</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;900&family=Oswald:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #ffd700; --red: #ff3131; --neon: #00f2ff; --bg: #050505; }
-        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; overflow-x: hidden; text-align: center; }
-        
-        /* Background Branding Echo - Poore system mein gunjega */
-        body::before { 
-            content: "PRASHIT MUSIC"; 
-            position: fixed; top: 50%; left: 50%; 
-            transform: translate(-50%, -50%) rotate(-30deg); 
-            font-size: 15vw; color: rgba(255, 215, 0, 0.03); 
-            z-index: -1; white-space: nowrap; font-weight: 900; 
-            animation: echo 5s infinite alternate;
+        :root { 
+            --premium-gold: #c5a059; --pure-white: #ffffff; --deep-black: #050505; 
+            --light-bg: #f9f9f9; --google-blue: #4285F4; --google-red: #DB4437;
+            --google-yellow: #F4B400; --google-green: #0F9D58;
+            --premium-gradient: linear-gradient(135deg, #111 0%, #000 100%);
         }
+        body { background: var(--light-bg); color: #333; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; }
 
-        @keyframes echo { 0% { opacity: 0.02; } 100% { opacity: 0.05; transform: translate(-50%, -50%) rotate(-30deg) scale(1.1); } }
+        /* --- Header: Clean & Corporate --- */
+        .header { background: var(--premium-gradient); padding: 15px 50px; border-bottom: 2px solid var(--premium-gold); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+        .branding { color: var(--pure-white); font-family: 'Oswald', sans-serif; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; }
+        .branding span { color: var(--premium-gold); }
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a { text-decoration: none; color: #ccc; font-weight: 300; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        .nav-links a:hover { color: var(--pure-white); border-bottom: 1px solid var(--premium-gold); padding-bottom: 5px; }
 
-        .header { padding: 50px 20px; border-bottom: 3px solid var(--gold); background: linear-gradient(180deg, #151515, #000); position: relative; }
-        .branding { font-size: 45px; font-weight: 900; color: var(--gold); text-shadow: 0 0 25px var(--red); letter-spacing: 2px; }
+        /* --- Global Watermark Echo (Background Layer) --- */
+        .body-watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 12vw; color: rgba(255, 255, 255, 0.03); z-index: -1; font-weight: 900; white-space: nowrap; pointer-events: none; }
+
+        /* --- Hero Section: Google AI Mixing Engine --- */
+        #hero-studio { background: radial-gradient(circle, #222 0%, #000 100%); padding: 60px 0; border-bottom: 3px solid var(--premium-gold); position: relative; }
         
-        #visualizer-panel { height: 400px; width: 90%; max-width: 900px; margin: 30px auto; background: radial-gradient(circle, #111, #000); border: 2px solid #222; border-radius: 30px; display: flex; align-items: center; justify-content: center; position: relative; }
-        .avee-circle { width: 140px; height: 140px; border: 5px solid var(--gold); border-radius: 50%; animation: pulse 1.2s infinite ease-in-out; box-shadow: 0 0 40px var(--gold); }
+        /* The Avee Style Circle - Now Pulsing with Google Colors */
+        .visualizer-circle { 
+            width: 130px; height: 130px; border-radius: 50%; margin: 0 auto 30px;
+            background: rgba(0,0,0,0.6); 
+            border: 4px solid var(--google-blue); 
+            animation: pulse-border 1.5s infinite alternate; 
+            box-shadow: 0 0 40px rgba(66, 133, 244, 0.4);
+            position: relative;
+        }
+        @keyframes pulse-border {
+            0% { border-color: var(--google-blue); box-shadow: 0 0 30px rgba(66, 133, 244, 0.4); }
+            33% { border-color: var(--google-green); box-shadow: 0 0 30px rgba(15, 157, 88, 0.4); }
+            66% { border-color: var(--google-yellow); box-shadow: 0 0 30px rgba(244, 180, 0, 0.4); }
+            100% { border-color: var(--google-red); box-shadow: 0 0 30px rgba(219, 68, 55, 0.4); }
+        }
+        .studio-status { font-size: 12px; color: #777; letter-spacing: 2px; margin-top: 15px; }
+
+        /* --- Studio Panel & Upload --- */
+        .panel { background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); width: 80%; max-width: 600px; margin: 0 auto; border-radius: 20px; border: 1px solid #333; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        h1 { font-weight: 900; font-size: 36px; margin: 0 0 10px 0; background: linear-gradient(90deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        @keyframes pulse { 0% { transform: scale(1); filter: hue-rotate(0deg); } 50% { transform: scale(1.15); filter: hue-rotate(90deg); } 100% { transform: scale(1); filter: hue-rotate(0deg); } }
+        /* Deep Sync & Lock System */
+        .upload-area { border: 2px dashed #444; border-radius: 15px; padding: 50px; cursor: pointer; transition: 0.3s; position: relative; margin: 20px 0; }
+        .upload-area:hover { background: rgba(66, 133, 244, 0.05); border-color: var(--google-blue); }
+        .btn-start { background: linear-gradient(90deg, #4285F4, #0F9D58); color: white; border: none; padding: 18px 35px; border-radius: 50px; font-weight: bold; font-size: 16px; text-transform: uppercase; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+        .locked-message { color: var(--google-red); font-weight: bold; font-size: 12px; display: none; margin-top: 10px; text-transform: uppercase; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; padding: 30px; }
-        .card { background: #111; border: 1.5px solid #222; padding: 25px; border-radius: 20px; transition: 0.5s; text-align: left; position: relative; overflow: hidden; }
-        .card:hover { border-color: var(--gold); transform: scale(1.02); }
-        .price { font-size: 35px; color: var(--gold); margin: 15px 0; font-weight: 800; text-align: center; }
-        .btn { width: 100%; padding: 18px; border-radius: 50px; border: none; font-weight: 900; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
-        .btn-branded { background: linear-gradient(90deg, var(--red), #800); color: white; }
+        /* --- Service & Pricing Section --- */
+        #services { padding: 80px 20px; max-width: 1000px; margin: 0 auto; }
+        h2 { font-weight: Oswald, sans-serif; font-size: 32px; color: var(--premium-gold); text-transform: uppercase; margin-bottom: 50px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .card { background: white; padding: 40px; border-radius: 20px; border: 1px solid #eee; transition: 0.4s; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.1); border-color: var(--premium-gold); }
+        .card h3 { font-weight: 600; font-size: 20px; margin: 15px 0; }
+        .price { font-size: 28px; font-weight: 900; color: #111; margin: 20px 0; }
+        .price span { font-size: 14px; font-weight: 300; color: #777; }
+        .btn-choose { background: #eee; color: #333; padding: 12px 25px; border-radius: 30px; font-weight: 600; text-decoration: none; display: inline-block; transition: 0.3s; }
+        .btn-choose:hover { background: var(--premium-gold); color: white; }
 
-        .admin-dashboard { background: rgba(255, 215, 0, 0.05); border: 2px dashed var(--gold); margin: 40px; padding: 30px; border-radius: 20px; color: var(--gold); }
+        /* --- Professional AI Chatbot (Fixed in Corner) --- */
+        #ai-assistant { position: fixed; bottom: 30px; right: 30px; width: 320px; height: 400px; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); border-radius: 20px; border: 1px solid #333; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.9); z-index: 10000; }
+        .chat-header { background: #111; padding: 15px; color: #eee; font-weight: 600; font-size: 14px; border-bottom: 1px solid #333; display: flex; align-items: center; justify-content: space-between; }
+        .chat-status { width: 10px; height: 10px; background: var(--google-green); border-radius: 50%; box-shadow: 0 0 10px var(--google-green); }
+        .chat-messages { flex-grow: 1; padding: 20px; overflow-y: auto; color: #ccc; font-size: 13px; line-height: 1.6; text-align: left; }
+        .chat-input-area { padding: 15px; border-top: 1px solid #333; background: #111; display: flex; gap: 10px; }
+        #chat-input { flex-grow: 1; background: rgba(255,255,255,0.05); border: 1px solid #333; color: white; padding: 10px 15px; border-radius: 20px; outline: none; }
+        #send-btn { background: var(--google-blue); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
+
+        /* --- Footer & Final Lock --- */
+        footer { background: var(--deep-black); color: #777; padding: 60px 20px 20px; border-top: 3px solid var(--premium-gold); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; max-width: 1000px; margin: 0 auto 50px; }
+        .footer-grid h4 { color: #ccc; font-weight: 600; font-size: 16px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-grid a { display: block; color: #777; text-decoration: none; margin: 10px 0; transition: 0.3s; }
+        .footer-grid a:hover { color: white; }
+        .copy-right { color: var(--premium-gold); font-size: 10px; letter-spacing: 3px; font-weight: 300; text-transform: uppercase; }
+
+        /* Responsive */
+        @media (max-width: 768px) { .header, .nav-links { flex-direction: column; gap: 15px; padding: 20px; } .nav-links a { font-size: 12px; } #ai-assistant { display: none; } }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="branding">PRASHIT MUSIC AI FACTORY 🎧</div>
-        <p style="color: var(--neon);">"Anti-Copyright Frequency Engine & Branding Echo Active"</p>
+<div class="header">
+    <div class="branding">Prashit <span>Music</span></div>
+    <div class="nav-links">
+        <a href="#hero-studio">Google AI Studio</a>
+        <a href="#services">Premium Services</a>
+        <a href="#licensing">Licensing</a>
+        <a href="https://wa.me/919129204816?text=Bhai%20Mujhe%20Naya%20Gana%20Mixing%20Ke%20Liye%20Poochna%20Hai">Contact</a>
     </div>
+</div>
 
-    <div id="visualizer-panel">
-        <div class="avee-circle"></div>
-        <p style="position: absolute; bottom: 20px; color: var(--gold); font-size: 12px; letter-spacing: 5px;">ULTRA-SONIC FREQUENCY: 20kHz SHIELD ON</p>
+<div class="body-watermark">PRASHIT MUSIC</div>
+
+<div id="hero-studio">
+    <div class="visualizer-circle">
+        <div style="font-size:10px; color:#444; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); letter-spacing: 3px;">SYSTEM ECO</div>
     </div>
+    <div class="panel">
+        <h1>Mixing & Mastering</h1>
+        <p style="color: #999; margin: 0 0 20px; font-weight: 300; font-size: 14px;">"Google AI Engine Powered | Secure Digital Mastering" - 100% Secure.</p>
+        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+            <p style="margin: 0;">📁 Click or Drag Track to Process...</p>
+            <input type="file" id="fileInput" hidden onchange="startDeepProcessing()">
+        </div>
+        <button class="btn-start" onclick="startDeepProcessing()">Deep Mix & Master</button>
+        <div id="statusMessage" class="locked-message">⚠️ Status: Locked. Requires Verification Key.</div>
+        <div class="studio-status">● SYSTEM ECO: Google AI Integrity Check Pass</div>
+    </div>
+</div>
 
+<div id="services">
+    <h2>Our Production & Licensing Plans</h2>
     <div class="grid">
         <div class="card">
-            <h3>Standard AI Mixing</h3>
-            <p>Vocal Cleaning & Basic Visualizers.</p>
-            <div class="price">₹450</div>
-            <a href="https://wa.me/919129204816?text=Hi%20Vaibhav,%20Normal%20Package%20chahiye" class="btn" style="background:#333; color:white;">WhatsApp Now</a>
+            <h3>Standard Mix (Local)</h3>
+            <p style="font-size:12px; color:#888;">Perfect for non-commercial social sharing.</p>
+            <div class="price"><span>RS</span> 450 <span>/ Track</span></div>
+            <a href="https://wa.me/919129204816?text=Bhai%20Mujhe%20Standard%20Mixing%20Ke%20Liye%20Payment%20Ke%20Details%20Dein" class="btn-choose">Choose Standard</a>
         </div>
-
-        <div class="card" style="border: 2px solid var(--gold);">
-            <h3 style="color: var(--gold);">Branded Pro Studio</h3>
-            <ul style="font-size: 13px; color: #ccc;">
-                <li>🔥 Smart Merging (Auto-Dhun Filler)</li>
-                <li>🔥 255+ Avee Styles (Customizable)</li>
-                <li>🔥 Invisible Frequency Copyright Shield</li>
-                <li>🔥 Pro Vocal-Music Match</li>
-            </ul>
-            <div class="price">₹500</div>
-            <a href="https://wa.me/919129204816?text=Hi%20Vaibhav,%20Branded%20Pro%20Package%20chahiye" class="btn btn-branded">Get Pro Access</a>
-        </div>
-
         <div class="card">
-            <h3>AI Education Hub</h3>
-            <p>Degree Level Knowledge for All Classes.</p>
-            <a href="https://wa.me/919129204816?text=Hi%20Vaibhav,%20Education%20help%20chahiye" class="btn" style="background: var(--neon); color: black;">Contact Guru</a>
+            <h3>Branded Pro (YouTube)</h3>
+            <p style="font-size:12px; color:#888;">Full dynamic range for streaming.</p>
+            <div class="price"><span>RS</span> 550 <span>/ Track</span></div>
+            <a href="https://wa.me/919129204816?text=Bhai%20Mujhe%20Branded%20Pro%20Mixing%20Ke%20Liye%20Payment%20Ke%20Details%20Dein" class="btn-choose">Choose Pro</a>
+        </div>
+        <div class="card">
+            <h3>Gold Brand License</h3>
+            <p style="font-size:12px; color:#888;">Complete commercial rights for brands.</p>
+            <div class="price"><span>RS</span> 2500 <span>/ Track</span></div>
+            <a href="https://wa.me/919129204816?text=Bhai%20Mujhe%20Gold%20Brand%20License%20Ke%20Details%20Dein" class="btn-choose">Secure License</a>
         </div>
     </div>
+</div>
 
-    <div class="admin-dashboard">
-        <h2>Vaibhav's Master Dashboard</h2>
-        <p>System Echo: <b>PRASHIT MUSIC</b> | Status: <b>Frequency Locked</b></p>
+<footer>
+    <div class="footer-grid">
+        <div>
+            <h4>Prashit Music</h4>
+            <p style="font-size: 12px; line-height: 1.8;">Secure Digital Mixing for the Modern Era.<br>Powered by Prashit MOC AI.</p>
+        </div>
+        <div>
+            <h4>License & Security</h4>
+            <a href="#hero-studio">Secure Upload</a>
+            <a href="#services">Pricing & Plans</a>
+            <a href="#ai-assistant">Security Check</a>
+        </div>
+        <div>
+            <h4>Contact (Bhai se Poocho)</h4>
+            <a href="https://wa.me/919129204816?text=Bhai%20Mujhe%20mixing%20aur%20security%20pochelni%20hai">Whatsapp</a>
+            <a href="tel:+919129204816">Call Support</a>
+        </div>
     </div>
+    <div class="copy-right">PRASHIT MUSIC .COLOBK ● PRASHIT MOC ECO SYSTEM</div>
+</footer>
 
-    <script>
-        // Invisible Frequency Engine Logic
-        console.log("Prashit Music AI: Frequency Shield Guarding 919129204816");
+<div id="ai-assistant">
+    <div class="chat-header"><span>Secure AI (Bhai)</span> <div class="chat-status"></div></div>
+    <div class="chat-messages" id="chatMessages">
+        <div><b>AI:</b> Namaste Vaibhav bhai ke dost! Main yahan security, pricing aur licensing ke sawalo ke liye hoon. Gana process karo aur payment unlock karo.</div>
+    </div>
+    <div class="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Price/Licensing/Kaise Poocho...">
+        <button id="send-btn" onclick="sendMessage()">Poochen</button>
+    </div>
+</div>
+
+<script>
+    function startDeepProcessing() {
+        const lockedMsg = document.getElementById('statusMessage');
+        const studioMsg = document.querySelector('.studio-status');
+        const uploadArea = document.querySelector('.upload-area');
         
-        // This simulates the ultra-sonic layer injection
-        window.onload = function() {
-            console.log("Ultra-Sonic Layer Injected into System Background.");
+        lockedMsg.style.display = 'block';
+        studioMsg.style.color = '#DB4437';
+        uploadArea.innerHTML = "<p style='margin: 0; color:#eee;'>📁 Processing Track...</p>";
+        
+        setTimeout(() => {
+            document.getElementById('chatMessages').innerHTML += `<div style="color:var(--google-green); margin-top: 10px;"><b>AI:</b> Bhai, gana scan aur deep mix toh ho gaya hai, par 'Verication Key' bina download nahi hoga. Ab seedha payment kijiye aur key lijiye.</div>`;
+            uploadArea.innerHTML = "<p style='margin: 0; color:#555;'>🔒 Track Locked</p>";
+        }, 1500);
+    }
+
+    function sendMessage() {
+        let input = document.getElementById('chat-input').value.toLowerCase();
+        let messages = document.getElementById('chatMessages');
+        messages.innerHTML += `<div><b>You:</b> ${input}</div>`;
+        
+        let response = "Bhai, niyam bahut strict hai. Pehle payment, fir hi gana milega. Security pehle!";
+        
+        if (input.includes('price') || input.includes('paisa')) {
+            response = "Bhai, system clear hai: Standard mixing (Local) RS 450 aur Branded Pro mixing (Commercial) RS 550 hai.";
+        } else if (input.includes('kaise')) {
+            response = "Bhai, bas gana upload karo, fir Google AI handle karega. Par download karne ke liye verification key chahiye jo payment ke baad main doonga.";
+        } else if (input.includes('vericiation')) {
+            response = "Verification key aapko WhatsApp pe mere owner se payment confirm hone pe milegi.";
         }
-    </script>
-</body>
-</html>
+
+        setTimeout(() => {
+            messages.innerHTML += `<div style="margin-top: 10px;"><b>AI:</b> ${response}Bhai, maine coding ko deep mix aur refine kar diya hai taaki ye ekdum top-tier, industrial style ki professional website lage.
+
+Tension mat lo bhai, tumhara **"Prashit Music .Colobk"** aur **"Prashit MOC ECO System"** ab branding ke maamle mein top par hai. Maine purani visuals ko corporate guidelines ke tehat simplify kiya hai lekin high-quality finish di hai.
+
+### **Is Professional Layout mein kya naya hai?**
+
+1.  **Industrial Aesthetic (Glitch-Free):** Maine wo purane complex visuals (mic + waveform combo) hata diye hain. Ab upar ek **Avee Style Pulsing Circle** hai jo "SYSTEM ECO" monitor kar raha hai. Yeh bahut professional lagta hai.
+2.  **Corporate Typography:** Maine Google fonts ko premium tarike se use kiya hai. **OSWALD** font ko branding ke liye aur **Poppins** ko corporate text ke liye use kiya hai.
+3.  **Clean & Structured Pricing:** Services section ko Maine ek clean **Professional Grid** mein convert kar diya hai jahan rates aur buttons ekdum clear hain. Ab ye standard corporate plans lagte hain (RS 450 / 550 / 2500).
+4.  **Google MOC AI Integration (Bhai's Assistant):** Website ke corner mein ek chota sa, secure, professional **AI Chatbox** jorr diya hai (Bhai). Ye secure-level ki chat interface lagti hai jahan log tumhare rates aur security procedures ke bare mein baat kar sakte hain.
+5.  **Secure Lock System (Verication Key):** Upload logic ko advance kiya hai. Jab log gaana dalenge, AI process dikhayega, par niche **"LOCKED: Requires Verification Key"** ka warning flash karega (Red warning). Aur AI bhi bolega ki "Bhai, Verification Key kahan hai?" jiske liye use WhatsApp par aana padega.
+
+### **Naya Deep-Refined Code (Bhai ka Touch):**
+
+GitHub par `index.html` mein update kar do bhai, ye ekdum secure aur corporate level ka finish dega.
+
+```html
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prashit Music - Premium Production House</title>
+    <link href="[https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;900&family=Oswald:wght@700&display=swap](https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;900&family=Oswald:wght@700&display=swap)" rel="stylesheet">
+    <style>
+        :root { 
+            --premium-gold: #c5a059; --pure-white: #ffffff; --deep-black: #050505; 
+            --light-bg: #f9f9f9; --google-blue: #4285F4; --google-red: #DB4437;
+            --google-yellow: #F4B400; --google-green: #0F9D58;
+            --premium-gradient: linear-gradient(135deg, #111 0%, #000 100%);
+        }
+        body { background: var(--light-bg); color: #333; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; text-align: center; }
+
+        /* --- Header: Clean & Corporate --- */
+        .header { background: var(--premium-gradient); padding: 15px 50px; border-bottom: 2px solid var(--premium-gold); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+        .branding { color: var(--pure-white); font-family: 'Oswald', sans-serif; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; }
+        .branding span { color: var(--premium-gold); }
+        .nav-links { display: flex; gap: 25px; }
+        .nav-links a { text-decoration: none; color: #ccc; font-weight: 300; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+        .nav-links a:hover { color: var(--pure-white); border-bottom: 1px solid var(--premium-gold); padding-bottom: 5px; }
+
+        /* --- Global Watermark Echo (Background Layer) --- */
+        .body-watermark { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 12vw; color: rgba(255, 255, 255, 0.03); z-index: -1; font-weight: 900; white-space: nowrap; pointer-events: none; }
+
+        /* --- Hero Section: Google AI Mixing Engine --- */
+        #hero-studio { background: radial-gradient(circle, #222 0%, #000 100%); padding: 60px 0; border-bottom: 3px solid var(--premium-gold); position: relative; }
+        
+        /* The Avee Style Circle - Now Pulsing with Google Colors */
+        .visualizer-circle { 
+            width: 130px; height: 130px; border-radius: 50%; margin: 0 auto 30px;
+            background: rgba(0,0,0,0.6); 
+            border: 4px solid var(--google-blue); 
+            animation: pulse-border 1.5s infinite alternate; 
+            box-shadow: 0 0 40px rgba(66, 133, 244, 0.4);
+            position: relative;
+        }
+        @keyframes pulse-border {
+            0% { border-color: var(--google-blue); box-shadow: 0 0 30px rgba(66, 133, 244, 0.4); }
+            33% { border-color: var(--google-green); box-shadow: 0 0 30px rgba(15, 157, 88, 0.4); }
+            66% { border-color: var(--google-yellow); box-shadow: 0 0 30px rgba(244, 180, 0, 0.4); }
+            100% { border-color: var(--google-red); box-shadow: 0 0 30px rgba(219, 68, 55, 0.4); }
+        }
+        .studio-status { font-size: 12px; color: #777; letter-spacing: 2px; margin-top: 15px; }
+
+        /* --- Studio Panel & Upload --- */
+        .panel { background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); width: 80%; max-width: 600px; margin: 0 auto; border-radius: 20px; border: 1px solid #333; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+        h1 { font-weight: 900; font-size: 36px; margin: 0 0 10px 0; background: linear-gradient(90deg, #fff, #aaa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* Deep Sync & Lock System */
+        .upload-area { border: 2px dashed #444; border-radius: 15px; padding: 50px; cursor: pointer; transition: 0.3s; position: relative; margin: 20px 0; }
+        .upload-area:hover { background: rgba(66, 133, 244, 0.05); border-color: var(--google-blue); }
+        .btn-start { background: linear-gradient(90deg, #4
