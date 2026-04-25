@@ -2,46 +2,73 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>MixingStar.in - AI Store</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prashit Music AI - The Brand Factory</title>
     <style>
-        body { background: #000; color: #0f0; font-family: sans-serif; text-align: center; padding: 20px; }
-        .brand { font-size: 32px; font-weight: bold; color: #ffd700; text-shadow: 0 0 10px #ffd700; }
-        .card { border: 2px solid #333; padding: 20px; margin: 15px auto; border-radius: 15px; background: #111; max-width: 450px; }
-        button { background: #0f0; color: #000; padding: 15px; width: 100%; font-weight: bold; border-radius: 10px; cursor: pointer; border: none; margin-top: 10px; }
-        #ai-box { position: fixed; bottom: 20px; right: 20px; width: 260px; background: #1a1a1a; border: 2px solid #0f0; border-radius: 15px; padding: 15px; text-align: left; display: none; }
+        :root { --gold: #ffd700; --red: #ff3131; --neon: #00f2ff; --bg: #050505; }
+        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; text-align: center; }
+        .header { padding: 50px 20px; border-bottom: 3px solid var(--gold); background: linear-gradient(180deg, #151515, #000); }
+        .branding { font-size: 45px; font-weight: 900; color: var(--gold); text-shadow: 0 0 25px var(--red); }
+        #visualizer-panel { height: 450px; width: 95%; max-width: 1000px; margin: 30px auto; background: radial-gradient(circle, #1a1a1a, #000); border: 2px solid #222; border-radius: 30px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .avee-circle { width: 150px; height: 150px; border: 4px solid var(--gold); border-radius: 50%; box-shadow: 0 0 30px var(--gold); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; padding: 40px; }
+        .card { background: #111; border: 1.5px solid #222; padding: 30px; border-radius: 25px; transition: 0.5s; position: relative; text-align: left; }
+        .price { font-size: 35px; color: var(--gold); margin: 15px 0; font-weight: bold; text-align: center; }
+        .btn { width: 100%; padding: 20px; border-radius: 50px; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+        .btn-normal { background: #333; color: white; }
+        .btn-branded { background: linear-gradient(90deg, var(--red), #800); color: white; box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4); }
+        .admin-dashboard { background: rgba(255, 215, 0, 0.05); border: 2px dashed var(--gold); margin: 40px; padding: 30px; border-radius: 20px; color: var(--gold); }
     </style>
 </head>
-<body onload="document.getElementById('ai-box').style.display = 'block';">
-    <div class="brand">MixingStar.in</div>
-    <div class="card">
-        <h3>Audio Player</h3>
-        <button onclick="startLocker('song')">PLAY REMIX (2s Tag)</button>
-        <button onclick="startLocker('dialogue')" style="background:#ff4500;">PLAY DIALOGUE (0.5s Tag)</button>
-        <hr style="border:1px solid #333; margin:20px 0;">
-        <button onclick="confirmPayment()" style="background:#fff; color:#000;">CONFIRM PAYMENT</button>
+<body>
+
+    <div class="header">
+        <div class="branding">PRASHIT MUSIC AI FACTORY 🎧</div>
+        <p style="color: var(--neon); font-style: italic;">"Gane Ka Doctor: No Copyright & WhatsApp Support"</p>
     </div>
-    <div id="ai-box">
-        <div style="color:#0f0; font-weight:bold;">🤖 MixingStar AI:</div>
-        <div id="ai-msg">नमस्ते! यहाँ ओरिजिनल मिक्सिंग मिलती है।</div>
+
+    <div id="visualizer-panel">
+        <div class="avee-circle"></div>
+        <p style="position: absolute; bottom: 30px; color: var(--gold); font-weight: bold; letter-spacing: 3px;">255+ PREMIUM EQUALIZERS READY</p>
     </div>
+
+    <div class="grid">
+        <div class="card">
+            <h3>Standard AI Mixing</h3>
+            <p>Vocal Cleaning, Anti-Chubhan Filter, 10 Basic Visualizers.</p>
+            <div class="price">₹450</div>
+            <a href="https://wa.me/919129204816?text=Hi%20Vaibhav,%20I%20want%20Normal%20AI%20Mixing%20Package" class="btn btn-normal">Buy via WhatsApp</a>
+        </div>
+
+        <div class="card" style="border: 2px solid var(--gold);">
+            <h3 style="color: var(--gold);">Branded Pro AI Studio</h3>
+            <ul style="padding-left: 20px; font-size: 14px; color: #ddd; line-height: 1.8;">
+                <li>🔥 <b>Smart Merging:</b> Auto-Melody Inserter (Gap Filler)</li>
+                <li>🔥 <b>Custom Avee Style:</b> 255+ Styles + Build Your Own</li>
+                <li>🔥 <b>Copyright Shield:</b> Protect from T-Series/Big Labels</li>
+                <li>🔥 <b>Vocal Doctor:</b> Pro Studio Music-Vocal Alignment</li>
+                <li>🔥 <b>Viral Kit:</b> 4K Thumbnails & Trending Hashtags</li>
+            </ul>
+            <div class="price">₹500</div>
+            <a href="https://wa.me/919129204816?text=Hi%20Vaibhav,%20I%20want%20Branded%20Pro%20AI%20Package" class="btn btn-branded">Get Branded Pro</a>
+        </div>
+
+        <div class="card">
+            <h3>AI Education Guru</h3>
+            <p>Degree Level Knowledge for All Classes. Sabhi vishay ki expert padhai.</p>
+            <a href="https://wa.me/919129204816?text=Hi%20Vaibhav,%20I%20want%20to%20learn%20via%20AI%20Education" class="btn" style="background: var(--neon); color: black;">Contact Teacher</a>
+        </div>
+    </div>
+
+    <div class="admin-dashboard">
+        <h2>Vaibhav's Private Master Dashboard</h2>
+        <p>Aapke liye saare features hamesha FREE hain.</p>
+    </div>
+
     <script>
-        let locker;
-        let tagAudio = new Audio('mixingstar-tag.mp3');
-        let mainAudio = new Audio('mixingstar.in.mp3'); 
-        function startLocker(type) {
-            clearInterval(locker);
-            mainAudio.play().catch(e => alert("Bhai, 'mixingstar.in.mp3' naam se gana upload karein!"));
-            let gap = (type === 'dialogue') ? 500 : 2000; 
-            locker = setInterval(() => {
-                tagAudio.currentTime = 0;
-                tagAudio.play();
-            }, gap);
-        }
-        function confirmPayment() {
-            let voiceMsg = new SpeechSynthesisUtterance("Vaibhav bhai, aapka payment aa chuka hai, aapka gana ja chuka hai");
-            voiceMsg.lang = 'hi-IN';
-            window.speechSynthesis.speak(voiceMsg);
-        }
+        console.log("Prashit Music AI Engine Ready with WhatsApp: 919129204816");
     </script>
+
 </body>
 </html>
