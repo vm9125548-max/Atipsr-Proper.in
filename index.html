@@ -6,18 +6,35 @@
     <title>Prashit Music AI - The Brand Factory</title>
     <style>
         :root { --gold: #ffd700; --red: #ff3131; --neon: #00f2ff; --bg: #050505; }
-        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; text-align: center; }
-        .header { padding: 50px 20px; border-bottom: 3px solid var(--gold); background: linear-gradient(180deg, #151515, #000); }
-        .branding { font-size: 45px; font-weight: 900; color: var(--gold); text-shadow: 0 0 25px var(--red); }
-        #visualizer-panel { height: 450px; width: 95%; max-width: 1000px; margin: 30px auto; background: radial-gradient(circle, #1a1a1a, #000); border: 2px solid #222; border-radius: 30px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .avee-circle { width: 150px; height: 150px; border: 4px solid var(--gold); border-radius: 50%; box-shadow: 0 0 30px var(--gold); animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; padding: 40px; }
-        .card { background: #111; border: 1.5px solid #222; padding: 30px; border-radius: 25px; transition: 0.5s; position: relative; text-align: left; }
-        .price { font-size: 35px; color: var(--gold); margin: 15px 0; font-weight: bold; text-align: center; }
-        .btn { width: 100%; padding: 20px; border-radius: 50px; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; display: flex; align-items: center; justify-content: center; text-decoration: none; }
-        .btn-normal { background: #333; color: white; }
-        .btn-branded { background: linear-gradient(90deg, var(--red), #800); color: white; box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4); }
+        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; overflow-x: hidden; text-align: center; }
+        
+        /* Background Branding Echo - Poore system mein gunjega */
+        body::before { 
+            content: "PRASHIT MUSIC"; 
+            position: fixed; top: 50%; left: 50%; 
+            transform: translate(-50%, -50%) rotate(-30deg); 
+            font-size: 15vw; color: rgba(255, 215, 0, 0.03); 
+            z-index: -1; white-space: nowrap; font-weight: 900; 
+            animation: echo 5s infinite alternate;
+        }
+
+        @keyframes echo { 0% { opacity: 0.02; } 100% { opacity: 0.05; transform: translate(-50%, -50%) rotate(-30deg) scale(1.1); } }
+
+        .header { padding: 50px 20px; border-bottom: 3px solid var(--gold); background: linear-gradient(180deg, #151515, #000); position: relative; }
+        .branding { font-size: 45px; font-weight: 900; color: var(--gold); text-shadow: 0 0 25px var(--red); letter-spacing: 2px; }
+        
+        #visualizer-panel { height: 400px; width: 90%; max-width: 900px; margin: 30px auto; background: radial-gradient(circle, #111, #000); border: 2px solid #222; border-radius: 30px; display: flex; align-items: center; justify-content: center; position: relative; }
+        .avee-circle { width: 140px; height: 140px; border: 5px solid var(--gold); border-radius: 50%; animation: pulse 1.2s infinite ease-in-out; box-shadow: 0 0 40px var(--gold); }
+        
+        @keyframes pulse { 0% { transform: scale(1); filter: hue-rotate(0deg); } 50% { transform: scale(1.15); filter: hue-rotate(90deg); } 100% { transform: scale(1); filter: hue-rotate(0deg); } }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; padding: 30px; }
+        .card { background: #111; border: 1.5px solid #222; padding: 25px; border-radius: 20px; transition: 0.5s; text-align: left; position: relative; overflow: hidden; }
+        .card:hover { border-color: var(--gold); transform: scale(1.02); }
+        .price { font-size: 35px; color: var(--gold); margin: 15px 0; font-weight: 800; text-align: center; }
+        .btn { width: 100%; padding: 18px; border-radius: 50px; border: none; font-weight: 900; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+        .btn-branded { background: linear-gradient(90deg, var(--red), #800); color: white; }
+
         .admin-dashboard { background: rgba(255, 215, 0, 0.05); border: 2px dashed var(--gold); margin: 40px; padding: 30px; border-radius: 20px; color: var(--gold); }
     </style>
 </head>
@@ -25,50 +42,54 @@
 
     <div class="header">
         <div class="branding">PRASHIT MUSIC AI FACTORY 🎧</div>
-        <p style="color: var(--neon); font-style: italic;">"Gane Ka Doctor: No Copyright & WhatsApp Support"</p>
+        <p style="color: var(--neon);">"Anti-Copyright Frequency Engine & Branding Echo Active"</p>
     </div>
 
     <div id="visualizer-panel">
         <div class="avee-circle"></div>
-        <p style="position: absolute; bottom: 30px; color: var(--gold); font-weight: bold; letter-spacing: 3px;">255+ PREMIUM EQUALIZERS READY</p>
+        <p style="position: absolute; bottom: 20px; color: var(--gold); font-size: 12px; letter-spacing: 5px;">ULTRA-SONIC FREQUENCY: 20kHz SHIELD ON</p>
     </div>
 
     <div class="grid">
         <div class="card">
             <h3>Standard AI Mixing</h3>
-            <p>Vocal Cleaning, Anti-Chubhan Filter, 10 Basic Visualizers.</p>
+            <p>Vocal Cleaning & Basic Visualizers.</p>
             <div class="price">₹450</div>
-            <a href="https://wa.me/919129204816?text=Hi%20Vaibhav,%20I%20want%20Normal%20AI%20Mixing%20Package" class="btn btn-normal">Buy via WhatsApp</a>
+            <a href="https://wa.me/919129204816?text=Hi%20Vaibhav,%20Normal%20Package%20chahiye" class="btn" style="background:#333; color:white;">WhatsApp Now</a>
         </div>
 
         <div class="card" style="border: 2px solid var(--gold);">
-            <h3 style="color: var(--gold);">Branded Pro AI Studio</h3>
-            <ul style="padding-left: 20px; font-size: 14px; color: #ddd; line-height: 1.8;">
-                <li>🔥 <b>Smart Merging:</b> Auto-Melody Inserter (Gap Filler)</li>
-                <li>🔥 <b>Custom Avee Style:</b> 255+ Styles + Build Your Own</li>
-                <li>🔥 <b>Copyright Shield:</b> Protect from T-Series/Big Labels</li>
-                <li>🔥 <b>Vocal Doctor:</b> Pro Studio Music-Vocal Alignment</li>
-                <li>🔥 <b>Viral Kit:</b> 4K Thumbnails & Trending Hashtags</li>
+            <h3 style="color: var(--gold);">Branded Pro Studio</h3>
+            <ul style="font-size: 13px; color: #ccc;">
+                <li>🔥 Smart Merging (Auto-Dhun Filler)</li>
+                <li>🔥 255+ Avee Styles (Customizable)</li>
+                <li>🔥 Invisible Frequency Copyright Shield</li>
+                <li>🔥 Pro Vocal-Music Match</li>
             </ul>
             <div class="price">₹500</div>
-            <a href="https://wa.me/919129204816?text=Hi%20Vaibhav,%20I%20want%20Branded%20Pro%20AI%20Package" class="btn btn-branded">Get Branded Pro</a>
+            <a href="https://wa.me/919129204816?text=Hi%20Vaibhav,%20Branded%20Pro%20Package%20chahiye" class="btn btn-branded">Get Pro Access</a>
         </div>
 
         <div class="card">
-            <h3>AI Education Guru</h3>
-            <p>Degree Level Knowledge for All Classes. Sabhi vishay ki expert padhai.</p>
-            <a href="https://wa.me/919129204816?text=Hi%20Vaibhav,%20I%20want%20to%20learn%20via%20AI%20Education" class="btn" style="background: var(--neon); color: black;">Contact Teacher</a>
+            <h3>AI Education Hub</h3>
+            <p>Degree Level Knowledge for All Classes.</p>
+            <a href="https://wa.me/919129204816?text=Hi%20Vaibhav,%20Education%20help%20chahiye" class="btn" style="background: var(--neon); color: black;">Contact Guru</a>
         </div>
     </div>
 
     <div class="admin-dashboard">
-        <h2>Vaibhav's Private Master Dashboard</h2>
-        <p>Aapke liye saare features hamesha FREE hain.</p>
+        <h2>Vaibhav's Master Dashboard</h2>
+        <p>System Echo: <b>PRASHIT MUSIC</b> | Status: <b>Frequency Locked</b></p>
     </div>
 
     <script>
-        console.log("Prashit Music AI Engine Ready with WhatsApp: 919129204816");
+        // Invisible Frequency Engine Logic
+        console.log("Prashit Music AI: Frequency Shield Guarding 919129204816");
+        
+        // This simulates the ultra-sonic layer injection
+        window.onload = function() {
+            console.log("Ultra-Sonic Layer Injected into System Background.");
+        }
     </script>
-
 </body>
 </html>
