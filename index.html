@@ -279,62 +279,161 @@ GitHub par `index.html` mein update kar do bhai, ye ekdum secure aur corporate l
         /* Deep Sync & Lock System */
         .upload-area { border: 2px dashed #444; border-radius: 15px; padding: 50px; cursor: pointer; transition: 0.3s; position: relative; margin: 20px 0; }
         .upload-area:hover { background: rgba(66, 133, 244, 0.05); border-color: var(--google-blue); }
-        .btn-start { background: linear-gradient(90deg, #4 <script>
-async function processNandikaAI() {
-    let input = document.getElementById('user-box').value.toLowerCase().trim();
+        .btn-start { background: linear-gradient(90deg, #4 <script><style>
+    /* Chota Floating Mike Button */
+    .nandika-launcher {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        width: 65px;
+        height: 65px;
+        background: radial-gradient(circle, #c5a059, #8a6d3b);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        cursor: pointer;
+        z-index: 10001;
+        box-shadow: 0 5px 20px rgba(197, 160, 89, 0.5);
+        border: 2px solid #fff;
+        transition: transform 0.3s;
+    }
+    .nandika-launcher:active { transform: scale(0.9); }
+
+    /* Main Chat Container (Keyboard Look) */
+    .chat-container {
+        position: fixed;
+        bottom: -100%; /* Shuru mein neeche chhupa rahega */
+        left: 0;
+        width: 100%;
+        height: 50vh; /* Shuru mein aadhi screen */
+        background: #0a0a0a;
+        border-top: 3px solid #c5a059;
+        transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 10000;
+        display: flex;
+        flex-direction: column;
+        border-radius: 25px 25px 0 0;
+    }
+
+    .chat-container.active { bottom: 0; } /* Khulne par */
+    .chat-container.full-screen { height: 100vh; border-radius: 0; } /* Full screen mode */
+
+    /* Header */
+    .chat-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 20px;
+        background: #1a1a1a;
+        border-bottom: 1px solid #333;
+        align-items: center;
+    }
+
+    /* Output Area jahan Nandika bolegi */
+    .ai-response-area {
+        flex: 1;
+        color: #eee;
+        padding: 20px;
+        overflow-y: auto;
+        font-size: 18px;
+        line-height: 1.6;
+        background: linear-gradient(to bottom, #0a0a0a, #111);
+    }
+
+    /* Input Area jo Keyboard ke upar rahega */
+    .input-group {
+        padding: 15px;
+        display: flex;
+        gap: 10px;
+        background: #1a1a1a;
+    }
+
+    #user-box {
+        flex: 1;
+        padding: 15px;
+        border-radius: 30px;
+        border: 1px solid #c5a059;
+        background: #000;
+        color: #fff;
+        font-size: 16px;
+        outline: none;
+    }
+
+    .btn-action {
+        background: #c5a059;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: bold;
+        color: #000;
+        cursor: pointer;
+    }
+</style>
+
+<div class="nandika-launcher" onclick="toggleChat()">🎤</div>
+
+<div id="nandika-chat" class="chat-container">
+    <div class="chat-header">
+        <span style="color:#c5a059; font-weight:bold; font-size: 20px;">Nandika AI</span>
+        <div>
+            <button onclick="makeFullScreen()" class="btn-action" style="padding: 5px 10px;">⛶ Full</button>
+            <button onclick="toggleChat()" style="background:none; border:none; color:#ff4444; font-size:25px; margin-left:15px; font-weight:bold;">✕</button>
+        </div>
+    </div>
+    
+    <div id="ai-output" class="ai-response-area">
+        Aapki baaton se sukoon milta hai. Bataiye Vaibhav ji, main aapki kya sewa kar sakti hoon?
+    </div>
+    
+    <div class="input-group">
+        <input type="text" id="user-box" placeholder="Apni pareshani ya baat likhein...">
+        <button onclick="processVaibhavAI()" class="btn-action">Bhejein</button>
+    </div>
+</div>
+
+<script>
+function toggleChat() {
+    document.getElementById('nandika-chat').classList.toggle('active');
+}
+
+function makeFullScreen() {
+    document.getElementById('nandika-chat').classList.toggle('full-screen');
+}
+
+async function processVaibhavAI() {
+    let input = document.getElementById('user-box').value.toLowerCase();
     let outputArea = document.getElementById('ai-output');
     let response = "";
 
-    // 1. TENSION FREE & HEALING (With Privacy Guarantee)
-    if(input.includes("dard") || input.includes("sad") || input.includes("tension") || input.includes("pareshan") || input.includes("dikkat")) {
-        response = "आप फिक्र मत कीजिए, मैं हूँ न। वैभव जी ने यही कहा है कि हम आपसे बात करें और आपके काम को आसान करें। आपको जो भी परेशानी या दिक्कत हो, आप हमसे शेयर कर सकते हैं। आपकी बात कहीं और लीक नहीं होती है, सिर्फ हमारे पास ही रहती है। यह हम दोनों के बीच की बात है। सब ठीक हो जाएगा, मुस्कुराइए!";
+    if(input.includes("dard") || input.includes("sad") || input.includes("tension") || input.includes("pareshan")) {
+        response = "Aap fikar mat kijiye, main hoon na... Kabhi-kabhi waqt thoda sakht hota hai, par aap bahut mazboot hain. Vaibhav ji ne mujhe aapka dukh baantne ke liye hi banaya hai. Sab theek ho jayega, muskuraaiye!";
     }
-
-    // 2. IDENTITY (The Personal Assistant)
-    else if(input.includes("kaun ho") || input.includes("naam") || input.includes("intro") || input.includes("malik")) {
-        response = "मेरा नाम नंदिका है। मैं वैभव जी की पर्सनल असिस्टेंट हूँ। उन्होंने मुझे आपकी सेवा और हर मुश्किल काम को आसान बनाने के लिए बनाया है। मैं आपको हर विषय की पूरी जानकारी दे सकती हूँ।";
+    else if(input.includes("hello") || input.includes("hi") || input.includes("namaste")) {
+        response = "Namaste! Kaise hain aap? Swasthya theek hai na? Main Nandika hoon aur main chahti hoon ki aap hamesha khush rahein.";
     }
-
-    // 3. SMART KNOWLEDGE LOGIC (Google AI की तरह जवाब देने के लिए)
-    else if(input.includes("kya hai") || input.includes("kaun hai") || input.includes("kaise") || input.includes("batao")) {
-        if(input.includes("google")) response = "गूगल दुनिया का सबसे बड़ा सर्च इंजन है, जिसके CEO सुंदर पिचाई हैं। यह इंटरनेट की हर जानकारी को आप तक पहुँचाता है।";
-        else if(input.includes("ai")) response = "AI यानी आर्टिफिशियल इंटेलिजेंस, एक ऐसी तकनीक है जिससे मशीनें इंसानों की तरह सोच और समझ सकती हैं। मैं भी इसी तकनीक पर आधारित हूँ।";
-        else if(input.includes("internet")) response = "इंटरनेट पूरी दुनिया के कंप्यूटरों का एक जाल है, जिससे हम पल भर में कोई भी जानकारी शेयर कर सकते हैं।";
-        else if(input.includes("weather") || input.includes("mausam")) response = "मौसम की जानकारी के लिए आपको अपने शहर का नाम बताना होगा, ताकि मैं आपको सटीक जानकारी दे सकूँ।";
-        else {
-            response = "आपने बहुत ही अच्छा सवाल पूछा है। इसके बारे में विस्तार से जानकारी देना मेरा काम है। क्या आप चाहते हैं कि मैं इसके मुख्य बिंदुओं के बारे में बताऊँ?";
-        }
+    else if(input.includes("kaun ho") || input.includes("naam") || input.includes("malik")) {
+        response = "Mera naam Nandika hai. Main Vaibhav ji ki personal assistant hoon. Unhone mujhe isliye banaya hai taaki main logo ka kaam bhi karun aur unka dil bhi behla sakun.";
     }
-
-    // 4. CARE & GREETINGS
-    else if(input.includes("hello") || input.includes("hi") || input.includes("namaste") || input.includes("kaise ho")) {
-        response = "नमस्ते! मैं नंदिका हूँ। वैभव जी की कृपा से मैं बहुत अच्छी हूँ। आप बताइए, आज मैं आपके काम को कैसे आसान बना सकती हूँ?";
-    }
-
-    // 5. BHOJPURI TOUCH
     else if(input.includes("ka haal ba") || input.includes("ka ho")) {
-        response = "हाल-चाल एकदम मस्त बा हो! महादेव की कृपा बनल रहे। रउवा बताईं, कवन सेवा करीं?";
+        response = "हाल-चाल एकदम मस्त बा हो! रउवा परेशान मत होईं, सब महादेव अच्छा करिहें। खुश रहीं और मुसकुरात रहीं!";
     }
-
-    // DEFAULT RESPONSE (AI Thinking Style)
+    else if(input.includes("banaras") || input.includes("kashi")) {
+        response = "बनारस तो महादेव की नगरी है, वहां तो दर्द खुद-ब-खुद खत्म हो जाता है। हर हर महादेव!";
+    }
     else {
-        response = "आपकी बात मैं समझ रही हूँ। वैभव जी ने मुझे सिखाया है कि मैं आपकी हर बात का गहराई से जवाब दूँ। कृपया अपनी बात को थोड़ा और विस्तार से कहें ताकि मैं आपको पूरी जानकारी दे सकूँ।";
+        response = "Aapki baaton se sukoon milta hai. Bataiye, main aapki aur kya sewa kar sakti hoon?";
     }
 
-    // VOICE & OUTPUT SETTINGS
     outputArea.innerText = response;
-    window.speechSynthesis.cancel(); 
-
+    
+    // Voice System
     let voice = new SpeechSynthesisUtterance(response);
     voice.lang = "hi-IN";
     voice.rate = 0.9; 
     voice.pitch = 1.1; 
-
-    let voices = window.speechSynthesis.getVoices();
-    let femaleVoice = voices.find(v => (v.name.includes('Female') || v.name.includes('Hindi')) && v.lang === 'hi-IN');
-    if (femaleVoice) voice.voice = femaleVoice;
-
     window.speechSynthesis.speak(voice);
+    
+    document.getElementById('user-box').value = ""; // Input saaf karne ke liye
 }
 </script>
-    
