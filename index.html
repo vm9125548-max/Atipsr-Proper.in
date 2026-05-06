@@ -1,1 +1,80 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atipsr Proper Premium | Estd. 2025</title>
+    <style>
+        :root { --bg: #000000; --card: #0a0a0a; --accent: #39ff14; --text: #ffffff; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
+        
+        /* LOGIN GATE (बाहर का दरवाज़ा) */
+        #login-gate { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .google-btn { background: #fff; color: #000; padding: 12px 25px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+
+        /* MAIN DASHBOARD (अंदर का नज़ारा) */
+        #main-empire { display: none; padding: 20px; }
+        .header { display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        .status-tag { color: var(--accent); font-weight: bold; font-size: 12px; }
+        
+        /* DNA ENGINE & TOOLS */
+        .power-box { background: var(--card); border: 1px solid #1a1a1a; border-radius: 15px; padding: 20px; margin: 20px 0; border-left: 4px solid var(--accent); }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .track-card { background: #111; border-radius: 8px; aspect-ratio: 1; border: 1px solid #222; position: relative; }
+        .price { position: absolute; bottom: 5px; width: 100%; text-align: center; font-size: 10px; color: #ffcc00; }
+
+        /* LEGACY FOOTER */
+        .footer { margin-top: 50px; border-top: 1px solid #1a1a1a; padding: 20px; text-align: center; font-size: 10px; color: #444; }
+    </style>
+</head>
+<body>
+
+    <div id="login-gate">
+        <h1 style="font-weight: 300; letter-spacing: 5px;">ATIPSR PROPER <span style="font-size: 12px; color: #555;">PREMIUM</span></h1>
+        <button class="google-btn" onclick="unlock()">
+            <img src="https://www.google.com/favicon.ico" width="18"> Signing with Google
+        </button>
+        <p style="margin-top: 20px; font-size: 10px; color: #333;">ESTABLISHED 2025 | SECURE CLOUD ACCESS</p>
+    </div>
+
+    <div id="main-empire">
+        <div class="header">
+            <div>UNLOCKED MODE</div>
+            <div class="status-tag">🚩 VAIBHAV - VERIFIED OWNER</div>
+        </div>
+
+        <div class="power-box">
+            <h4 style="margin: 0; color: var(--accent);">🧬 UNIVERSAL DNA OVERWRITER</h4>
+            <p style="font-size: 10px; color: #666;">Removing T-Series/Major Label DNA... Status: 250 AI Units Active</p>
+        </div>
+
+        <div class="grid">
+            <div class="track-card"><div class="price">₹550/₹450</div></div>
+            <div class="track-card"><div class="price">₹550/₹450</div></div>
+            <div class="track-card"><div class="price">₹550/₹450</div></div>
+        </div>
+
+        <div class="power-box" style="border-left-color: #9d50bb;">
+            <h4 style="margin: 0; color: #9d50bb;">🎧 LOFI & SEAMLESS MERGE STUDIO</h4>
+            <p style="font-size: 10px; color: #666;">BPM Sync & Invisible Frequency Ready.</p>
+        </div>
+
+        <div class="footer">
+            © 2025-2026 Atipsr Proper AI Industries. <br>
+            All Rights Reserved | Established 2025 | Chandauli HQ
+        </div>
+    </div>
+
+    <script>
+        function unlock() {
+            let email = prompt("Enter Master Email (vaibhavmishra@gmail.com):");
+            if(email === "vaibhavmishra@gmail.com") {
+                document.getElementById('login-gate').style.display = 'none';
+                document.getElementById('main-empire').style.display = 'block';
+                alert("Atipsr Proper Premium Unlocked. Welcome, Commander Vaibhav.");
+            }
+        }
+    </script>
+</body>
+</html>
 
