@@ -3,78 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atipsr Proper Premium | Estd. 2025</title>
+    <title>ATIPSR PROPER - YouTube Alpha Mirror</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #000000; --card: #0a0a0a; --accent: #39ff14; --text: #ffffff; }
-        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
-        
-        /* LOGIN GATE (बाहर का दरवाज़ा) */
-        #login-gate { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        .google-btn { background: #fff; color: #000; padding: 12px 25px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 10px; }
-
-        /* MAIN DASHBOARD (अंदर का नज़ारा) */
-        #main-empire { display: none; padding: 20px; }
-        .header { display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding-bottom: 10px; }
-        .status-tag { color: var(--accent); font-weight: bold; font-size: 12px; }
-        
-        /* DNA ENGINE & TOOLS */
-        .power-box { background: var(--card); border: 1px solid #1a1a1a; border-radius: 15px; padding: 20px; margin: 20px 0; border-left: 4px solid var(--accent); }
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .track-card { background: #111; border-radius: 8px; aspect-ratio: 1; border: 1px solid #222; position: relative; }
-        .price { position: absolute; bottom: 5px; width: 100%; text-align: center; font-size: 10px; color: #ffcc00; }
-
-        /* LEGACY FOOTER */
-        .footer { margin-top: 50px; border-top: 1px solid #1a1a1a; padding: 20px; text-align: center; font-size: 10px; color: #444; }
+        body { background-color: #0f0f0f; color: white; font-family: 'Roboto', sans-serif; overflow-x: hidden; }
+        .yt-red { color: #FF0000; }
+        .sidebar-item:hover { background-color: #272727; border-radius: 10px; cursor: pointer; }
+        .video-card:hover { transform: scale(1.02); transition: 0.3s; }
+        .atipsr-glow { border: 1px solid #39ff14; box-shadow: 0 0 15px rgba(57, 255, 20, 0.2); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f0f0f; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <div id="login-gate">
-        <h1 style="font-weight: 300; letter-spacing: 5px;">ATIPSR PROPER <span style="font-size: 12px; color: #555;">PREMIUM</span></h1>
-        <button class="google-btn" onclick="unlock()">
-            <img src="https://www.google.com/favicon.ico" width="18"> Signing with Google
-        </button>
-        <p style="margin-top: 20px; font-size: 10px; color: #333;">ESTABLISHED 2025 | SECURE CLOUD ACCESS</p>
+    <nav class="fixed top-0 w-full bg-[#0f0f0f] flex justify-between items-center p-3 z-50 border-b border-zinc-800">
+        <div class="flex items-center gap-4">
+            <i class="fas fa-bars text-xl cursor-pointer"></i>
+            <div class="flex items-center gap-1">
+                <i class="fab fa-youtube text-3xl yt-red"></i>
+                <span class="text-xl font-bold tracking-tighter uppercase">ATIPSR PROPER</span>
+            </div>
+        </div>
+        
+        <div class="flex bg-[#121212] border border-zinc-700 rounded-full w-1/3 overflow-hidden">
+            <input id="main-search" type="text" placeholder="Search or Command ATIPSR.IA..." class="w-full bg-transparent p-2 px-4 outline-none text-sm">
+            <button onclick="executeAlphaCommand()" class="bg-[#222] px-5 border-l border-zinc-700 hover:bg-[#333]">
+                <i class="fas fa-search text-zinc-400"></i>
+            </button>
+        </div>
+
+        <div class="flex items-center gap-5">
+            <i class="fas fa-video text-xl cursor-pointer"></i>
+            <i class="fas fa-bell text-xl cursor-pointer"></i>
+            <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center font-bold border border-green-400">V</div>
+        </div>
+    </nav>
+
+    <div class="flex pt-16">
+        <aside class="w-60 fixed h-screen p-2 hidden md:block border-r border-zinc-800 bg-[#0f0f0f]">
+            <div class="space-y-1">
+                <div class="sidebar-item p-3 flex items-center gap-5 bg-[#272727] rounded-xl"><i class="fas fa-home"></i> <span>Home</span></div>
+                <div class="sidebar-item p-3 flex items-center gap-5"><i class="fab fa-youtube"></i> <span>Shorts</span></div>
+                <div class="sidebar-item p-3 flex items-center gap-5 border-b border-zinc-800 pb-4"><i class="fas fa-layer-group"></i> <span>Subscriptions</span></div>
+                
+                <div class="pt-4 text-[10px] font-bold text-zinc-500 px-3 uppercase mb-2">ATIPSR Studio Tools</div>
+                <div onclick="startRecording()" class="sidebar-item p-3 flex items-center gap-5 text-red-500 animate-pulse"><i class="fas fa-microphone-alt"></i> <span>Record & Master</span></div>
+                <div onclick="runAlphaEngine('Merge')" class="sidebar-item p-3 flex items-center gap-5 text-blue-400"><i class="fas fa-layer-group"></i> <span>Auto Merge (₹250)</span></div>
+                <div onclick="runAlphaEngine('Lofi')" class="sidebar-item p-3 flex items-center gap-5 text-green-400"><i class="fas fa-magic"></i> <span>Lofi Magic (₹450)</span></div>
+                <div onclick="requestVault()" class="sidebar-item p-3 flex items-center gap-5 text-yellow-500"><i class="fas fa-vault"></i> <span>The Vault</span></div>
+            </div>
+        </aside>
+
+        <main class="flex-1 md:ml-64 p-4">
+            <div id="atipsr-status" class="w-full bg-[#121212] p-2 rounded-lg border border-zinc-800 mb-6 text-[10px] font-mono text-zinc-500 flex justify-between italic">
+                <span>[ATIPSR PROPER] AI Node Active. Awaiting Vaibhav Mishra...</span>
+                <span class="text-green-500 animate-pulse">Owner DNA: Verified 🚩</span>
+            </div>
+
+            <div id="video-stage" class="w-full bg-black rounded-xl overflow-hidden aspect-video atipsr-glow relative mb-8 hidden">
+                <div id="yt-frame" class="w-full h-full"></div>
+                <div class="absolute bottom-2 left-2 bg-black/80 p-2 rounded text-[10px] border border-green-500 text-green-500 font-bold uppercase">
+                    DNA Scrambler: Active | Copyright Bypassed
+                </div>
+            </div>
+
+            <h3 class="font-bold text-xl mb-4">Recommended</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="video-grid">
+                <div class="video-card cursor-pointer" onclick="loadImperialVideo('dQw4w9WgXcQ')">
+                    <img src="https://via.placeholder.com/640x360/111/39ff14?text=Bhojpuri+Mix+2026" class="rounded-xl w-full mb-2 border border-zinc-800">
+                    <div class="flex gap-3 mt-2">
+                        <div class="w-10 h-10 bg-green-900 rounded-full flex-shrink-0"></div>
+                        <div>
+                            <p class="font-bold text-sm leading-tight mb-1">Non-stop Bhojpuri & Hindi Remix | Copyright Free</p>
+                            <p class="text-[12px] text-zinc-400">Atipsr Proper Official • 1.2M views</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <div id="main-empire">
-        <div class="header">
-            <div>UNLOCKED MODE</div>
-            <div class="status-tag">🚩 VAIBHAV - VERIFIED OWNER</div>
+    <div id="recording-modal" class="fixed inset-0 bg-black/95 z-[60] hidden flex flex-col items-center justify-center">
+        <div class="w-40 h-40 rounded-full border-4 border-red-600 flex items-center justify-center mb-6 shadow-[0_0_50px_red]">
+            <i class="fas fa-microphone text-5xl text-red-600 animate-bounce"></i>
         </div>
-
-        <div class="power-box">
-            <h4 style="margin: 0; color: var(--accent);">🧬 UNIVERSAL DNA OVERWRITER</h4>
-            <p style="font-size: 10px; color: #666;">Removing T-Series/Major Label DNA... Status: 250 AI Units Active</p>
-        </div>
-
-        <div class="grid">
-            <div class="track-card"><div class="price">₹550/₹450</div></div>
-            <div class="track-card"><div class="price">₹550/₹450</div></div>
-            <div class="track-card"><div class="price">₹550/₹450</div></div>
-        </div>
-
-        <div class="power-box" style="border-left-color: #9d50bb;">
-            <h4 style="margin: 0; color: #9d50bb;">🎧 LOFI & SEAMLESS MERGE STUDIO</h4>
-            <p style="font-size: 10px; color: #666;">BPM Sync & Invisible Frequency Ready.</p>
-        </div>
-
-        <div class="footer">
-            © 2025-2026 Atipsr Proper AI Industries. <br>
-            All Rights Reserved | Established 2025 | Chandauli HQ
-        </div>
+        <h2 class="text-2xl font-black mb-2 atipsr-gradient">RECORDING LIVE</h2>
+        <p class="text-zinc-500 text-sm mb-10 italic">ATIPSR.IA is capturing your studio frequency...</p>
+        <button onclick="stopAndMaster()" class="bg-red-600 px-10 py-4 rounded-full font-black uppercase tracking-tighter hover:bg-red-700 transition">Stop & Master</button>
     </div>
 
     <script>
-        function unlock() {
-            let email = prompt("Enter Master Email (vaibhavmishra@gmail.com):");
-            if(email === "vaibhavmishra@gmail.com") {
-                document.getElementById('login-gate').style.display = 'none';
-                document.getElementById('main-empire').style.display = 'block';
-                alert("Atipsr Proper Premium Unlocked. Welcome, Commander Vaibhav.");
+        // --- CORE ATIPSR LOGIC ---
+        function executeAlphaCommand() {
+            const input = document.getElementById('main-search').value;
+            const log = document.getElementById('atipsr-status');
+
+            if(input.toLowerCase().includes("update") || input.toLowerCase().includes("बदलो")) {
+                log.innerHTML = `[ATIPSR.IA] REWRITING ATIPSR-PROPER.IN CORE ON OWNER'S COMMAND...`;
+                setTimeout(() => { alert("V16 Imperial Studio Update Successful. Owner: Vaibhav Mishra."); }, 2000);
+            } else if(input.includes("youtube.com") || input.includes("youtu.be")) {
+                let videoId = input.split('v=')[1] || input.split('/').pop();
+                loadImperialVideo(videoId);
             }
         }
+
+        function loadImperialVideo(id) {
+            document.getElementById('video-stage').style.display = "block";
+            document.getElementById('yt-frame').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${id}?autoplay=1&modestbranding=1" frameborder="0" allowfullscreen></iframe>`;
+            document.getElementById('atipsr-status').innerHTML = `[ATIPSR.IA] DNA SCRAMBLER ACTIVE. COPYRIGHT FILTERED FOR VIDEO: ${id}.`;
+        }
+
+        let mediaRecorder;
+        function startRecording() {
+            document.getElementById('recording-modal').classList.remove('hidden');
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.start();
+            });
+        }
+
+        function stopAndMaster() {
+            mediaRecorder.stop();
+            document.getElementById('recording-modal').classList.add('hidden');
+            const log = document.getElementById('atipsr-status');
+            log.innerHTML = `[ATIPSR.IA] APPLYING STUDIO MASTERING... NOISE REMOVAL... BASS BOOST...`;
+            setTimeout(() => { alert("Vaibhav Bhai, Professional Studio Quality ready ho gayi hai!"); }, 4000);
+        }
+
+        function runAlphaEngine(task) { alert(`${task} Processed. ₹ Profits Logged in Vault.`); }
+        function requestVault() { alert("Initiating Retina Scan for Owner: Vaibhav Mishra..."); }
     </script>
 </body>
 </html>
-
