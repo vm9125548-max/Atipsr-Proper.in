@@ -1,52 +1,188 @@
-<div class="video-player-style">
-    <div class="thumbnail-area">
-        <span class="copyright-badge">COPYRIGHT FREE ✅</span>
-    </div>
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atipsr Proper - AI Music Studio & DNA Portal</title>
     
-    <div class="action-bar">
-        <h3>Bhojpuri Remix (Copyright Free)</h3>
-        
-        <div id="payment-gate">
-            <p style="color: #ffcc00; font-size: 14px;">Download karne ke liye ₹500 ka bhugtan karein.</p>
-            <button onclick="processPayment()" class="pay-btn">
-                PAY ₹500 & DOWNLOAD
-            </button>
-        </div>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
-        <div id="download-link" style="display: none;">
-            <a href="your-file-link.mp3" download class="orange-download-btn">
-                <img src="https://img.icons8.com/m_rounded/512/FFFFFF/download.png" width="20">
-                NOW DOWNLOAD MP3
-            </a>
+    <style>
+        :root { --main-orange: #ff4500; --soft-white: #f8f9fa; }
+        body { background: var(--soft-white); font-family: 'Roboto', sans-serif; margin: 0; overflow-x: hidden; }
+
+        /* Login Screen */
+        #login-screen { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 2000; }
+        .orange-btn { background: linear-gradient(135deg, #ff8c00, #ff4500); color: white; border: none; padding: 12px 25px; border-radius: 12px; font-weight: bold; cursor: pointer; box-shadow: 4px 4px 0px #b23000; display: flex; align-items: center; gap: 10px; text-decoration: none; justify-content: center; transition: 0.2s; }
+        .orange-btn:active { transform: translateY(2px); box-shadow: 2px 2px 0px #b23000; }
+
+        /* Main UI */
+        #main-app { display: none; }
+        header { height: 65px; background: #fff; border-bottom: 1px solid #ddd; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; position: sticky; top: 0; z-index: 100; }
+        .logo { color: var(--main-orange); font-size: 24px; font-weight: bold; }
+        
+        /* Studio Banner Style */
+        .studio-banner { background: #fff1ed; padding: 25px; margin: 20px; border-radius: 15px; border: 2px dashed var(--main-orange); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        
+        .content-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 25px; }
+        .video-card { background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); cursor: pointer; transition: 0.3s; }
+        .video-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(255, 69, 0, 0.15); }
+        .thumb { width: 100%; aspect-ratio: 16/9; background: #eee; position: relative; }
+        .dna-tag { position: absolute; top: 10px; right: 10px; background: var(--main-orange); color: #fff; padding: 4px 8px; font-size: 10px; font-weight: bold; border-radius: 4px; }
+
+        /* AI Portal Overlay */
+        .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+        .modal { background: #fff; padding: 35px; border-radius: 25px; text-align: center; width: 100%; max-width: 420px; border-top: 8px solid var(--main-orange); position: relative; }
+
+        .admin-trigger { position: fixed; bottom: 5px; right: 5px; width: 20px; height: 20px; opacity: 0.05; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div id="login-screen">
+    <h1 style="color:var(--main-orange); margin-bottom: 20px;">ATIPSR PROPER</h1>
+    <button class="orange-btn" onclick="googleLogin()">
+        <img src="https://img.icons8.com/color/48/google-logo.png" width="20">
+        Google ID se Sign-in karein
+    </button>
+</div>
+
+<div id="main-app">
+    <header>
+        <div class="logo">🟠 Atipsr Proper</div>
+        <div id="user-name" style="font-weight: bold; color: var(--main-orange);">Vaibhav Mishra</div>
+    </header>
+
+    <div class="studio-banner">
+        <div>
+            <h3 style="margin:0; color:var(--main-orange);">AI Studio Mastering 🎤</h3>
+            <p style="margin:5px 0; font-size:14px; color: #444;">Apni voice record karke dalein, hum dhun laga kar Studio style banayenge.</p>
         </div>
+        <button class="orange-btn" onclick="openStudioPortal()">Upload Voice (₹650)</button>
+    </div>
+
+    <div class="content-grid" id="v-grid"></div>
+</div>
+
+<div id="p-overlay" class="overlay">
+    <div class="modal">
+        <h3 id="v-title" style="color: var(--main-orange); margin-top: 0;"></h3>
+        <p id="p-desc" style="font-size:14px; color:#555;"></p>
+        <div id="ai-status" style="background:#fff4f0; padding:15px; border:1px dashed var(--main-orange); border-radius:12px; margin:15px 0;">
+            <b>AI Assistant:</b> "Paisa Portal monitor kar raha hoon. Payment verify hote hi DNA unlock hoga."
+        </div>
+        
+        <input type="file" id="studio-upload" style="display:none; margin: 15px auto; width: 80%;">
+        
+        <button onclick="processPayment()" class="orange-btn" id="pay-btn" style="margin: auto; width: 100%;">
+            PAY NOW & UNLOCK
+        </button>
+
+        <div id="dl-ready" style="display:none; color:green; font-weight:bold; margin-top:20px;">
+            Processing Complete! Vaibhav Mishra Frequency Added. ✅<br>
+            <a href="#" class="orange-btn" style="background:#fff; color:var(--main-orange); border: 2px solid var(--main-orange); margin-top:15px; box-shadow: none;">📥 DOWNLOAD FINAL MASTER</a>
+        </div>
+        <button onclick="closePortal()" style="background:none; border:none; color:#999; cursor:pointer; margin-top:15px; font-size: 13px;">Cancel</button>
     </div>
 </div>
 
+<div class="admin-trigger" onclick="adminAccess()">.</div>
+
 <script>
-function processPayment() {
-    // Yahan aap apna payment gateway link (Razorpay/Paytm) dalenge
-    alert("Redirecting to Payment Gateway...");
-    
-    // Payment successful hone ke baad ka logic (Demo ke liye):
-    setTimeout(function(){
-        document.getElementById('payment-gate').style.display = 'none';
-        document.getElementById('download-link').style.display = 'block';
-        alert("Payment Successful! Ab aap download kar sakte hain.");
-    }, 2000);
-}
+    const firebaseConfig = {
+        apiKey: "AIzaSyCNl_75ecS3KRt7cEn8zABfi2Cb9LwuFEk",
+        authDomain: "atipsr-proper-9693d.firebaseapp.com",
+        projectId: "atipsr-proper-9693d",
+        storageBucket: "atipsr-proper-9693d.firebasestorage.app",
+        messagingSenderId: "636424459984",
+        appId: "1:636424459984:web:e4e75a43a2a0582852f0d5",
+        measurementId: "G-LSJQFSNZWK"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    let portalVault = 0;
+    let currentPrice = 500;
+
+    function googleLogin() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider).then((result) => {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            document.getElementById('user-name').innerText = result.user.displayName;
+            loadVideos();
+        }).catch(err => alert("Login Failed: " + err.message));
+    }
+
+    function openStudioPortal() {
+        currentPrice = 650;
+        document.getElementById('v-title').innerText = "AI Studio Mastering Portal";
+        document.getElementById('p-desc').innerText = "Apni raw voice upload karein. AI ise master karke dhun jodeyga aur Vaibhav Mishra DNA frequency inject karega.";
+        document.getElementById('studio-upload').style.display = 'block';
+        document.getElementById('pay-btn').innerText = "PAY ₹650 & START MASTERING";
+        document.getElementById('p-overlay').style.display = 'flex';
+    }
+
+    function openPortal(title) {
+        currentPrice = 500;
+        document.getElementById('v-title').innerText = title;
+        document.getElementById('p-desc').innerText = "Is track ka copyright DNA badalne ke liye portal mein ₹500 jama karein.";
+        document.getElementById('studio-upload').style.display = 'none';
+        document.getElementById('pay-btn').innerText = "PAY ₹500 & UNLOCK DNA";
+        document.getElementById('p-overlay').style.display = 'flex';
+    }
+
+    function processPayment() {
+        const status = document.querySelector('#p-overlay b');
+        status.innerText = "Payment Verified! AI Engine DNA/Frequency badal raha hai...";
+        setTimeout(() => {
+            portalVault += currentPrice;
+            status.innerText = "Mastering Successful! Vaibhav Mishra Tag Added.";
+            document.getElementById('pay-btn').style.display = 'none';
+            document.getElementById('studio-upload').style.display = 'none';
+            document.getElementById('dl-ready').style.display = 'block';
+        }, 2500);
+    }
+
+    function loadVideos() {
+        const grid = document.getElementById('v-grid');
+        grid.innerHTML = "";
+        const genres = ["Bhojpuri Remix", "Hindi Nonstop", "Punjabi Bass", "Bhakti Special", "Viral Track", "DJ Mix"];
+        genres.forEach((name, i) => {
+            grid.innerHTML += `
+            <div class="video-card" onclick="openPortal('${name} #${i+1}')">
+                <div class="thumb">
+                    <span class="dna-tag">DNA PROTECTED</span>
+                    <img src="https://via.placeholder.com/320x180/fff1ed/ff4500?text=${name.replace(' ', '+')}" style="width:100%">
+                </div>
+                <div style="padding:15px;">
+                    <div style="font-weight:bold; font-size:15px;">${name} Copyright Free</div>
+                    <div style="color:#888; font-size:12px; margin-top:5px;">AI Frequency Added • ₹500</div>
+                </div>
+            </div>`;
+        });
+    }
+
+    function adminAccess() {
+        let code = prompt("Enter Admin Secret Code:");
+        if(code === "VM_BOSS_720") {
+            alert("Portal Unlocked. Swagat hai Vaibhav Mishra ji.");
+            let n1 = prompt("Paisa nikalne ke liye number dalein:");
+            if(!n1) return;
+            let n2 = prompt("Suraksha ke liye number dubara dalein:");
+            if(n1 === n2 && n1.length >= 10) {
+                alert(`Paisa transfer Verified ✅. ₹${portalVault} number ${n1} par bhej diya gaya hai.`);
+                portalVault = 0;
+            } else {
+                alert("AI Warning: Dono number match nahi hue!");
+            }
+        } else {
+            alert("Aapka access denied hai.");
+        }
+    }
+
+    function closePortal() { document.getElementById('p-overlay').style.display = 'none'; }
 </script>
-
-<style>
-.video-player-style { background: #111; padding: 20px; border-radius: 15px; color: white; }
-.thumbnail-area { width: 100%; height: 200px; background: #333; border-radius: 10px; display: flex; align-items: center; justify-content: center; position: relative; }
-.copyright-badge { position: absolute; top: 10px; right: 10px; background: green; padding: 5px 10px; border-radius: 5px; font-size: 12px; }
-
-/* Orange Download Button Style */
-.pay-btn, .orange-download-btn {
-    background: linear-gradient(145deg, #ff6a00, #ee0979);
-    color: white; border: none; padding: 12px 25px;
-    border-radius: 8px; font-weight: bold; cursor: pointer;
-    text-decoration: none; display: inline-flex; align-items: center; gap: 10px;
-    box-shadow: 0px 4px 15px rgba(255, 106, 0, 0.4);
-}
-</style>
+</body>
+</html>
