@@ -1,1 +1,187 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atipsr Proper - Premium AI Music Portal</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
+    <style>
+        :root { --orange: #ff4500; --white: #ffffff; --bg-soft: #fff9f5; }
+        body { background: var(--white); font-family: 'Roboto', sans-serif; margin: 0; overflow-x: hidden; }
+
+        /* 1. ATIPSR BRANDED HEADER */
+        header { 
+            height: 60px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 0; background: var(--white); z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .brand-name { display: flex; align-items: center; gap: 8px; color: var(--orange); font-weight: 900; font-size: 24px; cursor: pointer; letter-spacing: -1px; }
+        
+        .search-wrapper { width: 50%; display: flex; border: 1.5px solid #ddd; border-radius: 40px; overflow: hidden; background: #fdfdfd; }
+        .search-wrapper input { width: 100%; border: none; padding: 10px 20px; outline: none; background: transparent; font-size: 15px; }
+        .search-wrapper button { border: none; background: #f4f4f4; padding: 0 25px; cursor: pointer; border-left: 1px solid #ddd; }
+
+        /* 2. PROFILE & AI SECRET MENU */
+        .profile-container { position: relative; }
+        .user-pfp { width: 38px; height: 38px; background: var(--orange); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; box-shadow: 0 3px 10px rgba(255,69,0,0.2); }
+        
+        .atipsr-menu { 
+            display: none; position: absolute; right: 0; top: 50px; width: 300px; 
+            background: #fff; box-shadow: 0 10px 35px rgba(0,0,0,0.15); border-radius: 15px; z-index: 2000; overflow: hidden;
+        }
+        .item { padding: 15px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-bottom: 1px solid #f8f8f8; font-size: 14px; font-weight: 500; }
+        .item:hover { background: var(--bg-soft); color: var(--orange); }
+
+        /* 3. AI CHAT SYSTEM */
+        #ai-chat-box { 
+            display: none; position: fixed; bottom: 30px; right: 30px; width: 350px; height: 480px; 
+            background: white; border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.2); z-index: 5000; flex-direction: column; border: 1px solid #eee;
+        }
+        .chat-head { background: var(--orange); color: white; padding: 18px; border-radius: 20px 20px 0 0; display: flex; justify-content: space-between; font-weight: bold; }
+        .chat-main { flex: 1; padding: 15px; overflow-y: auto; background: var(--bg-soft); font-size: 14px; }
+        .chat-footer { display: flex; padding: 15px; background: white; border-top: 1px solid #eee; border-radius: 0 0 20px 20px; }
+
+        /* 4. VIDEO FEED */
+        .atipsr-feed { padding: 30px; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; max-width: 1400px; margin: auto; }
+        .v-item { background: white; border-radius: 18px; overflow: hidden; transition: 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .v-item iframe { width: 100%; aspect-ratio: 16/9; border: none; border-radius: 18px; background: #000; }
+        .v-title { padding: 12px 10px; font-weight: bold; font-size: 15px; color: #333; }
+
+        /* 5. PAYOUT SECURITY */
+        #payout-guard { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 6000; align-items: center; justify-content: center; }
+        .guard-card { background: white; padding: 40px; border-radius: 30px; width: 90%; max-width: 420px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div id="login-screen" style="position:fixed; inset:0; background:var(--bg-soft); display:flex; align-items:center; justify-content:center; z-index:9999;">
+    <div style="text-align:center; background:white; padding:60px; border-radius:40px; box-shadow: 0 20px 50px rgba(255,69,0,0.1);">
+        <h1 style="color:var(--orange); font-size: 45px; margin:0; letter-spacing:-2px;">ATIPSR PROPER</h1>
+        <p style="color:#666; margin-bottom:40px; font-weight:500; font-size: 18px;">DNA Verified AI Music Studio</p>
+        <button onclick="googleLogin()" style="background:var(--orange); color:white; border:none; padding:20px 50px; border-radius:15px; font-weight:bold; cursor:pointer; font-size:20px; box-shadow: 0 8px 20px rgba(255,69,0,0.3);">Signing with Google</button>
+        <p style="margin-top: 30px; font-size: 12px; color: #aaa;">Secure AI Gateway • Vaibhav Mishra Official</p>
+    </div>
+</div>
+
+<div id="main-app" style="display:none;">
+    <header>
+        <div class="brand-name" onclick="location.reload()">🟠 ATIPSR PROPER</div>
+        <div class="search-wrapper">
+            <input type="text" id="search-input" placeholder="Pure India ka koi bhi gana search karein...">
+            <button onclick="executeGlobalSearch()">🔍</button>
+        </div>
+        <div class="profile-container">
+            <div class="user-pfp" id="user-init" onclick="toggleMenu()">V</div>
+            <div id="menu-dropdown" class="atipsr-menu">
+                <div class="item" onclick="toggleChat()">💬 Chat with AI Partner</div>
+                <div class="item" onclick="activateDNA()">🛡️ Frequency DNA Bypass</div>
+                <div class="item" onclick="alert('Studio Recording: ACTIVE')">🎙️ AI Studio: Record & Mix</div>
+                <div class="item" onclick="openPayoutGuard()">💰 Withdraw Money (₹550/₹650)</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="atipsr-feed" id="video-display">
+        <div style="grid-column: 1/-1; text-align:center; padding-top:150px;">
+            <h2 style="color:#ddd; font-size: 30px;">Atipsr Proper Portal Live</h2>
+            <p style="color:#eee;">Search bar mein gana likhein aur start karein.</p>
+        </div>
+    </div>
+</div>
+
+<div id="ai-chat-box">
+    <div class="chat-head">
+        <span>Atipsr Assistant (AI)</span>
+        <span onclick="toggleChat()" style="cursor:pointer;">×</span>
+    </div>
+    <div class="chat-main" id="chat-content">
+        <p><b>AI:</b> Namaste Vaibhav ji! Main aapka AI Partner hoon. Main portal ki security aur gane ki frequency bypass mein aapki madad karunga.</p>
+    </div>
+    <div class="chat-footer">
+        <input type="text" id="chat-input" placeholder="Mujhse sawal karein..." style="flex:1; border:none; outline:none;">
+        <button onclick="sendMsgToAI()" style="border:none; background:var(--orange); color:white; padding:10px 20px; border-radius:10px; font-weight:bold; cursor:pointer;">Send</button>
+    </div>
+</div>
+
+<div id="payout-guard">
+    <div class="guard-card">
+        <h2 style="color:var(--orange);">AI Identity Security</h2>
+        <p>Withdrawal ke liye Secret Code dalein:</p>
+        <input type="password" id="guard-code" placeholder="Enter Secret Code" style="width:100%; padding:15px; margin-bottom:15px; border-radius:12px; border:1px solid #ddd;">
+        <input type="text" id="guard-phone" placeholder="Confirm Mobile Number" style="width:100%; padding:15px; margin-bottom:25px; border-radius:12px; border:1px solid #ddd;">
+        <button onclick="validatePayout()" style="background:var(--orange); color:white; border:none; padding:18px 30px; border-radius:35px; width:100%; font-weight:bold; cursor:pointer; font-size:16px;">Verify & Withdraw</button>
+        <button onclick="document.getElementById('payout-guard').style.display='none'" style="background:none; border:none; color:gray; margin-top:20px; cursor:pointer;">Cancel</button>
+    </div>
+</div>
+
+<script>
+    // Firebase Core Setup
+    const firebaseConfig = {
+      apiKey: "AIzaSyCNl_75ecS3KRt7cEn8zABfi2Cb9LwuFEk",
+      authDomain: "atipsr-proper-9693d.firebaseapp.com",
+      projectId: "atipsr-proper-9693d",
+      storageBucket: "atipsr-proper-9693d.firebasestorage.app",
+      messagingSenderId: "636424459984",
+      appId: "1:636424459984:web:e4e75a43a2a0582852f0d5"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    function googleLogin() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(res => {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+            document.getElementById('user-init').innerText = res.user.displayName.charAt(0);
+        });
+    }
+
+    function toggleMenu() {
+        let d = document.getElementById('menu-dropdown');
+        d.style.display = (d.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function toggleChat() {
+        let c = document.getElementById('ai-chat-box');
+        c.style.display = (c.style.display === 'flex') ? 'none' : 'flex';
+    }
+
+    function executeGlobalSearch() {
+        const q = document.getElementById('search-input').value;
+        if(!q) return;
+        const feed = document.getElementById('video-display');
+        feed.innerHTML = `
+            <div class="v-item"><iframe src="https://www.youtube.com/embed?listType=search&list=${q}"></iframe><div class="v-title">Result: ${q}</div></div>
+            <div class="v-item"><iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ"></iframe><div class="v-title">Atipsr Premium DNA Mix</div></div>
+        `;
+    }
+
+    function sendMsgToAI() {
+        let m = document.getElementById('chat-input').value;
+        let c = document.getElementById('chat-content');
+        if(!m) return;
+        c.innerHTML += `<p style="text-align:right;"><b>You:</b> ${m}</p>`;
+        setTimeout(() => {
+            c.innerHTML += `<p><b>AI:</b> Aapka portal Atipsr Proper ekdum secure hai. Main frequency bypass ready kar raha hoon.</p>`;
+            c.scrollTop = c.scrollHeight;
+        }, 800);
+        document.getElementById('chat-input').value = "";
+    }
+
+    function openPayoutGuard() { document.getElementById('payout-guard').style.display = 'flex'; }
+    
+    function validatePayout() {
+        if(document.getElementById('guard-code').value === "VAIBHAV2026") {
+            alert("Security Match! Transfer initiated to " + document.getElementById('guard-phone').value);
+        } else { alert("AI Security Alert: Code Incorrect!"); }
+    }
+
+    function activateDNA() {
+        alert("Frequency Bypass Successful! 'Vaibhav Mishra' Digital DNA Injection Complete.");
+    }
+
+    firebase.auth().onAuthStateChanged(user => { if(user) { document.getElementById('login-overlay').style.display = 'none'; document.getElementById('main-app').style.display = 'block'; } });
+</script>
+</body>
+</html>
