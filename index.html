@@ -3,279 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atipsr Proper - Premium AI Music Portal</title>
-    
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-
+    <title>atipsrproper.in | Master Money Control</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        :root { 
-            --orange: #ff4500; 
-            --dark-orange: #e63e00;
-            --white: #ffffff; 
-            --bg-soft: #f9f9f9; 
-            --sidebar-width: 240px;
-        }
-        
-        body { 
-            background: var(--bg-soft); 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            margin: 0; 
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        /* HEADER */
-        header { 
-            height: 65px; 
-            padding: 0 25px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between;
-            position: sticky; 
-            top: 0; 
-            background: var(--white); 
-            z-index: 1000; 
-            box-shadow: 0 1px 10px rgba(0,0,0,0.08);
-        }
-        .brand-name { 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            color: var(--orange); 
-            font-weight: 900; 
-            font-size: 22px; 
-            cursor: pointer; 
-            text-decoration: none;
-        }
-        
-        .search-wrapper { 
-            width: 40%; 
-            display: flex; 
-            border: 1px solid #ccc; 
-            border-radius: 40px; 
-            overflow: hidden; 
-            background: #fff;
-            transition: 0.3s;
-        }
-        .search-wrapper:focus-within { border-color: var(--orange); box-shadow: 0 0 5px rgba(255,69,0,0.2); }
-        .search-wrapper input { width: 100%; border: none; padding: 10px 20px; outline: none; font-size: 15px; }
-        .search-wrapper button { border: none; background: #f8f8f8; padding: 0 20px; cursor: pointer; border-left: 1px solid #ccc; }
-
-        /* MAIN LAYOUT */
-        .app-container { display: flex; flex: 1; overflow: hidden; }
-
-        /* SIDEBAR */
-        nav { 
-            width: var(--sidebar-width); 
-            background: white; 
-            padding: 20px 10px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 5px;
-            border-right: 1px solid #eee;
-        }
-        .nav-item { 
-            padding: 12px 15px; 
-            border-radius: 10px; 
-            cursor: pointer; 
-            font-size: 15px; 
-            font-weight: 500; 
-            color: #444;
-            transition: 0.2s;
-        }
-        .nav-item:hover { background: #fff1eb; color: var(--orange); }
-        .nav-item.active { background: var(--orange); color: white; }
-
-        /* CONTENT FEED */
-        .main-content { flex: 1; overflow-y: auto; padding: 25px; }
-        .atipsr-feed { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
-            gap: 25px; 
-        }
-        .v-item { 
-            background: white; 
-            border-radius: 12px; 
-            overflow: hidden; 
-            transition: transform 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .v-item:hover { transform: translateY(-5px); }
-        .v-item iframe { width: 100%; aspect-ratio: 16/9; border: none; }
-        .v-info { padding: 12px; }
-        .v-title { font-weight: 600; font-size: 15px; margin-bottom: 5px; color: #111; }
-        .v-meta { font-size: 13px; color: #666; }
-
-        /* CHAT BOX */
-        #ai-chat-box { 
-            display: none; position: fixed; bottom: 30px; right: 30px; width: 350px; height: 500px; 
-            background: white; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); 
-            z-index: 5000; flex-direction: column; overflow: hidden; border: 1px solid #eee;
-        }
-        .chat-head { background: var(--orange); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .chat-main { flex: 1; padding: 15px; overflow-y: auto; background: #fdfdfd; }
-        .chat-bubble { margin-bottom: 12px; padding: 10px 14px; border-radius: 12px; max-width: 80%; font-size: 14px; }
-        .ai-msg { background: #f1f1f1; align-self: flex-start; }
-        .user-msg { background: var(--orange); color: white; align-self: flex-end; margin-left: auto; }
-
-        /* PAYOUT MODAL */
-        #payout-guard { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 6000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .guard-card { background: white; padding: 40px; border-radius: 20px; width: 380px; text-align: center; }
-        .guard-input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #ddd; box-sizing: border-box; }
-        
-        @media (max-width: 768px) {
-            nav { display: none; }
-            .search-wrapper { width: 60%; }
-        }
+        body { background-color: #000; color: #fff; font-family: sans-serif; overflow-x: hidden; }
+        .atipsr-header { position: sticky; top: 0; z-index: 1000; background: #0f0f0f; border-bottom: 1px solid #333; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+        #admin-panel { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 50000; display: none; flex-direction: column; items: center; justify-content: center; padding: 20px; }
+        .admin-box { background: #0a0a0a; border: 2px solid #3b82f6; border-radius: 40px; width: 100%; max-width: 420px; padding: 25px; text-align: center; box-shadow: 0 0 50px rgba(59,130,246,0.3); }
+        .gullak-grid { display: grid; grid-template-cols: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .gullak-item { background: #111; padding: 15px; border-radius: 20px; border: 1px solid #333; }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
 <body>
 
-<div id="login-screen" style="position:fixed; inset:0; background:var(--white); display:flex; align-items:center; justify-content:center; z-index:9999;">
-    <div style="text-align:center;">
-        <h1 style="color:var(--orange); font-size: 40px; margin-bottom:10px;">ATIPSR PROPER</h1>
-        <p style="color:#666; margin-bottom:30px;">Premium AI Music Distribution</p>
-        <button onclick="googleLogin()" style="background:var(--orange); color:white; border:none; padding:15px 40px; border-radius:30px; font-weight:bold; cursor:pointer; font-size:18px;">Sign in with Google</button>
+    <div id="auth-gate" class="fixed inset-0 bg-black z-[20000] flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-6xl font-black text-blue-500 mb-2 tracking-tighter uppercase">atipsrproper.in</h1>
+        <p class="text-gray-500 mb-10 text-xs tracking-[5px]">SMART SPLIT ENGINE</p>
+        <button onclick="atipsrShining()" class="bg-white text-black px-12 py-4 rounded-full font-black flex items-center gap-3 shadow-2xl hover:scale-105 transition">
+            GOOGLE SHINING
+        </button>
     </div>
-</div>
 
-<div id="main-app" style="display:none; height: 100%;">
-    <header>
-        <div class="brand-name" onclick="location.reload()">🟠 ATIPSR</div>
-        <div class="search-wrapper">
-            <input type="text" id="search-input" placeholder="Gana search karein...">
-            <button onclick="executeGlobalSearch()">🔍</button>
+    <div id="main-app" class="hidden">
+        <header class="atipsr-header">
+            <h1 class="text-xl font-black"><span class="text-blue-500">ATIPSR</span> PROPER</h1>
+            <div class="bg-blue-900/50 px-4 py-1 rounded-full border border-blue-500">
+                <span class="text-[9px] font-bold text-blue-400">NET BANK: ₹<span id="cloud-balance">0.00</span></span>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-2 gap-2 p-4 mt-10">
+            <button onclick="runRunwayAI()" class="col-span-2 p-4 rounded-3xl font-black text-xs bg-blue-600 uppercase border-b-4 border-blue-900">Create AI Video (₹500)</button>
+            <button onclick="createLofi()" class="col-span-2 p-4 rounded-3xl font-black text-xs bg-indigo-700 uppercase border-b-4 border-indigo-900">Create Lofi Song (₹200)</button>
         </div>
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <span style="font-weight: 500; color: #555;" id="user-name-display"></span>
-            <div id="user-init" onclick="toggleMenu()" style="width:38px; height:38px; background:var(--orange); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; cursor:pointer;">V</div>
+
+        <div class="mx-4 p-6 bg-zinc-900 border-2 border-green-600 rounded-[40px] mb-10">
+            <h3 class="text-xs font-black text-green-500 uppercase mb-4 text-center">🏦 WITHDRAWAL CENTER</h3>
+            <input id="p-num" type="number" placeholder="Mobile Number" class="w-full bg-black border border-gray-800 rounded-2xl p-4 text-sm mb-3 outline-none">
+            <input id="m-pwd" type="password" placeholder="Master Code" class="w-full bg-black border border-blue-900 rounded-2xl p-4 text-sm mb-3 outline-none">
+            <button onclick="fPay()" class="w-full bg-green-600 py-4 rounded-2xl font-black text-xs text-white">CASH OUT SHARE</button>
         </div>
-    </header>
 
-    <div class="app-container">
-        <nav>
-            <div class="nav-item active">🏠 Home</div>
-            <div class="nav-item" onclick="toggleChat()">💬 AI Partner</div>
-            <div class="nav-item" onclick="activateDNA()">🛡️ DNA Bypass</div>
-            <div class="nav-item" onclick="openPayoutGuard()">💰 Payouts</div>
-            <hr style="width:100%; border:0; border-top:1px solid #eee; margin:10px 0;">
-            <div class="nav-item">🎙️ My Studio</div>
-        </nav>
+        <button onclick="accessAdmin()" class="w-full text-[9px] text-gray-800 font-bold mb-20 uppercase tracking-[5px]">[ OPEN MASTER ADMIN ]</button>
+    </div>
 
-        <main class="main-content">
-            <div class="atipsr-feed" id="video-display">
-                <div style="grid-column: 1/-1; text-align:center; padding-top:100px; color:#aaa;">
-                    <h2>Swaagat hai, Vaibhav ji!</h2>
-                    <p>Koi bhi gana search karke mixing start karein.</p>
+    <div id="admin-panel">
+        <div class="admin-box">
+            <h2 class="text-lg font-black text-blue-500 mb-4 uppercase">4-गुल्लक मनी ट्रैकर</h2>
+            <div class="gullak-grid">
+                <div class="gullak-item border-orange-900">
+                    <p class="text-[8px] text-gray-500 uppercase">11 Labs (25%)</p>
+                    <p class="text-sm font-bold text-orange-500">₹<span id="g-11labs">0.00</span></p>
+                </div>
+                <div class="gullak-item border-blue-900">
+                    <p class="text-[8px] text-gray-500 uppercase">Runway (25%)</p>
+                    <p class="text-sm font-bold text-blue-500">₹<span id="g-runway">0.00</span></p>
+                </div>
+                <div class="gullak-item border-green-900">
+                    <p class="text-[8px] text-gray-500 uppercase">Vaibhav (25%)</p>
+                    <p class="text-sm font-bold text-green-500">₹<span id="g-vaibhav">0.00</span></p>
+                </div>
+                <div class="gullak-item border-purple-900">
+                    <p class="text-[8px] text-gray-500 uppercase">Reserve (25%)</p>
+                    <p class="text-sm font-bold text-purple-500">₹<span id="g-reserve">0.00</span></p>
                 </div>
             </div>
-        </main>
+            <div class="bg-zinc-900 p-4 rounded-3xl mt-4 border-2 border-white">
+                <p class="text-[9px] text-gray-400 uppercase">Total Revenue (Ads Included)</p>
+                <p class="text-3xl font-black text-white">₹<span id="admin-net">0.00</span></p>
+            </div>
+            <button onclick="closeAdmin()" class="mt-6 text-[10px] font-bold text-gray-600 uppercase tracking-widest">DASHBOARD EXIT</button>
+        </div>
     </div>
-</div>
 
-<div id="ai-chat-box">
-    <div class="chat-head">
-        <span style="font-weight:600;">Atipsr Assistant</span>
-        <span onclick="toggleChat()" style="cursor:pointer; font-size:20px;">×</span>
-    </div>
-    <div class="chat-main" id="chat-content">
-        <div class="chat-bubble ai-msg">Namaste! Main aapka AI Partner hoon. Kya aaj koi naya Bhojpuri remix banana hai?</div>
-    </div>
-    <div style="padding:15px; border-top:1px solid #eee; display:flex; gap:10px;">
-        <input type="text" id="chat-input" placeholder="Message..." style="flex:1; border:none; outline:none;">
-        <button onclick="sendMsgToAI()" style="background:var(--orange); color:white; border:none; padding:8px 15px; border-radius:8px; cursor:pointer;">Send</button>
-    </div>
-</div>
+    <script>
+        // कॉन्फ़िगरेशन
+        const firebaseConfig = {
+            apiKey: "AIzaSyCNl_75ecS3KRt7cEn8zABfi2Cb9LwuFEk",
+            databaseURL: "https://atipsr-proper-9693d-default-rtdb.firebaseio.com/" 
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-<div id="payout-guard">
-    <div class="guard-card">
-        <h3>AI Security Verification</h3>
-        <input type="password" id="guard-code" class="guard-input" placeholder="Security PIN">
-        <input type="text" id="guard-phone" class="guard-input" placeholder="Phone Number">
-        <button onclick="validatePayout()" style="width:100%; padding:12px; background:var(--orange); color:white; border:none; border-radius:8px; margin-top:15px; font-weight:bold; cursor:pointer;">Withdraw Funds</button>
-        <p onclick="document.getElementById('payout-guard').style.display='none'" style="margin-top:15px; color:#888; cursor:pointer; font-size:14px;">Cancel</p>
-    </div>
-</div>
-
-<script>
-    // Firebase Config (Aapka original config)
-    const firebaseConfig = {
-      apiKey: "AIzaSyCNl_75ecS3KRt7cEn8zABfi2Cb9LwuFEk",
-      authDomain: "atipsr-proper-9693d.firebaseapp.com",
-      projectId: "atipsr-proper-9693d",
-      storageBucket: "atipsr-proper-9693d.firebasestorage.app",
-      messagingSenderId: "636424459984",
-      appId: "1:636424459984:web:e4e75a43a2a0582852f0d5"
-    };
-    firebase.initializeApp(firebaseConfig);
-
-    function googleLogin() {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider).then(res => {
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'block';
-            document.getElementById('user-init').innerText = res.user.displayName.charAt(0);
-            document.getElementById('user-name-display').innerText = res.user.displayName;
-        }).catch(err => alert("Login Failed: " + err.message));
-    }
-
-    function executeGlobalSearch() {
-        const q = document.getElementById('search-input').value;
-        if(!q) return;
-        const feed = document.getElementById('video-display');
-        feed.innerHTML = ""; // Clear feed
+        const MASTER_CODE = "VAIBHAV_ATIPSR_786";
         
-        // Mocking YouTube Grid results
-        for(let i=0; i<6; i++) {
-            feed.innerHTML += `
-                <div class="v-item">
-                    <iframe src="https://www.youtube.com/embed?listType=search&list=${q}&index=${i}"></iframe>
-                    <div class="v-info">
-                        <div class="v-title">${q} - Official Remix ${i+1}</div>
-                        <div class="v-meta">Atipsr Proper • 1.2M views</div>
-                    </div>
-                </div>
-            `;
+        let wallets = {
+            g11labs: 0,
+            grunway: 0,
+            gvaibhav: 0,
+            greserve: 0,
+            ads: 0
+        };
+
+        // क्लाउड से डेटा सिंक
+        database.ref('atipsr_bank').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if(data) {
+                wallets = data;
+                updateUI();
+            }
+        });
+
+        function sync() { database.ref('atipsr_bank').set(wallets); }
+
+        function splitMoney(amount) {
+            let share = amount / 4;
+            wallets.g11labs += share;
+            wallets.grunway += share;
+            wallets.gvaibhav += share;
+            wallets.greserve += share;
+            sync();
         }
-    }
 
-    function sendMsgToAI() {
-        let input = document.getElementById('chat-input');
-        let msg = input.value;
-        if(!msg) return;
+        function createLofi() { splitMoney(200); alert("₹200 Cloud Bank में दर्ज!"); }
+        function runRunwayAI() { splitMoney(500); alert("₹500 Cloud Bank में दर्ज!"); }
 
-        let content = document.getElementById('chat-content');
-        content.innerHTML += `<div class="chat-bubble user-msg">${msg}</div>`;
-        input.value = "";
-
-        setTimeout(() => {
-            content.innerHTML += `<div class="chat-bubble ai-msg">Samajh gaya! Aapki frequency request "DNA-75" process ho rahi hai.</div>`;
-            content.scrollTop = content.scrollHeight;
-        }, 1000);
-    }
-
-    function toggleChat() {
-        let c = document.getElementById('ai-chat-box');
-        c.style.display = (c.style.display === 'flex') ? 'none' : 'flex';
-    }
-
-    function openPayoutGuard() { document.getElementById('payout-guard').style.display = 'flex'; }
-    
-    function validatePayout() {
-        if(document.getElementById('guard-code').value === "VAIBHAV2026") {
-            alert("Verification Success! Paisa aapke bank mein bhej diya gaya hai.");
-            document.getElementById('payout-guard').style.display = 'none';
-        } else {
-            alert("Incorrect Code! AI Security blocked the request.");
+        function atipsrShining() { 
+            document.getElementById('auth-gate').style.display='none'; 
+            document.getElementById('main-app').classList.remove('hidden'); 
+            // एड्स इंजन
+            setInterval(() => { wallets.ads += 0.50; wallets.gvaibhav += 0.50; sync(); }, 15000); 
         }
-    }
 
-    function activateDNA() {
-        alert("Digital DNA Bypass Active: Vaibhav Mishra Authorized.");
-    }
-</script>
+        function fPay() {
+            const pwd = document.getElementById('m-pwd').value;
+            if(pwd === MASTER_CODE) {
+                let regularCash = wallets.gvaibhav + wallets.g11labs + wallets.grunway + wallets.ads;
+                let reserveCash = wallets.greserve;
 
+                let choice = prompt("विकल्प चुनें: \n'1' - अपना मुनाफा (3 गुल्लक) निकालने के लिए\n'2' - डोमेन के लिए पूरा फंड निकालने के लिए");
+
+                if(choice === "1") {
+                    if(regularCash <= 0) return alert("मुनाफा जीरो है!");
+                    wallets.gvaibhav = 0; wallets.g11labs = 0; wallets.grunway = 0; wallets.ads = 0;
+                    sync();
+                    alert("सफलता! आपका हिस्सा निकाल लिया गया।");
+                } 
+                else if(choice === "2") {
+                    let totalAll = regularCash + reserveCash;
+                    if(confirm("पूरा खजाना (₹" + totalAll.toFixed(2) + ") डोमेन के लिए निकालें?")) {
+                        wallets.gvaibhav = 0; wallets.g11labs = 0; wallets.grunway = 0; wallets.ads = 0; wallets.greserve = 0;
+                        sync();
+                        alert("पूरा फंड विड्रॉ हो गया!");
+                    }
+                }
+            } else { alert("गलत मास्टर कोड!"); }
+        }
+
+        function accessAdmin() {
+            if(prompt("Master Code:") === MASTER_CODE) document.getElementById('admin-panel').style.display='flex';
+        }
+
+        function closeAdmin() { document.getElementById('admin-panel').style.display='none'; }
+
+        function updateUI() {
+            let net = wallets.g11labs + wallets.grunway + wallets.gvaibhav + wallets.greserve + wallets.ads;
+            document.getElementById('g-11labs').innerText = wallets.g11labs.toFixed(2);
+            document.getElementById('g-runway').innerText = wallets.grunway.toFixed(2);
+            document.getElementById('g-vaibhav').innerText = (wallets.gvaibhav + wallets.ads).toFixed(2);
+            document.getElementById('g-reserve').innerText = wallets.greserve.toFixed(2);
+            document.getElementById('admin-net').innerText = net.toFixed(2);
+            document.getElementById('cloud-balance').innerText = (wallets.gvaibhav + wallets.g11labs + wallets.grunway + wallets.ads).toFixed(2);
+        }
+    </script>
 </body>
 </html>
