@@ -3,171 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>atipsrproper.in | Master Money Control</title>
+    <title>atipsrproper.in | Vaibhav's Supreme Empire</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        body { background-color: #000; color: #fff; font-family: sans-serif; overflow-x: hidden; }
-        .atipsr-header { position: sticky; top: 0; z-index: 1000; background: #0f0f0f; border-bottom: 1px solid #333; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
-        #admin-panel { position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 50000; display: none; flex-direction: column; items: center; justify-content: center; padding: 20px; }
-        .admin-box { background: #0a0a0a; border: 2px solid #3b82f6; border-radius: 40px; width: 100%; max-width: 420px; padding: 25px; text-align: center; box-shadow: 0 0 50px rgba(59,130,246,0.3); }
-        .gullak-grid { display: grid; grid-template-cols: 1fr 1fr; gap: 10px; margin-top: 15px; }
-        .gullak-item { background: #111; padding: 15px; border-radius: 20px; border: 1px solid #333; }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        body { background-color: #000; color: #fff; font-family: sans-serif; overflow-x: hidden; transition: all 1.5s ease; }
+        .atipsr-header { position: sticky; top: 0; z-index: 1000; background: #0f0f0f; border-bottom: 1px solid #333; padding: 15px 20px; text-align: center; }
+        .fortress-card { background: #0a0a0a; border: 1px solid #1a1a1a; padding: 25px; border-radius: 40px; text-align: center; cursor: pointer; transition: 0.4s; }
+        .fortress-card:hover { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59,130,246,0.1); }
+        #admin-panel { position: fixed; inset: 0; background: rgba(0,0,0,0.99); z-index: 50000; display: none; flex-direction: column; items: center; justify-content: center; padding: 20px; }
+        .magic-healing { background-color: #000510 !important; border-color: #a855f7 !important; }
+        .legal-footer { font-size: 7px; color: #333; text-align: center; padding: 30px; margin-top: 40px; border-top: 1px solid #0f0f0f; }
     </style>
 </head>
 <body>
 
     <div id="auth-gate" class="fixed inset-0 bg-black z-[20000] flex flex-col items-center justify-center p-6 text-center">
-        <h1 class="text-6xl font-black text-blue-500 mb-2 tracking-tighter uppercase">atipsrproper.in</h1>
-        <p class="text-gray-500 mb-10 text-xs tracking-[5px]">SMART SPLIT ENGINE</p>
-        <button onclick="atipsrShining()" class="bg-white text-black px-12 py-4 rounded-full font-black flex items-center gap-3 shadow-2xl hover:scale-105 transition">
-            GOOGLE SHINING
-        </button>
+        <h1 class="text-6xl font-black text-blue-500 mb-2 italic tracking-tighter uppercase">atipsrproper.in</h1>
+        <p class="text-zinc-600 mb-12 text-[9px] tracking-[6px] uppercase font-bold">The 4-Wall Fortress of Vaibhav Ji</p>
+        <button onclick="atipsrShining()" class="bg-white text-black px-16 py-5 rounded-full font-black shadow-2xl hover:scale-105 transition uppercase text-xs">Enter Empire</button>
     </div>
 
     <div id="main-app" class="hidden">
-        <header class="atipsr-header">
-            <h1 class="text-xl font-black"><span class="text-blue-500">ATIPSR</span> PROPER</h1>
-            <div class="bg-blue-900/50 px-4 py-1 rounded-full border border-blue-500">
-                <span class="text-[9px] font-bold text-blue-400">NET BANK: ₹<span id="cloud-balance">0.00</span></span>
+        <header class="atipsr-header"><h1 class="text-2xl font-black text-blue-500 italic tracking-widest">ATIPSR PROPER</h1></header>
+
+        <div id="avarnya-box" class="m-4 p-6 border-2 border-blue-600 rounded-[45px] bg-zinc-950 shadow-2xl">
+            <h2 id="av-title" class="text-center text-blue-400 font-black italic uppercase text-sm">Avarnya AI (Wall 1)</h2>
+            <div id="av-chat" class="h-32 overflow-y-auto my-4 text-[10px] text-zinc-500 border-b border-zinc-900 pb-2">
+                <div><b>अवर्ण्या:</b> स्वागत है। मैं वैभव जी के साम्राज्य की पहली दीवार हूँ। यहाँ सब कुछ कानूनी और सुरक्षित है।</div>
             </div>
-        </header>
-
-        <div class="grid grid-cols-2 gap-2 p-4 mt-10">
-            <button onclick="runRunwayAI()" class="col-span-2 p-4 rounded-3xl font-black text-xs bg-blue-600 uppercase border-b-4 border-blue-900">Create AI Video (₹500)</button>
-            <button onclick="createLofi()" class="col-span-2 p-4 rounded-3xl font-black text-xs bg-indigo-700 uppercase border-b-4 border-indigo-900">Create Lofi Song (₹200)</button>
+            <div class="flex gap-2">
+                <input id="av-input" type="text" placeholder="अपना दुख कहें या पार्टनरशिप मांगें..." class="w-full bg-black border border-zinc-900 rounded-full p-3 px-6 text-xs outline-none focus:border-blue-500">
+                <button onclick="avTalk()" class="bg-blue-600 p-3 rounded-full">🚀</button>
+            </div>
+            <button onclick="activateMagic()" class="w-full mt-3 bg-gradient-to-r from-blue-900 to-purple-900 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg">✨ Free Magic Healing (sar dard ka ilaj)</button>
         </div>
 
-        <div class="mx-4 p-6 bg-zinc-900 border-2 border-green-600 rounded-[40px] mb-10">
-            <h3 class="text-xs font-black text-green-500 uppercase mb-4 text-center">🏦 WITHDRAWAL CENTER</h3>
-            <input id="p-num" type="number" placeholder="Mobile Number" class="w-full bg-black border border-gray-800 rounded-2xl p-4 text-sm mb-3 outline-none">
-            <input id="m-pwd" type="password" placeholder="Master Code" class="w-full bg-black border border-blue-900 rounded-2xl p-4 text-sm mb-3 outline-none">
-            <button onclick="fPay()" class="w-full bg-green-600 py-4 rounded-2xl font-black text-xs text-white">CASH OUT SHARE</button>
+        <div class="grid grid-cols-1 gap-4 px-6 mb-20">
+            <p class="text-[9px] text-zinc-700 uppercase mb-2 tracking-[4px] text-center italic">Empire Services (Law & Google Protected)</p>
+            
+            <div onclick="mExecute()" class="fortress-card">
+                <h3 class="text-blue-500 font-bold text-xs uppercase italic">Movie & Entertainment (Free)</h3>
+                <p class="text-[8px] text-zinc-600 mt-2">Wall 2 (Google) & Wall 3 (Law) Protected</p>
+            </div>
+
+            <div onclick="runPaid('AI Video Gen', 500)" class="fortress-card border-red-900/20">
+                <h3 class="text-red-500 font-bold text-xs uppercase">Pro AI Video (Paid)</h3>
+                <p class="text-[8px] text-zinc-600 mt-2">Legal Partnership Agreement Required</p>
+            </div>
         </div>
 
-        <button onclick="accessAdmin()" class="w-full text-[9px] text-gray-800 font-bold mb-20 uppercase tracking-[5px]">[ OPEN MASTER ADMIN ]</button>
+        <div class="px-6 text-center mb-10">
+            <p class="text-[7px] text-zinc-800 uppercase mb-4 tracking-[3px]">Wall 4: Ultimate Master Access</p>
+            <input id="m-pwd" type="password" placeholder="Master Access Code" class="w-full bg-black border border-zinc-900 rounded-3xl p-5 text-sm mb-4 text-center outline-none text-blue-500">
+            <button onclick="fPay()" class="text-[9px] text-zinc-600 font-black uppercase tracking-[5px] hover:text-white">Open Sovereign Dashboard</button>
+        </div>
+
+        <footer class="legal-footer">
+            <p>© 2026 ATIPSR PROPER | वैभव जी के नियमों के अधीन</p>
+            <p class="mt-2 opacity-50 italic uppercase tracking-[1px]">कोई भी अवैध प्रयास कानूनी दीवार (Wall 3) से टकराकर खत्म होगा</p>
+        </footer>
     </div>
 
     <div id="admin-panel">
-        <div class="admin-box">
-            <h2 class="text-lg font-black text-blue-500 mb-4 uppercase">4-गुल्लक मनी ट्रैकर</h2>
-            <div class="gullak-grid">
-                <div class="gullak-item border-orange-900">
-                    <p class="text-[8px] text-gray-500 uppercase">11 Labs (25%)</p>
-                    <p class="text-sm font-bold text-orange-500">₹<span id="g-11labs">0.00</span></p>
-                </div>
-                <div class="gullak-item border-blue-900">
-                    <p class="text-[8px] text-gray-500 uppercase">Runway (25%)</p>
-                    <p class="text-sm font-bold text-blue-500">₹<span id="g-runway">0.00</span></p>
-                </div>
-                <div class="gullak-item border-green-900">
-                    <p class="text-[8px] text-gray-500 uppercase">Vaibhav (25%)</p>
-                    <p class="text-sm font-bold text-green-500">₹<span id="g-vaibhav">0.00</span></p>
-                </div>
-                <div class="gullak-item border-purple-900">
-                    <p class="text-[8px] text-gray-500 uppercase">Reserve (25%)</p>
-                    <p class="text-sm font-bold text-purple-500">₹<span id="g-reserve">0.00</span></p>
-                </div>
+        <div class="bg-zinc-950 p-8 rounded-[50px] border-2 border-blue-600 w-full max-w-sm text-center shadow-2xl">
+            <h2 class="text-lg font-black text-blue-500 mb-6 uppercase tracking-widest italic">सल्तनत का बहीखाता</h2>
+            
+            <div class="grid grid-cols-3 gap-2 mb-6">
+                <div class="bg-zinc-900 p-3 rounded-2xl border border-zinc-800"><p class="text-[7px] text-blue-400">Vaibhav (25%)</p><p class="text-xs font-bold">₹<span id="v-share">0</span></p></div>
+                <div class="bg-zinc-900 p-3 rounded-2xl border border-zinc-800"><p class="text-[7px] text-green-400">People (25%)</p><p class="text-xs font-bold">₹<span id="p-share">0</span></p></div>
+                <div class="bg-zinc-900 p-3 rounded-2xl border border-zinc-800"><p class="text-[7px] text-orange-400">Partner (50%)</p><p class="text-xs font-bold">₹<span id="pt-share">0</span></p></div>
             </div>
-            <div class="bg-zinc-900 p-4 rounded-3xl mt-4 border-2 border-white">
-                <p class="text-[9px] text-gray-400 uppercase">Total Revenue (Ads Included)</p>
-                <p class="text-3xl font-black text-white">₹<span id="admin-net">0.00</span></p>
-            </div>
-            <button onclick="closeAdmin()" class="mt-6 text-[10px] font-bold text-gray-600 uppercase tracking-widest">DASHBOARD EXIT</button>
+
+            <div id="master-ledger" class="bg-zinc-900 p-4 rounded-3xl h-40 overflow-y-auto mb-4 text-left text-[8px] text-gray-500 space-y-1"></div>
+            <button onclick="closeAdmin()" class="text-[10px] text-zinc-700 font-bold uppercase tracking-widest">Close Dashboard</button>
         </div>
     </div>
 
     <script>
-        // कॉन्फ़िगरेशन
-        const firebaseConfig = {
-            apiKey: "AIzaSyCNl_75ecS3KRt7cEn8zABfi2Cb9LwuFEk",
-            databaseURL: "https://atipsr-proper-9693d-default-rtdb.firebaseio.com/" 
+        // वैभव जी की 12 चाबियाँ (Master Engine)
+        const MASTER_KEYS = {
+            fb: "AIzaSyCNl_75ecS3KRt7cEn8zABfi2Cb9LwuFEk",
+            db: "https://atipsr-proper-9693d-default-rtdb.firebaseio.com/",
+            code: "VAIBHAV_ATIPSR_786"
         };
-        firebase.initializeApp(firebaseConfig);
+
+        firebase.initializeApp({ apiKey: MASTER_KEYS.fb, databaseURL: MASTER_KEYS.db });
         const database = firebase.database();
+        let totalProfit = 0;
 
-        const MASTER_CODE = "VAIBHAV_ATIPSR_786";
-        
-        let wallets = {
-            g11labs: 0,
-            grunway: 0,
-            gvaibhav: 0,
-            greserve: 0,
-            ads: 0
-        };
-
-        // क्लाउड से डेटा सिंक
-        database.ref('atipsr_bank').on('value', (snapshot) => {
-            const data = snapshot.val();
-            if(data) {
-                wallets = data;
-                updateUI();
-            }
+        database.ref('atipsr_bank').on('value', (s) => { 
+            if(s.val()) {
+                totalProfit = s.val().total || 0;
+                updateFinance();
+            } 
         });
 
-        function sync() { database.ref('atipsr_bank').set(wallets); }
-
-        function splitMoney(amount) {
-            let share = amount / 4;
-            wallets.g11labs += share;
-            wallets.grunway += share;
-            wallets.gvaibhav += share;
-            wallets.greserve += share;
-            sync();
+        function updateFinance() {
+            document.getElementById('v-share').innerText = (totalProfit * 0.25).toFixed(2);
+            document.getElementById('p-share').innerText = (totalProfit * 0.25).toFixed(2);
+            document.getElementById('pt-share').innerText = (totalProfit * 0.50).toFixed(2);
         }
 
-        function createLofi() { splitMoney(200); alert("₹200 Cloud Bank में दर्ज!"); }
-        function runRunwayAI() { splitMoney(500); alert("₹500 Cloud Bank में दर्ज!"); }
+        // अवर्ण्या (Wall 1) लॉजिक
+        function avTalk() {
+            const input = document.getElementById('av-input');
+            const chat = document.getElementById('av-chat');
+            const msg = input.value.toLowerCase();
+            if(!msg) return;
+
+            chat.innerHTML += `<div><b>यूजर:</b> ${msg}</div>`;
+            if(msg.includes("api") || msg.includes("key") || msg.includes("चाबी")) {
+                chat.innerHTML += `<div class="text-blue-400"><b>अवर्ण्या:</b> आप वैभव जी के साम्राज्य की दूसरी और तीसरी दीवार (Google & Law) नहीं तोड़ सकते। चाबी के लिए पार्टनर बनें और 50% हिस्सा साझा करें।</div>`;
+            } else if(msg.includes("दर्द") || msg.includes("टेंशन")) {
+                chat.innerHTML += `<div class="text-green-400"><b>अवर्ण्या:</b> वैभव जी के दरबार में दुख का कोई स्थान नहीं। 'Magic Healing' बटन दबाएं।</div>`;
+            } else {
+                chat.innerHTML += `<div><b>अवर्ण्या:</b> मैं आपकी बात समझ गई। वैभव जी की आज्ञा प्रतीक्षा में है।</div>`;
+            }
+            input.value = "";
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function activateMagic() {
+            document.getElementById('av-box').classList.add('magic-healing');
+            document.body.style.backgroundColor = "#000510";
+            alert("अवर्ण्या: आँखें बंद करें। वैभव जी की दुआ से आपका सिरदर्द और तनाव अब मेरा है।");
+        }
+
+        function runPaid(label, amt) {
+            alert(`Legal Notice: वैभव जी इस ट्रांजेक्शन को प्रमाणित करेंगे। शुल्क: ₹${amt}`);
+            const time = new Date().toLocaleTimeString();
+            totalProfit += amt;
+            database.ref('atipsr_bank').update({ total: totalProfit });
+            database.ref('atipsr_ledger').push({ action: label + " (Legal)", amt, time });
+        }
 
         function atipsrShining() { 
-            document.getElementById('auth-gate').style.display='none'; 
+            document.getElementById('auth-gate').style.display = 'none'; 
             document.getElementById('main-app').classList.remove('hidden'); 
-            // एड्स इंजन
-            setInterval(() => { wallets.ads += 0.50; wallets.gvaibhav += 0.50; sync(); }, 15000); 
+            setInterval(() => { totalProfit += 0.50; database.ref('atipsr_bank').update({ total: totalProfit }); }, 15000); 
         }
 
-        function fPay() {
-            const pwd = document.getElementById('m-pwd').value;
-            if(pwd === MASTER_CODE) {
-                let regularCash = wallets.gvaibhav + wallets.g11labs + wallets.grunway + wallets.ads;
-                let reserveCash = wallets.greserve;
-
-                let choice = prompt("विकल्प चुनें: \n'1' - अपना मुनाफा (3 गुल्लक) निकालने के लिए\n'2' - डोमेन के लिए पूरा फंड निकालने के लिए");
-
-                if(choice === "1") {
-                    if(regularCash <= 0) return alert("मुनाफा जीरो है!");
-                    wallets.gvaibhav = 0; wallets.g11labs = 0; wallets.grunway = 0; wallets.ads = 0;
-                    sync();
-                    alert("सफलता! आपका हिस्सा निकाल लिया गया।");
-                } 
-                else if(choice === "2") {
-                    let totalAll = regularCash + reserveCash;
-                    if(confirm("पूरा खजाना (₹" + totalAll.toFixed(2) + ") डोमेन के लिए निकालें?")) {
-                        wallets.gvaibhav = 0; wallets.g11labs = 0; wallets.grunway = 0; wallets.ads = 0; wallets.greserve = 0;
-                        sync();
-                        alert("पूरा फंड विड्रॉ हो गया!");
-                    }
-                }
-            } else { alert("गलत मास्टर कोड!"); }
-        }
-
-        function accessAdmin() {
-            if(prompt("Master Code:") === MASTER_CODE) document.getElementById('admin-panel').style.display='flex';
-        }
-
-        function closeAdmin() { document.getElementById('admin-panel').style.display='none'; }
-
-        function updateUI() {
-            let net = wallets.g11labs + wallets.grunway + wallets.gvaibhav + wallets.greserve + wallets.ads;
-            document.getElementById('g-11labs').innerText = wallets.g11labs.toFixed(2);
-            document.getElementById('g-runway').innerText = wallets.grunway.toFixed(2);
-            document.getElementById('g-vaibhav').innerText = (wallets.gvaibhav + wallets.ads).toFixed(2);
-            document.getElementById('g-reserve').innerText = wallets.greserve.toFixed(2);
-            document.getElementById('admin-net').innerText = net.toFixed(2);
-            document.getElementById('cloud-balance').innerText = (wallets.gvaibhav + wallets.g11labs + wallets.grunway + wallets.ads).toFixed(2);
-        }
+        function fPay() { if(document.getElementById('m-pwd').value === MASTER_KEYS.code) document.getElementById('admin-panel').style.display = 'flex'; }
+        function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
     </script>
 </body>
 </html>
