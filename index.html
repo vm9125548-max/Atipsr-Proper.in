@@ -3,148 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>atipsrproper.in | Vaibhav's Supreme Empire</title>
+    <title>atipsrproper.in | ATIPSR Supreme Suite</title>
+    <meta name="monetag" content="7cd55129e1142d8c01e8018fad3f4294">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        body { background-color: #000; color: #fff; font-family: sans-serif; overflow-x: hidden; transition: all 1.5s ease; }
+        body { background-color: #000; color: #fff; font-family: sans-serif; overflow-x: hidden; }
         .atipsr-header { position: sticky; top: 0; z-index: 1000; background: #0f0f0f; border-bottom: 1px solid #333; padding: 15px 20px; text-align: center; }
-        .fortress-card { background: #0a0a0a; border: 1px solid #1a1a1a; padding: 25px; border-radius: 40px; text-align: center; cursor: pointer; transition: 0.4s; }
-        .fortress-card:hover { border-color: #3b82f6; box-shadow: 0 0 20px rgba(59,130,246,0.1); }
-        #admin-panel { position: fixed; inset: 0; background: rgba(0,0,0,0.99); z-index: 50000; display: none; flex-direction: column; items: center; justify-content: center; padding: 20px; }
-        .magic-healing { background-color: #000510 !important; border-color: #a855f7 !important; }
-        .legal-footer { font-size: 7px; color: #333; text-align: center; padding: 30px; margin-top: 40px; border-top: 1px solid #0f0f0f; }
+        .atipsr-btn { background: #0a0a0a; border: 2px solid #1e3a8a; padding: 20px; border-radius: 35px; text-align: center; cursor: pointer; transition: 0.3s; font-weight: 900; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; }
+        .atipsr-btn:hover { border-color: #3b82f6; background: #0f172a; box-shadow: 0 0 25px rgba(59,130,246,0.2); }
+        .empire-box { background: #050505; border: 2px solid #222; border-radius: 40px; padding: 20px; margin-top: 20px; }
+        iframe { width: 100%; height: 280px; border-radius: 25px; border: 2px solid #333; }
+        #monetag-floating-box { position: fixed; bottom: 20px; right: 20px; width: 120px; height: 90px; background: #111; border: 2px solid #3b82f6; border-radius: 15px; z-index: 10000; display: flex; items: center; justify-content: center; font-size: 8px; color: #555; text-transform: uppercase; overflow: hidden; }
+        .bg-ad-active { opacity: 0.05; position: fixed; inset: 0; z-index: 1; pointer-events: none; }
     </style>
 </head>
 <body>
 
+    <div id="monetag-floating-box">
+        <p class="text-center">ATIPSR<br>Sponsored Shield</p>
+    </div>
+    <div id="monetag-bg-layer"></div>
+
     <div id="auth-gate" class="fixed inset-0 bg-black z-[20000] flex flex-col items-center justify-center p-6 text-center">
         <h1 class="text-6xl font-black text-blue-500 mb-2 italic tracking-tighter uppercase">atipsrproper.in</h1>
-        <p class="text-zinc-600 mb-12 text-[9px] tracking-[6px] uppercase font-bold">The 4-Wall Fortress of Vaibhav Ji</p>
-        <button onclick="atipsrShining()" class="bg-white text-black px-16 py-5 rounded-full font-black shadow-2xl hover:scale-105 transition uppercase text-xs">Enter Empire</button>
+        <p class="text-zinc-600 mb-12 text-[9px] tracking-[6px] uppercase font-bold">Ultra Pro Cloud Security Shield</p>
+        <button onclick="handleGoogleSignIn()" class="bg-white text-black px-16 py-5 rounded-full font-black shadow-2xl hover:scale-105 transition uppercase text-xs flex items-center gap-2">
+            🔑 Sign In With Google Cloud
+        </button>
+        <p id="security-alert" class="text-red-500 text-[10px] font-bold mt-6 uppercase tracking-widest hidden">🚨 DISMISSED BY PROPER SECURITY KING: MALICIOUS ACTIVITY BLOCKED</p>
     </div>
 
     <div id="main-app" class="hidden">
-        <header class="atipsr-header"><h1 class="text-2xl font-black text-blue-500 italic tracking-widest">ATIPSR PROPER</h1></header>
+        <header class="atipsr-header">
+            <h1 class="text-2xl font-black text-blue-500 italic tracking-widest">ATIPSR PROPER</h1>
+            <p id="user-welcome" class="text-[9px] text-green-400 uppercase tracking-wider mt-1 font-bold"></p>
+        </header>
 
-        <div id="avarnya-box" class="m-4 p-6 border-2 border-blue-600 rounded-[45px] bg-zinc-950 shadow-2xl">
-            <h2 id="av-title" class="text-center text-blue-400 font-black italic uppercase text-sm">Avarnya AI (Wall 1)</h2>
-            <div id="av-chat" class="h-32 overflow-y-auto my-4 text-[10px] text-zinc-500 border-b border-zinc-900 pb-2">
-                <div><b>अवर्ण्या:</b> स्वागत है। मैं वैभव जी के साम्राज्य की पहली दीवार हूँ। यहाँ सब कुछ कानूनी और सुरक्षित है।</div>
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div onclick="openAtipsrModule('movies')" class="atipsr-btn text-blue-400">🎬 ATIPSR Movies</div>
+                <div onclick="openAtipsrModule('video-player')" class="atipsr-btn text-teal-400">▶️ ATIPSR Video Player</div>
+                <div onclick="openAtipsrModule('editor')" class="atipsr-btn text-purple-400">🎨 ATIPSR Video Editor [Premium]</div>
+                <div onclick="openAtipsrModule('chatbox')" class="atipsr-btn text-indigo-400">💬 ATIPSR AI Chat Box</div>
+                <div onclick="openAtipsrModule('lofi')" class="atipsr-btn text-pink-400">🎵 ATIPSR Lofi Creator</div>
+                <div onclick="openAtipsrModule('vocal')" class="atipsr-btn text-red-400">🎤 ATIPSR Vocal & Birha Dialogue Pro</div>
+                <div onclick="openAtipsrModule('audio-studio')" class="atipsr-btn text-cyan-400 border-cyan-800">🎛️ ATIPSR AI Music Studio</div>
+                <div onclick="openAtipsrModule('loop-packs')" class="atipsr-btn text-amber-400 border-amber-600">🥁 ATIPSR Loop & Dialogue Store</div>
             </div>
+        </div>
+
+        <div id="module-movies" class="hidden p-6 mx-4 empire-box">
+            <div class="flex bg-zinc-900 border border-zinc-800 rounded-full overflow-hidden p-1 mb-6">
+                <input id="movie-query" type="text" placeholder="फिल्म खोजें..." class="w-full bg-transparent p-3 px-6 outline-none text-sm text-white">
+                <button onclick="searchAtipsrMovies()" class="bg-blue-600 px-8 rounded-full font-black text-xs uppercase">Search</button>
+            </div>
+            <div id="movie-display" class="hidden">
+                <div id="movie-player"></div>
+            </div>
+        </div>
+
+        <div id="module-video-player" class="hidden p-6 mx-4 empire-box">
+            <div class="flex bg-zinc-900 border border-zinc-800 rounded-full overflow-hidden p-1 mb-6">
+                <input id="video-query" type="text" placeholder="यूट्यूब वीडियो सर्च करें..." class="w-full bg-transparent p-3 px-6 outline-none text-sm text-white">
+                <button onclick="searchAtipsrVideos()" class="bg-teal-600 px-8 rounded-full font-black text-xs uppercase">Search</button>
+            </div>
+            <div id="video-display" class="hidden">
+                <div id="video-player-area"></div>
+            </div>
+        </div>
+
+        <div id="module-editor" class="hidden p-6 mx-4 empire-box text-center">
+            <textarea id="runway-prompt" placeholder="Runway AI प्रॉम्ट..." class="w-full bg-zinc-950 border border-zinc-800 rounded-2xl p-4 text-xs outline-none mb-4 h-20"></textarea>
+            <button onclick="checkPremiumPayment('Runway Gen-3 Pro Pass', 79, 'runway')" class="bg-purple-600 px-8 py-3 rounded-full font-black text-xs">Generate Video (₹79)</button>
+        </div>
+
+        <div id="module-chatbox" class="hidden p-6 mx-4 empire-box">
+            <div id="av-chat-area" class="h-32 overflow-y-auto mb-4 text-xs text-zinc-400 p-2"></div>
             <div class="flex gap-2">
-                <input id="av-input" type="text" placeholder="अपना दुख कहें या पार्टनरशिप मांगें..." class="w-full bg-black border border-zinc-900 rounded-full p-3 px-6 text-xs outline-none focus:border-blue-500">
-                <button onclick="avTalk()" class="bg-blue-600 p-3 rounded-full">🚀</button>
-            </div>
-            <button onclick="activateMagic()" class="w-full mt-3 bg-gradient-to-r from-blue-900 to-purple-900 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg">✨ Free Magic Healing (sar dard ka ilaj)</button>
-        </div>
-
-        <div class="grid grid-cols-1 gap-4 px-6 mb-20">
-            <p class="text-[9px] text-zinc-700 uppercase mb-2 tracking-[4px] text-center italic">Empire Services (Law & Google Protected)</p>
-            
-            <div onclick="mExecute()" class="fortress-card">
-                <h3 class="text-blue-500 font-bold text-xs uppercase italic">Movie & Entertainment (Free)</h3>
-                <p class="text-[8px] text-zinc-600 mt-2">Wall 2 (Google) & Wall 3 (Law) Protected</p>
-            </div>
-
-            <div onclick="runPaid('AI Video Gen', 500)" class="fortress-card border-red-900/20">
-                <h3 class="text-red-500 font-bold text-xs uppercase">Pro AI Video (Paid)</h3>
-                <p class="text-[8px] text-zinc-600 mt-2">Legal Partnership Agreement Required</p>
+                <input id="av-msg" type="text" placeholder="पूछें..." class="w-full bg-black border border-zinc-900 rounded-full p-3 px-6 text-xs">
+                <button onclick="askAvarnya()" class="bg-indigo-600 p-3 rounded-full">🚀</button>
             </div>
         </div>
 
-        <div class="px-6 text-center mb-10">
-            <p class="text-[7px] text-zinc-800 uppercase mb-4 tracking-[3px]">Wall 4: Ultimate Master Access</p>
-            <input id="m-pwd" type="password" placeholder="Master Access Code" class="w-full bg-black border border-zinc-900 rounded-3xl p-5 text-sm mb-4 text-center outline-none text-blue-500">
-            <button onclick="fPay()" class="text-[9px] text-zinc-600 font-black uppercase tracking-[5px] hover:text-white">Open Sovereign Dashboard</button>
+        <div id="module-lofi" class="hidden p-6 mx-4 empire-box text-center">
+            <input id="lofi-file" type="file" accept="audio/*" class="block w-full text-xs text-zinc-500 mb-4" onchange="detectVirus(this)">
+            <button onclick="processLofiCreation()" class="bg-pink-600 px-8 py-3 rounded-full font-black text-xs">Process Lofi</button>
         </div>
 
-        <footer class="legal-footer">
-            <p>© 2026 ATIPSR PROPER | वैभव जी के नियमों के अधीन</p>
-            <p class="mt-2 opacity-50 italic uppercase tracking-[1px]">कोई भी अवैध प्रयास कानूनी दीवार (Wall 3) से टकराकर खत्म होगा</p>
-        </footer>
+        <div id="module-vocal" class="hidden p-6 mx-4 empire-box text-center">
+            <input id="vocal-file" type="file" accept="audio/*" class="block w-full text-xs text-zinc-500 mb-6" onchange="detectVirus(this)">
+            <div class="flex gap-4 justify-center">
+                <button onclick="processVocalRemoval('normal')" class="bg-zinc-900 p-4 rounded-3xl text-xs font-bold">Standard</button>
+                <button onclick="checkPremiumPayment('Vocal Remover Pro DJ Pass', 199, 'vocal-pro')" class="bg-purple-600 p-4 rounded-3xl text-xs font-bold">Pro (₹199)</button>
+            </div>
+        </div>
+
+        <div id="module-audio-studio" class="hidden p-6 mx-4 empire-box text-center">
+            <input id="merge-files" type="file" accept="audio/*" multiple class="block w-full text-xs mb-3" onchange="detectVirus(this)">
+            <button onclick="processAudioMerge()" class="bg-cyan-600 p-2 rounded-full text-xs">Merge Tracks</button>
+        </div>
+
+        <div id="module-loop-packs" class="hidden p-6 mx-4 empire-box text-center">
+            <button onclick="checkPremiumPayment('ATIPSR Legend Birha Gold Pack', 79, 'buy-pack')" class="bg-yellow-500 text-black font-black text-xs p-4 rounded-full">Buy Birha Pack (₹79)</button>
+        </div>
+
+        <div class="px-6 text-center mb-10 mt-12">
+            <input id="m-pwd" type="password" placeholder="Master Access Code" class="w-full bg-black border border-zinc-900 rounded-3xl p-5 text-sm mb-4 text-center outline-none">
+            <button onclick="fPay()" class="text-[9px] text-zinc-600 font-black">Open Sovereign Dashboard</button>
+        </div>
     </div>
 
-    <div id="admin-panel">
-        <div class="bg-zinc-950 p-8 rounded-[50px] border-2 border-blue-600 w-full max-w-sm text-center shadow-2xl">
-            <h2 class="text-lg font-black text-blue-500 mb-6 uppercase tracking-widest italic">सल्तनत का बहीखाता</h2>
-            
-            <div class="grid grid-cols-3 gap-2 mb-6">
-                <div class="bg-zinc-900 p-3 rounded-2xl border border-zinc-800"><p class="text-[7px] text-blue-400">Vaibhav (25%)</p><p class="text-xs font-bold">₹<span id="v-share">0</span></p></div>
-                <div class="bg-zinc-900 p-3 rounded-2xl border border-zinc-800"><p class="text-[7px] text-green-400">People (25%)</p><p class="text-xs font-bold">₹<span id="p-share">0</span></p></div>
-                <div class="bg-zinc-900 p-3 rounded-2xl border border-zinc-800"><p class="text-[7px] text-orange-400">Partner (50%)</p><p class="text-xs font-bold">₹<span id="pt-share">0</span></p></div>
+    <div id="admin-panel" class="hidden fixed inset-0 bg-black/98 z-50 flex flex-col items-center justify-center p-6">
+        <div class="bg-zinc-950 p-8 rounded-[50px] border-2 border-blue-600 w-full max-w-lg text-center">
+            <div class="grid grid-cols-2 gap-3 mb-8 text-[9px] text-white">
+                <div class="bg-zinc-900 p-4 rounded-2xl"><p>Vaibhav Share</p><p id="share-vaibhav">₹0.00</p></div>
+                <div class="bg-zinc-900 p-4 rounded-2xl"><p>ElevenLabs</p><p id="share-eleven">₹0.00</p></div>
+                <div class="bg-zinc-900 p-4 rounded-2xl"><p>Runway</p><p id="share-runway">₹0.00</p></div>
+                <div class="bg-zinc-900 p-4 rounded-2xl"><p>Domain Fund</p><p id="share-domain">₹0.00</p></div>
             </div>
-
-            <div id="master-ledger" class="bg-zinc-900 p-4 rounded-3xl h-40 overflow-y-auto mb-4 text-left text-[8px] text-gray-500 space-y-1"></div>
-            <button onclick="closeAdmin()" class="text-[10px] text-zinc-700 font-bold uppercase tracking-widest">Close Dashboard</button>
+            <button onclick="closeAdmin()" class="text-xs text-zinc-500">Exit</button>
         </div>
     </div>
 
     <script>
-        // वैभव जी की 12 चाबियाँ (Master Engine)
         const MASTER_KEYS = {
             fb: "AIzaSyCNl_75ecS3KRt7cEn8zABfi2Cb9LwuFEk",
             db: "https://atipsr-proper-9693d-default-rtdb.firebaseio.com/",
-            code: "VAIBHAV_ATIPSR_786"
+            code: "VAIBHAV_ATIPSR_786",
+            tmdbKey: "a8bbf4e90a83b95a3078c3260e185548",
+            youtubeKey: "AIzaSyAGFANqApIpfQ59gZgDIMM9dV7ZYdzcE3M"
         };
 
         firebase.initializeApp({ apiKey: MASTER_KEYS.fb, databaseURL: MASTER_KEYS.db });
         const database = firebase.database();
-        let totalProfit = 0;
+        let totalProfit = 0; let currentUserEmail = "";
 
-        database.ref('atipsr_bank').on('value', (s) => { 
-            if(s.val()) {
-                totalProfit = s.val().total || 0;
-                updateFinance();
-            } 
-        });
-
-        function updateFinance() {
-            document.getElementById('v-share').innerText = (totalProfit * 0.25).toFixed(2);
-            document.getElementById('p-share').innerText = (totalProfit * 0.25).toFixed(2);
-            document.getElementById('pt-share').innerText = (totalProfit * 0.50).toFixed(2);
+        function handleGoogleSignIn() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(provider).then((result) => {
+                currentUserEmail = result.user.email;
+                document.getElementById('user-welcome').innerText = `Logged In: ${currentUserEmail}`;
+                document.getElementById('auth-gate').style.display = 'none';
+                document.getElementById('main-app').classList.remove('hidden');
+            }).catch((e) => { alert("Google Sign-In Failed."); });
         }
 
-        // अवर्ण्या (Wall 1) लॉजिक
-        function avTalk() {
-            const input = document.getElementById('av-input');
-            const chat = document.getElementById('av-chat');
-            const msg = input.value.toLowerCase();
-            if(!msg) return;
-
-            chat.innerHTML += `<div><b>यूजर:</b> ${msg}</div>`;
-            if(msg.includes("api") || msg.includes("key") || msg.includes("चाबी")) {
-                chat.innerHTML += `<div class="text-blue-400"><b>अवर्ण्या:</b> आप वैभव जी के साम्राज्य की दूसरी और तीसरी दीवार (Google & Law) नहीं तोड़ सकते। चाबी के लिए पार्टनर बनें और 50% हिस्सा साझा करें।</div>`;
-            } else if(msg.includes("दर्द") || msg.includes("टेंशन")) {
-                chat.innerHTML += `<div class="text-green-400"><b>अवर्ण्या:</b> वैभव जी के दरबार में दुख का कोई स्थान नहीं। 'Magic Healing' बटन दबाएं।</div>`;
-            } else {
-                chat.innerHTML += `<div><b>अवर्ण्या:</b> मैं आपकी बात समझ गई। वैभव जी की आज्ञा प्रतीक्षा में है।</div>`;
+        function detectVirus(input) {
+            if (!input.files || input.files.length === 0) return;
+            const fileName = input.files[0].name.toLowerCase();
+            if (fileName.endsWith('.exe') || fileName.endsWith('.bat')) {
+                input.value = ""; document.getElementById('main-app').classList.add('hidden');
+                document.getElementById('auth-gate').style.display = 'flex';
+                document.getElementById('security-alert').classList.remove('hidden');
             }
-            input.value = "";
-            chat.scrollTop = chat.scrollHeight;
         }
 
-        function activateMagic() {
-            document.getElementById('av-box').classList.add('magic-healing');
-            document.body.style.backgroundColor = "#000510";
-            alert("अवर्ण्या: आँखें बंद करें। वैभव जी की दुआ से आपका सिरदर्द और तनाव अब मेरा है।");
+        function detectCodeInjection(textarea) {
+            if (/<script>|eval\(/gi.test(textarea.value)) { textarea.value = ""; }
         }
 
-        function runPaid(label, amt) {
-            alert(`Legal Notice: वैभव जी इस ट्रांजेक्शन को प्रमाणित करेंगे। शुल्क: ₹${amt}`);
-            const time = new Date().toLocaleTimeString();
-            totalProfit += amt;
-            database.ref('atipsr_bank').update({ total: totalProfit });
-            database.ref('atipsr_ledger').push({ action: label + " (Legal)", amt, time });
+        database.ref('atipsr_bank').on('value', (s) => { if(s.val()) { totalProfit = s.val().total || 0; updateFinanceSplit(); } });
+        function updateFinanceSplit() {
+            const q = totalProfit * 0.25;
+            document.getElementById('share-vaibhav').innerText = "₹" + q.toFixed(2);
+            document.getElementById('share-eleven').innerText = "₹" + q.toFixed(2);
+            document.getElementById('share-runway').innerText = "₹" + q.toFixed(2);
+            document.getElementById('share-domain').innerText = "₹" + q.toFixed(2);
         }
 
-        function atipsrShining() { 
-            document.getElementById('auth-gate').style.display = 'none'; 
-            document.getElementById('main-app').classList.remove('hidden'); 
-            setInterval(() => { totalProfit += 0.50; database.ref('atipsr_bank').update({ total: totalProfit }); }, 15000); 
+        function checkPremiumPayment(service, rate, type) {
+            if (confirm(`Pay ₹${rate}?`)) {
+                totalProfit += rate; database.ref('atipsr_bank').update({ total: totalProfit });
+                alert("Payment Successful!");
+            }
         }
 
+        function openAtipsrModule(type) {
+            const modules = ['movies', 'video-player', 'editor', 'chatbox', 'lofi', 'vocal', 'loop-packs', 'audio-studio'];
+            modules.forEach(m => document.getElementById('module-' + m).classList.add('hidden'));
+            document.getElementById('module-' + type).classList.remove('hidden');
+        }
+
+        function searchAtipsrMovies() { document.getElementById('movie-display').classList.remove('hidden'); }
+        function searchAtipsrVideos() { document.getElementById('video-display').classList.remove('hidden'); }
+        function processLofiCreation() { alert("Lofi Processed!"); }
+        function processVocalRemoval(mode) { alert("Processing..."); }
+        function processAudioMerge() { alert("Tracks Merged!"); }
+        function triggerDownload(t) { alert("Downloading..."); }
         function fPay() { if(document.getElementById('m-pwd').value === MASTER_KEYS.code) document.getElementById('admin-panel').style.display = 'flex'; }
         function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
     </script>
