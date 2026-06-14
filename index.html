@@ -1,1 +1,69 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>Vaibhav Mishra | Atipsr Pro Empire</title>
+    <style>
+        body { background: #000; color: #fff; margin: 0; padding: 0; font-family: sans-serif; }
+        
+        /* 1. Google-Style Auth Button (Top Right) */
+        #google-auth-btn {
+            position: fixed; top: 15px; right: 20px; z-index: 10000;
+            padding: 8px 16px; background: #fff; color: #000;
+            border-radius: 4px; cursor: pointer; font-weight: bold;
+            font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        /* 2. Atipsr CEO (Stealth Left-Corner Hub) */
+        #atipsr-ceo-hub {
+            position: fixed; top: 15px; left: 15px; z-index: 9999;
+            color: #333; font-size: 11px; cursor: default; user-select: none;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        #content-grid { padding-top: 80px; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 50px; }
+    </style>
+</head>
+<body>
+
+    <!-- Professional Auth -->
+    <div id="google-auth-btn">Sign in with Google</div>
+
+    <!-- Stealth Branding -->
+    <div id="atipsr-ceo-hub" onclick="MasterBrain.checkCEO()">Atipsr CEO</div>
+
+    <div id="content-grid"></div>
+
+    <script>
+    const MasterBrain = {
+        ceo: "Vaibhav Mishra",
+        brand: "Atipsr Pro",
+
+        async init() {
+            this.autoBuildUI();
+        },
+
+        autoBuildUI() {
+            const grid = document.getElementById('content-grid');
+            grid.innerHTML = `<h1>Welcome to ${this.brand}</h1>`;
+            
+            // Sabhi APIs ka naam mask hokar "Atipsr Pro" ho jayega
+            setTimeout(() => {
+                grid.innerHTML = `<p>Data Stream Powered by ${this.brand} Engine.</p>`;
+            }, 2000);
+        },
+
+        // SIRF CEO ke liye switch
+        checkCEO() {
+            const secretKey = prompt("CEO Vaibhav Mishra, Accessing Secure Channel...");
+            if (secretKey === "atipsr") { // Security Layer
+                alert("Channel Open. Bataiye, kya badalna hai?");
+            }
+        }
+    };
+
+    window.onload = () => MasterBrain.init();
+    </script>
+</body>
+</html>
 
