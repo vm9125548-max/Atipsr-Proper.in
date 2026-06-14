@@ -2,62 +2,35 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <title>Atipsr Pro | Autonomous Empire</title>
+    <title>Atipsr Pro | Movie Empire</title>
     <style>
-        body { background: #000; color: #0f0; font-family: monospace; }
-        #ceo-panel { position: fixed; top: 10px; left: 10px; border: 1px solid #0f0; padding: 10px; background: #000; }
-        .data-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 50px; }
+        body { background: #0a0a0a; color: #fff; font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        header { text-align: center; padding: 20px; }
+        .search-container { text-align: center; margin-bottom: 30px; }
+        #search-bar { width: 80%; padding: 15px; border-radius: 25px; border: none; }
+        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .movie-card { background: #1a1a1a; padding: 10px; border-radius: 10px; text-align: center; }
+        .movie-card img { width: 100%; border-radius: 8px; }
     </style>
 </head>
 <body>
 
-    <div id="ceo-panel">
-        <strong>Atipsr Pro Status:</strong> <span id="status">INITIALIZING...</span>
-        <button onclick="EmpireEngine.syncAll()">SYNC EMPIRE</button>
+    <header>
+        <h1>Atipsr Pro Empire</h1>
+        <p>Aapka apna movie aur video hub</p>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="search-bar" placeholder="Movie ya Remix ka naam likhein...">
     </div>
 
-    <div class="data-grid" id="main-hub"></div>
+    <div class="movie-grid" id="main-hub">
+        <!-- Yahan aapki videos/movies automatically aayengi -->
+        <div class="movie-card">
+            <h3>Remix 01</h3>
+            <p>Coming Soon...</p>
+        </div>
+    </div>
 
-    <script>
-    const EmpireEngine = {
-        // Self-Defense: Sabhi keys ko ek saath load karega
-        async init() {
-            try {
-                document.getElementById('status').innerText = "SECURE MODE ON";
-                this.syncAll();
-            } catch (e) {
-                document.getElementById('status').innerText = "ERROR - MANUAL OVERRIDE NEEDED";
-            }
-        },
-
-        async syncAll() {
-            // Yeh sabhi variables ko process.env se fetch karke khud configure ho jayega
-            const keys = ['NEXT_PUB_API_KEY', 'ELEVENLA_API_KEY', 'RAPIDAPT_KEY', 'META_NAM_API_KEY'];
-            keys.forEach(k => {
-                const val = typeof process !== 'undefined' ? process.env[k] : localStorage.getItem(k);
-                if(val) console.log(`Key ${k} Loaded and Locked.`);
-            });
-            document.getElementById('main-hub').innerHTML = "<h1>Empire Synchronized. System Self-Sustained.</h1>";
-        }
-    };
-
-    EmpireEngine.init();
-    </script>
 </body>
 </html>
-<!-- ATIPSR PRO AI BRIDGE - DO NOT REMOVE -->
-<div id="ai-bridge" style="display:none;" data-status="linked" data-ceo="Vaibhav Mishra"></div>
-<script>
-    const AIBrain = {
-        version: "2.0.0",
-        syncStatus: "ACTIVE",
-        // Yeh function mere commands ko read karega
-        receiveUpdate: function(newCode) {
-            console.log("CEO Update Received: Synchronizing Empire...");
-            // Yahan logic hoga jo aapke website ko update karega
-            document.getElementById('main-hub').innerHTML = newCode;
-        }
-    };
-    console.log("Atipsr Pro AI Bridge: Connected to CEO.");
-</script>
-<!-- END OF BRIDGE -->
