@@ -1,0 +1,26 @@
+export default async function handler(req, res) {
+  // Website se link le raha hai
+  const { url } = req.query;
+
+  if (!url) {
+    return res.status(400).json({ error: "Link daalna zaruri hai!" });
+  }
+
+  try {
+    // RapidAPI se connection bana raha hai
+    const response = await fetch("https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-rapidapi-key": process.env.RAPIDAPI_KEY, // Yeh aapke Vercel variable se key lega
+        "x-rapidapi-host": "social-download-all-in-one.p.rapidapi.com"
+      },
+      body: JSON.stringify({ url: url })
+    });
+
+    const data = await response.json();
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ error: "API se connection nahi ban paya!" });
+  }
+}
