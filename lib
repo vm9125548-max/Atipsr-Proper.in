@@ -1,0 +1,19 @@
+// Atipsr Pro: 10-Crore Speed Connector - ALL IN ONE
+export const MasterBridge = {
+    async call(apiName, action, payload = {}) {
+        const start = performance.now();
+        try {
+            const res = await fetch(`/api/bridge/${apiName}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action, payload })
+            });
+            const data = await res.json();
+            console.log(`Makkhan Speed: ${apiName} processed in ${performance.now() - start}ms`);
+            return data;
+        } catch (err) {
+            console.error("Connection Error:", err);
+            return null;
+        }
+    }
+};
