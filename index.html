@@ -1,18 +1,14 @@
-<input type="text" id="url" placeholder="YouTube Link...">
-<button onclick="run()">Execute</button>
-<div id="output"></div>
-
 <script>
 async function run() {
     const url = document.getElementById('url').value;
-    const out = document.getElementById('output');
-    out.innerHTML = "Processing...";
+    console.log("Request bheji ja rahi hai:", '/api?url=' + encodeURIComponent(url));
     try {
         const res = await fetch('/api?url=' + encodeURIComponent(url));
         const data = await res.json();
-        out.innerHTML = data.download_url ? `<a href="${data.download_url}">Download</a>` : JSON.stringify(data);
+        console.log("API ka jawaab:", data);
+        document.getElementById('output').innerText = JSON.stringify(data);
     } catch (e) {
-        out.innerHTML = "Error: " + e.message;
+        document.getElementById('output').innerText = "Error: " + e.message;
     }
 }
 </script>
