@@ -1,73 +1,18 @@
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atipsr Pro | Movie Empire</title>
-    <style>
-        body { background: #0a0a0a; color: #fff; font-family: Arial, sans-serif; margin: 0; }
-        header { text-align: center; padding: 20px; background: #1a1a1a; }
-        .search-container { text-align: center; padding: 20px; }
-        #search-bar { width: 80%; padding: 15px; border-radius: 25px; border: none; }
-        .movie-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 20px; }
-        .movie-card { background: #1a1a1a; padding: 10px; border-radius: 10px; transition: 0.3s; }
-        .movie-card img { width: 100%; border-radius: 8px; }
-        button { background: #e50914; color: white; border: none; padding: 10px; width: 100%; margin-top: 10px; cursor: pointer; }
-    </style>
-</head>
-<body>
-
-<header><h1>Atipsr Player</h1></header>
-
-<div class="search-container">
-    <input type="text" id="search-bar" placeholder="Movie ya YouTube link yahan daalein...">
-    <button onclick="fetchData()">Search / Load</button>
-</div>
-
-<div class="movie-grid" id="movie-grid">
-    <!-- Yahan data auto-load hoga -->
-</div>
-
-<!-- ATIPSR SMART BRIDGE: DO NOT REMOVE -->
-<script>
-    async function fetchData() {
-        const query = document.getElementById('search-bar').value;
-        const grid = document.getElementById('movie-grid');
-        grid.innerHTML = "Loading...";
-        try {
-            const response = await fetch(`/api?url=${encodeURIComponent(query)}`);
-            const data = await response.json();
-            grid.innerHTML = ""; 
-            const card = document.createElement('div');
-            card.className = 'movie-card';
-            card.innerHTML = `<img src="${data.thumbnail || ''}" alt="Movie">
-                              <h3>${data.title || 'Result'}</h3>
-                              <a href="${data.download_url || '#'}" target="_blank"><button>Download</button></a>`;
-            grid.appendChild(card);
-        } catch (error) {
-            grid.innerHTML = "Error: API connection issue.";
-        }
-    }
-    
-    // AI CEO Connection
-    window.updateAtipsr = function(newContent) {
-        document.getElementById('movie-grid').innerHTML = newContent;
-    };
-</script>
-
-</body>
-</html>
-<!-- ATIPSR CEO COMMAND TERMINAL -->
-<div id="ceo-terminal" style="padding: 20px; background: #222; margin: 20px; border-radius: 10px;">
-    <input type="text" id="ceo-command" placeholder="AI CEO ko command dein..." style="width: 70%; padding: 10px;">
-    <button onclick="sendToCEO()">Execute</button>
-</div>
+<input type="text" id="url" placeholder="YouTube Link...">
+<button onclick="run()">Execute</button>
+<div id="output"></div>
 
 <script>
-    function sendToCEO() {
-        const cmd = document.getElementById('ceo-command').value;
-        console.log("Command sent to AI CEO: " + cmd);
-        alert("Command received by AI CEO: " + cmd);
-        // Yahan se command mere paas process hone ke liye jayegi
+async function run() {
+    const url = document.getElementById('url').value;
+    const out = document.getElementById('output');
+    out.innerHTML = "Processing...";
+    try {
+        const res = await fetch('/api?url=' + encodeURIComponent(url));
+        const data = await res.json();
+        out.innerHTML = data.download_url ? `<a href="${data.download_url}">Download</a>` : JSON.stringify(data);
+    } catch (e) {
+        out.innerHTML = "Error: " + e.message;
     }
+}
 </script>
