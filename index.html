@@ -1,181 +1,239 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atipsr-Proper.in | Vainex AI CEO Powered Platform</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase SDK for Google Sign-In -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <title>Atipsr-Proper.in - AI Dynamic Studio & ITS Command Center</title>
+    <style>
+        body { background: #0b0b0b; color: #fff; font-family: Arial, sans-serif; text-align: center; padding: 20px; margin: 0; }
+        .studio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 30px auto; max-width: 900px; }
+        .feature-card { background: #1a1a1a; border: 1px solid #333; padding: 25px; border-radius: 12px; cursor: pointer; transition: 0.3s; }
+        .feature-card:hover { border-color: #00ffcc; transform: translateY(-5px); }
+        h2 { color: #00ffcc; }
+
+        /* AI Chat Box & Search Section Styling */
+        .search-section { margin: 20px auto; max-width: 700px; }
+        .search-input { width: 80%; padding: 12px; font-size: 16px; border: 2px solid #333; background: #111; color: #fff; border-radius: 5px; }
+        .options-row { margin-top: 10px; }
+        .option-btn { padding: 8px 16px; margin: 0 5px; font-weight: bold; border: none; border-radius: 4px; cursor: pointer; }
+        .btn-fake { background-color: #ffcccc; color: #990000; }
+        .btn-official { background-color: #d4edda; color: #155724; }
+
+        /* AI Chat Box Container */
+        .ai-chat-box { border: 2px solid #00ffcc; border-radius: 8px; margin: 30px auto; max-width: 750px; background: #141414; display: flex; flex-direction: column; height: 450px; text-align: left; }
+        .ai-header { background: #1f1f1f; color: #00ffcc; padding: 12px 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; }
+        .chat-screen { flex: 1; padding: 15px; overflow-y: auto; font-size: 14px; background: #0d0d0d; color: #ddd; }
+        .chat-input-area { display: flex; padding: 10px; background: #1a1a1a; border-top: 1px solid #333; }
+        .chat-input { flex: 1; padding: 10px; border: 1px solid #444; background: #222; color: #fff; border-radius: 4px; }
+        .send-btn { padding: 10px 20px; background: #00ffcc; color: #000; font-weight: bold; border: none; border-radius: 4px; margin-left: 5px; cursor: pointer; }
+
+        .disclaimer-box { background: #221a00; border: 1px solid #ffd700; padding: 12px; margin: 10px 0; border-radius: 4px; font-size: 13px; line-height: 1.4; color: #ffe680; }
+        .disclaimer-box textarea { width: 100%; height: 50px; margin-top: 5px; background: #111; color: #fff; border: 1px solid #444; }
+    </style>
 </head>
-<body class="bg-slate-950 text-white font-sans antialiased min-h-screen flex flex-col justify-between">
+<body>
 
-    <!-- 1. Universal Auth & Disclaimer Modal (Sabhi ke liye ek jaisa start) -->
-    <div id="authModal" class="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl max-w-md w-full shadow-2xl text-center space-y-4">
-            <h2 class="text-2xl font-bold text-cyan-400">Atipsr-Proper.in में आपका स्वागत है</h2>
-            <p class="text-slate-300 text-sm">आगे बढ़ने के लिए कृपया नियम पढ़ें और Google से लॉगिन करें।</p>
-            
-            <div class="bg-slate-950 p-3 rounded-lg text-xs text-slate-400 text-left border border-slate-800">
-                <input type="checkbox" id="agreeCheck" class="mr-2 accent-cyan-500">
-                <label for="agreeCheck">मैं अपनी मर्जी से इस वेबसाइट पर सामग्री देख रहा हूँ, मुझ पर किसी प्रकार का कोई दबाव नहीं है।</label>
-            </div>
+    <h1>🚀 AI DYNAMIC STUDIO 🚀</h1>
+    <p>Select your tool and let the AI do the magic instantly.</p>
 
-            <button onclick="loginWithGoogle()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold py-3 rounded-xl shadow-lg hover:opacity-90 transition">
-                Google से लॉगिन करें
-            </button>
+    <!-- STUDIO GRID (Tools) -->
+    <div class="studio-grid" id="studio-grid-section">
+        <div class="feature-card" onclick="runTool('visualizer')">
+            <h3>Unlimited Visualizer Generating</h3>
+            <p>Transform audio/video into dynamic full-screen visualizers.</p>
+        </div>
+        <div class="feature-card" onclick="runTool('emoji')">
+            <h3>Unlimited Emoji Generating</h3>
+            <p>Create custom moving and dancing emojis on the fly.</p>
+        </div>
+        <div class="feature-card" onclick="runTool('text-mover')">
+            <h3>Unlimited Text Movers Generating</h3>
+            <p>Animate text with stylish moving cinematic motion effects.</p>
+        </div>
+        <div class="feature-card" onclick="runTool('logo-mover')">
+            <h3>Unlimited Logo Mover Generating</h3>
+            <p>Give your brand logo smooth rotating and waving animations.</p>
+        </div>
+        <div class="feature-card" onclick="runTool('sticker-moving')">
+            <h3 style="color: #00ffcc;">🟢 Unlimited Sticker Moving Generator</h3>
+            <p>Convert static stickers into seamless moving animations instantly.</p>
         </div>
     </div>
 
-    <!-- Main Website Container (Hidden until verification) -->
-    <div class="hidden" id="mainContent">
-        <!-- Header Window -->
-        <header class="bg-slate-900 border-b border-slate-800 p-4 flex justify-between items-center sticky top-0 z-40">
-            <div class="flex items-center space-x-3">
-                <h1 class="text-xl font-extrabold text-cyan-400">Atipsr-Proper.in</h1>
-                <span class="bg-cyan-500/10 text-cyan-400 text-[10px] px-2 py-1 rounded-full border border-cyan-500/30 font-semibold" id="aiStatusBadge">Vainex AI Active</span>
-            </div>
-            <div class="flex items-center space-x-4">
-                <span id="userEmailDisplay" class="text-xs text-slate-400"></span>
-                <button onclick="logout()" class="bg-red-600/20 text-red-400 text-xs px-3 py-1 rounded-lg border border-red-500/30">लॉग आउट</button>
-            </div>
-        </header>
-
-        <!-- Dynamic Content & AI Command Center -->
-        <main class="max-w-5xl mx-auto p-4 space-y-6 my-6 flex-1">
-            
-            <!-- Vainex AI CEO Admin Command Panel (Sirf malik ke liye active hoga) -->
-            <div id="adminPanel" class="hidden bg-slate-900 border border-cyan-500/40 p-5 rounded-xl shadow-md space-y-3">
-                <h3 class="text-sm font-bold text-cyan-400 flex items-center gap-2">
-                    <span>👑</span> Vainex AI Website CEO - ओनर कमांड सेंटर (हरी झंडी)
-                </h3>
-                <p class="text-xs text-slate-400">मालिक पहचान लिए गए हैं। आप यहाँ से जो भी आदेश देंगे, वह तुरंत वेबसाइट पर जोड़ दिया जाएगा।</p>
-                <div class="flex gap-2">
-                    <input type="text" id="commandInput" placeholder="Vainex AI को आदेश दें (जैसे: नया फीचर या विंडो जोड़ो)..." class="flex-1 bg-slate-950 border border-slate-800 p-2.5 rounded-lg text-sm text-white focus:outline-none focus:border-cyan-500">
-                    <button onclick="executeCommand()" class="bg-cyan-500 text-slate-950 font-bold px-4 py-2 rounded-lg text-sm hover:bg-cyan-400 transition">आदेश लागू करें</button>
-                </div>
-                <p id="commandStatus" class="text-xs text-emerald-400 font-medium"></p>
-            </div>
-
-            <!-- Global Content Window Grid -->
-            <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl space-y-4">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                        <span>🔥</span> दुनिया भर का लाइव ट्रेंडिंग कंटेंट विंडो
-                    </h2>
-                    <span class="text-xs text-cyan-400 animate-pulse">● Live Window Active</span>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
-                        <div class="aspect-video bg-slate-900 rounded-lg flex items-center justify-center border border-slate-800 text-slate-500 text-sm">
-                            🎬 ग्लोबल मीडिया फीड
-                        </div>
-                        <h4 class="font-bold text-cyan-300">Viral Trend & Media Stream</h4>
-                        <p class="text-xs text-slate-400">वेबसाइट की मुख्य विंडो पर प्रदर्शित होने वाला ऑटो-सिंक कंटेंट।</p>
-                        <button onclick="handleDownload()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 rounded-lg text-sm transition shadow">
-                            डाउनलोड करें
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
+    <!-- SEARCH BOX & OPTIONS -->
+    <div class="search-section" id="setting-comment-section">
+        <input type="text" id="mainSearchBox" class="search-input" placeholder="यहाँ खोजें (Search features or tools)...">
+        <div class="options-row">
+            <button class="option-btn btn-fake" onclick="selectMode('fake')">Fake Mode</button>
+            <button class="option-btn btn-official" onclick="selectMode('official')">Official Mode</button>
+        </div>
     </div>
 
-    <!-- Core Security & Verification Script -->
+    <!-- 5-TIER AI CHAT BOX (Placed directly below search & options) -->
+    <div class="ai-chat-box" id="ai-chat-box-section">
+        <div class="ai-header">
+            <span id="activeTierTitle">ITS System: Magnetic AI (Gateway)</span>
+            <span id="tierMemory" style="font-size: 12px; background: #333; padding: 3px 8px; border-radius: 4px; color: #00ffcc;">Memory: 25%</span>
+        </div>
+        
+        <div id="chatScreen" class="chat-screen">
+            <div style="color: #00ffcc;">[ सिस्टम संदेश ]: स्वागत है वैभव भाई। वर्तमान में 'Magnetic AI' (Gateway) सक्रिय है। अपनी पसंद का टूल चुनें या चैट शुरू करें।</div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="userMessageInput" class="chat-input" placeholder="अपना संदेश यहाँ लिखें...">
+            <button class="send-btn" onclick="handleUserMessage()">भेजें</button>
+        </div>
+    </div>
+
+    <!-- 2 घंटे 28 मिनट पूरा होने पर दिखने वाला स्पेशल पॉपअप डिस्क्लेमर -->
+    <div id="userRespectPopup" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#111; color:#fff; border:2px solid #00ffcc; padding:30px; border-radius:15px; z-index:9999; max-width:500px; box-shadow:0 0 20px rgba(0,255,204,0.5); font-family:sans-serif; text-align: left;">
+        <h3 style="color:#00ffcc; margin-top:0; text-align: center;">✨ Check The Disclaimer ✨</h3>
+        <p style="line-height:1.6; font-size:14px;">
+            Aap hamare pramukh aur acche user hain. Aapke samman mein hum hamesha active rahenge. Agar aapko is platform par koi bhi kami nazar aaye, toh aap apni marzi se humse share kar sakte hain—kisi par koi zabardasti nahi hai!
+        </p>
+        
+        <div style="margin: 20px 0; display: flex; flex-direction: column; gap: 10px;">
+            <button onclick="goToAIChat()" style="background:#00ffcc; color:#000; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;">💬 AI Chat Box par jayein</button>
+            <button onclick="goToSettingComment()" style="background:#ff0055; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer;">⚙️ Setting Comment Box par jayein</button>
+            <button onclick="closePopup()" style="background:transparent; color:#888; border:1px solid #555; padding:8px; border-radius:8px; cursor:pointer; font-size:12px; text-align: center;">Band karein (Close)</button>
+        </div>
+    </div>
+
+    <!-- FRONTEND JAVASCRIPT & 5-AI ECOSYSTEM LOGIC -->
     <script>
-        // Vaibhav bhai ki asli Firebase Configuration yahan set kar di gayi hai
-        const firebaseConfig = {
-            apiKey: "AIzaSyCNl_75ecS3KRt7cEn8zABfi2Cb9LwuFEk",
-            authDomain: "atipsr-proper-9693d.firebaseapp.com",
-            databaseURL: "https://atipsr-proper-9693d-default-rtdb.firebaseio.com",
-            projectId: "atipsr-proper-9693d",
-            storageBucket: "atipsr-proper-9693d.firebasestorage.app",
-            messagingSenderId: "636424459984",
-            appId: "1:636424459984:web:e4e75a43a2a0582852f0d5",
-            measurementId: "G-LSJQFSNZWK"
+        // Tool initialization hook
+        function runTool(toolName) {
+            alert("Initializing " + toolName.toUpperCase() + " via AI Core Engine...");
+        }
+
+        // --- 5-TIER AI ECOSYSTEM CONFIGURATION ---
+        const ITS_MASTER_ECOSYSTEM = {
+            platform: "International Tech Smart Officer",
+            domain: "atipsr-proper.in",
+            status: "Active & Secure",
+            magneticAI: { memorySense: "25%", role: "Web gateway & local guide." },
+            normalVersion: { memorySense: "20%", timeLimit: "2-Hour Chat Limit", role: "General daily companion." },
+            proVersion: { memorySense: "40%", role: "Creative workflow assistance." },
+            superProVersion: { memorySense: "90%", role: "Viral hashtags, flawless code & generation tools." },
+            ultraProVersion: { 
+                memorySense: "125%", 
+                role: "Supreme Strict ITS Officer", 
+                disclaimerRule: "Ultra Pro AI Disclaimer" 
+            }
         };
-        firebase.initializeApp(firebaseConfig);
 
-        // Gupt roop se surakshit admin pehchan (Base64 for vm9125548@gmail.com)
-        const SECURE_ADMIN_HASH = "dm8xMjU1NDhAZ21haWwuY29t"; 
+        let currentTier = "magnetic"; // options: magnetic, normal, pro, superPro, ultraPro
+        let paymentDone = true;       // Set true or link with your payment gateway
+        let disclaimerPassed = false;
 
-        function verifyAdmin(email) {
-            try {
-                return atob(SECURE_ADMIN_HASH) === email;
-            } catch (e) {
-                return false;
-            }
-        }
-
-        // Auth State Handler: Sabhi ke liye pehle disclaimer/login, fir malik ki pehchan
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                document.getElementById('authModal').classList.add('hidden');
-                document.getElementById('mainContent').classList.remove('hidden');
-                document.getElementById('userEmailDisplay').innerText = user.email;
-
-                // Jaise hi malik pehchane gaye, hari jhandi mil jayegi aur admin panel khul jayega
-                if (verifyAdmin(user.email)) {
-                    document.getElementById('adminPanel').classList.remove('hidden');
-                    document.getElementById('aiStatusBadge').innerText = "Vainex AI CEO (Owner Mode Active)";
-                } else {
-                    document.getElementById('adminPanel').classList.add('hidden');
-                    document.getElementById('aiStatusBadge').innerText = "Vainex AI User Mode";
-                }
+        function selectMode(mode) {
+            const screen = document.getElementById("chatScreen");
+            if(mode === 'fake') {
+                switchTier('normal');
+                screen.innerHTML += `<div style="color: #ff9999; margin-top: 5px;">[ सिस्टम ]: Fake मोड चयनित। नॉर्मल गाइड सक्रिय।</div>`;
             } else {
-                document.getElementById('authModal').classList.remove('hidden');
-                document.getElementById('mainContent').classList.add('hidden');
-            }
-        });
-
-        // Google Login Function with Checkbox Verification
-        function loginWithGoogle() {
-            const isChecked = document.getElementById('agreeCheck').checked;
-            if (!isChecked) {
-                alert("कृपया पहले डिस्क्लेमर और नियमों वाले बॉक्स पर टिक करें!");
-                return;
-            }
-            const provider = new firebase.auth.GoogleAuthProvider();
-            firebase.auth().signInWithPopup(provider).catch((error) => {
-                alert("लॉगिन विफल रहा: " + error.message);
-            });
-        }
-
-        // Logout Function
-        function logout() {
-            firebase.auth().signOut();
-        }
-
-        // Download Logic (Direct for Owner, Ad-supported for general users)
-        function handleDownload() {
-            const user = firebase.auth().currentUser;
-            if (user && verifyAdmin(user.email)) {
-                alert("Vainex AI CEO: मालिक (Owner) होने के कारण आपके लिए फ़ाइल सीधे डाउनलोड हो रही है!");
-                window.location.href = "#"; 
-            } else {
-                alert("Vainex AI: विज्ञापन (Ad) लोड हो रहा है... कृपया प्रतीक्षा करें।");
-                setTimeout(() => {
-                    window.location.href = "#"; 
-                }, 2000);
+                switchTier('ultraPro');
+                screen.innerHTML += `<div style="color: #00ffcc; margin-top: 5px;">[ सिस्टम ]: Official मोड चयनित। ITS कमांड सेंटर सक्रिय।</div>`;
             }
         }
 
-        // Vainex AI CEO Command Executor
-        function executeCommand() {
-            const cmd = document.getElementById('commandInput').value;
-            const status = document.getElementById('commandStatus');
-            if(!cmd) return;
+        function switchTier(tierName) {
+            currentTier = tierName;
+            const titleEl = document.getElementById("activeTierTitle");
+            const memoryEl = document.getElementById("tierMemory");
             
-            status.innerText = "Vainex AI CEO आदेश पर काम कर रहा है...";
+            if(tierName === 'magnetic') {
+                titleEl.innerText = "ITS System: Magnetic AI (Gateway)";
+                memoryEl.innerText = "Memory: 25%";
+            } else if(tierName === 'normal') {
+                titleEl.innerText = "ITS System: Normal Companion";
+                memoryEl.innerText = "Memory: 20% (2-Hour Limit)";
+            } else if(tierName === 'pro') {
+                titleEl.innerText = "ITS System: Pro Creative Assistant";
+                memoryEl.innerText = "Memory: 40%";
+            } else if(tierName === 'superPro') {
+                titleEl.innerText = "ITS System: Super Pro Powerhouse";
+                memoryEl.innerText = "Memory: 90%";
+            } else if(tierName === 'ultraPro') {
+                titleEl.innerText = "International Tech Smart Officer (ITS Officer)";
+                memoryEl.innerText = "Memory: 125%";
+            }
+        }
+
+        function handleUserMessage() {
+            const inputField = document.getElementById("userMessageInput");
+            const chatScreen = document.getElementById("chatScreen");
+            const userText = inputField.value.trim();
+
+            if(!userText) return;
+
+            chatScreen.innerHTML += `<div style="margin: 8px 0; text-align: right; color: #fff;"><b>आप:</b> ${userText}</div>`;
+            inputField.value = "";
+
+            // --- ULTRA PRO DISCLAIMER GATEWAY LOGIC ---
+            if (currentTier === 'ultraPro' && !disclaimerPassed) {
+                if (!paymentDone) {
+                    chatScreen.innerHTML += `<div style="color: #ff4444; margin: 8px 0;">[ सिस्टम ]: प्रवेश अस्वीकृत। प्रीमियम शुल्क जमा करना अनिवार्य है।</div>`;
+                    return;
+                }
+
+                const requiredText = "मैं पूरी होश-हवाश, शालीनता और गंभीर इरादे के साथ यह घोषणा करता हूँ कि मैंने Ultra Pro AI Disclaimer के सभी नियमों और शर्तों को अच्छी तरह पढ़ और समझ लिया है। मुझे बताए गए हर एक नियम और शर्त मंजूर हैं...";
+                
+                if (userText !== requiredText) {
+                    chatScreen.innerHTML += `
+                        <div class="disclaimer-box">
+                            <b>[ ULTRA PRO AI DISCLAIMER ]:</b><br>
+                            अंदर प्रवेश करने से पहले निम्नलिखित आधिकारिक घोषणा को पूर्ण रूप से कॉपी करें और नीचे दिए गए बॉक्स में पेस्ट करके सहमति दें:<br><br>
+                            <i>"${requiredText}"</i>
+                        </div>
+                    `;
+                    return;
+                } else {
+                    disclaimerPassed = true;
+                    chatScreen.innerHTML += `<div style="color: #00ffcc; margin: 8px 0;">[ ITS Officer ]: सहमति स्वीकृत। शांत और गंभीर कक्ष खोला जा रहा है। स्वागत है।</div>`;
+                    return;
+                }
+            }
+
+            // --- STANDARD AI RESPONSES ---
             setTimeout(() => {
-                status.innerText = `सफलतापूर्वक नया फीचर/कंटेंट लाइव कर दिया गया: "${cmd}"`;
-                document.getElementById('commandInput').value = "";
-            }, 1200);
+                let botReply = "";
+                if (currentTier === 'magnetic') {
+                    botReply = "Magnetic AI: बटन, फीचर्स और कमेंट्स संभालने की जानकारी यहाँ उपलब्ध है।";
+                } else if (currentTier === 'normal') {
+                    botReply = "Normal Version: आपकी भेजी गई जानकारी के आधार पर साधारण सहायता दी जा रही है।";
+                } else if (currentTier === 'pro') {
+                    botReply = "Pro Version: क्रिएटिव सुझाव तैयार हैं।";
+                } else if (currentTier === 'superPro') {
+                    botReply = "Super Pro: पावरहाउस सक्रिय। 100% पक्की वायरल कोडिंग और जनरेशन टूल्स तैयार हैं।";
+                } else if (currentTier === 'ultraPro') {
+                    botReply = "International Tech Smart Officer: देखिए, यह कक्ष केवल गंभीर और आधिकारिक विषयों के लिए है। अपनी बात मर्यादा और अनुशासन के साथ रखें।";
+                }
+
+                chatScreen.innerHTML += `<div style="margin: 8px 0; color: #00ffcc;"><b>जवाब:</b> ${botReply}</div>`;
+                chatScreen.scrollTop = chatScreen.scrollHeight;
+            }, 500);
+        }
+
+        // --- 2 GHANTE 28 MINUTES POPUP TIMER ---
+        setTimeout(() => {
+            document.getElementById('userRespectPopup').style.display = 'block';
+        }, (148 * 60 * 1000)); // 148 minutes = 2 hours 28 minutes
+
+        function goToAIChat() {
+            document.getElementById('userRespectPopup').style.display = 'none';
+            document.getElementById('ai-chat-box-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function goToSettingComment() {
+            document.getElementById('userRespectPopup').style.display = 'none';
+            document.getElementById('setting-comment-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closePopup() {
+            document.getElementById('userRespectPopup').style.display = 'none';
         }
     </script>
+
 </body>
-                    </html>
-                    
+</html>
