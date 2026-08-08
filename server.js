@@ -1,3 +1,5 @@
+const appConfig = require('./config');
+app.use(ultraShield);
 // ==========================================
 // ATIPSR-PROPER.IN - MASTER BACKEND SERVER
 // ==========================================
