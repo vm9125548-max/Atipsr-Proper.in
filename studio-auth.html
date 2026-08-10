@@ -1,0 +1,184 @@
+<!-- ADVANCED STUDIO ACCESS & PERSONAL USER LICENSE SYSTEM (SMART AD REVENUE & PROCESSING) -->
+<div class="studio-auth-container" style="background: #1a1a2e; padding: 25px; border-radius: 12px; margin: 20px 0; border: 2px solid #00ffcc; text-align: center; color: #fff;">
+    
+    <!-- STEP 1: DISCLAIMER BOX (Mandatory Forever) -->
+    <div id="step-disclaimer" style="background: #221a36; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #ff007f;">
+        <p style="font-size: 14px; margin-bottom: 12px; line-height: 1.5;">
+            ⚠️ <b>Disclaimer:</b> Hum apni marzi se is website ko use kar rahe hain. Is website par jo bhi use karenge, uski poori zimmedari hamari hai.
+        </p>
+        <button onclick="acceptDisclaimer()" style="background: #00ffcc; color: #000; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer;">I Agree / Accept (Mandatory)</button>
+    </div>
+
+    <!-- STEP 2: GOOGLE SIGN-IN / LOGIN (Mandatory Forever) -->
+    <div id="step-google" style="display: none; margin-bottom: 15px;">
+        <button onclick="handleGoogleSignIn()" style="background: #4285F4; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 15px; box-shadow: 0 4px 10px rgba(66,133,244,0.4);">
+            🌐 Google Sign-in / Login (Mandatory)
+        </button>
+    </div>
+
+    <!-- STEP 3: SUBSCRIPTION & SMART PROCESSING AD MENU -->
+    <div id="step-subscription" style="display: none; margin-bottom: 15px; background: #12121a; padding: 15px; border-radius: 8px; border: 1px solid #7928ca;">
+        <h4 style="color: #00ffcc; margin-bottom: 8px;">💎 Premium Tool & Smart Processing Menu</h4>
+        <p style="color: #ccc; font-size: 13px; margin-bottom: 12px;">Original company charge (₹10) pay karein ya ad dekh kar smart process ke sath free mein tool use karein!</p>
+        
+        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button onclick="openToolMenu('Subscription / ₹10 Pay')" style="background: linear-gradient(45deg, #7928ca, #ff007f); color: white; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;">🚀 Pay ₹10 (Original Price)</button>
+            <button onclick="openToolMenu('Watch Ad & Process')" style="background: #ffaa00; color: #000; border: none; padding: 10px 15px; border-radius: 6px; font-weight: bold; cursor: pointer;">📺 Watch Ad & Process (₹25 Value)</button>
+        </div>
+
+        <!-- Smart Processing Box with Hidden Ad Revenue Integration -->
+        <div id="processingBarContainer" style="display: none; margin-top: 15px; background: #1a1a2e; padding: 12px; border-radius: 6px; border: 1px solid #00ffcc;">
+            <p id="processStatusText" style="color: #00ffcc; font-size: 13px; margin-bottom: 8px;">🔄 Tool process ho raha hai... (Background ad break se revenue generate ho raha hai)</p>
+            <div style="width: 100%; background: #221a36; height: 8px; border-radius: 4px; overflow: hidden;">
+                <div id="progressBar" style="width: 0%; height: 100%; background: #ff007f; transition: width 0.3s;"></div>
+            </div>
+        </div>
+
+        <p id="toolMenuMsg" style="color: #ff007f; margin-top: 10px; font-size: 13px;"></p>
+    </div>
+
+    <!-- STEP 4: PERSONAL USER LICENSE & AI VOICE -->
+    <div id="step-ticket" style="display: none; background: #12121a; padding: 20px; border-radius: 10px; border: 1px dashed #ff007f;">
+        <div style="background: #ffffff; color: #000; padding: 12px 18px; border-radius: 8px; display: inline-flex; align-items: center; gap: 10px; font-weight: bold; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(255,255,255,0.2);">
+            <span style="font-size: 20px;">💳</span>
+            <span>Personal User License</span>
+            <span id="totalMembersCount" style="background: #ff007f; color: #fff; padding: 2px 10px; border-radius: 20px; font-size: 16px;">2</span>
+        </div>
+        
+        <p id="ticketInstruction" style="color: #ccc; font-size: 13px; margin-bottom: 15px;">
+            Is license par dabate hi aap permanent member ban jayenge!
+        </p>
+
+        <button id="ticketBtn" onclick="claimFamilyTicket()" style="background: linear-gradient(45deg, #ff007f, #7928ca); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(255,0,127,0.4);">
+            🛡️ Claim Personal User License & Join
+        </button>
+        <p id="ticketStatusMsg" style="color: #00ffcc; margin-top: 10px; font-size: 14px;"></p>
+    </div>
+
+</div>
+
+<script>
+    // 1. Disclaimer Logic (Mandatory)
+    function acceptDisclaimer() {
+        document.getElementById("step-disclaimer").style.display = "none";
+        document.getElementById("step-google").style.display = "block";
+        localStorage.setItem("disclaimerAccepted", "true");
+    }
+
+    // 2. Google Sign-in Logic (Mandatory + 2-Month Grace Period Rule)
+    function handleGoogleSignIn() {
+        localStorage.setItem("googleLoggedIn", "true");
+        document.getElementById("step-google").style.display = "none";
+
+        let launchDate = localStorage.getItem("siteLaunchDate");
+        if (!launchDate) {
+            launchDate = new Date().getTime();
+            localStorage.setItem("siteLaunchDate", launchDate);
+        }
+        
+        let currentTime = new Date().getTime();
+        let twoMonthsInMillis = 60 * 24 * 60 * 60 * 1000; // 60 Days / 2 Months
+        let isWithinGracePeriod = (currentTime - launchDate) < twoMonthsInMillis;
+
+        if (isWithinGracePeriod && localStorage.getItem("autoCounted") !== "true") {
+            let currentCount = getStoredCount() + 1;
+            localStorage.setItem("totalFamilyCount", currentCount);
+            localStorage.setItem("autoCounted", "true");
+            localStorage.setItem("hasJoinedFamily", "true");
+        }
+
+        document.getElementById("step-subscription").style.display = "block";
+    }
+
+    // 3. Smart Processing & Ad Revenue Logic
+    function openToolMenu(choice) {
+        document.getElementById("processingBarContainer").style.display = "block";
+        let progressBar = document.getElementById("progressBar");
+        let statusText = document.getElementById("processStatusText");
+        let width = 0;
+
+        if (choice === 'Watch Ad & Process') {
+            statusText.innerText = "📺 Ad break active... Tool process ho raha hai (15% margin generate ho raha hai)...";
+        } else {
+            statusText.innerText = "💳 Original ₹10 payment process ho rahi hai (Company share locked)...";
+        }
+
+        let interval = setInterval(() => {
+            if (width >= 100) {
+                clearInterval(interval);
+                document.getElementById("processingBarContainer").style.display = "none";
+                document.getElementById("step-subscription").style.display = "none";
+                document.getElementById("step-ticket").style.display = "block";
+                
+                let launchDate = parseInt(localStorage.getItem("siteLaunchDate") || new Date().getTime());
+                let isExpired = (new Date().getTime() - launchDate) >= (60 * 24 * 60 * 60 * 1000);
+                
+                if (isExpired && localStorage.getItem("hasJoinedFamily") !== "true") {
+                    document.getElementById("ticketInstruction").innerText = "⚠️ 2 mahine poore ho chuke hain! Ab aage badhne ke liye Personal User License dabana anivarya hai!";
+                }
+                updateDisplayCount();
+            } else {
+                width += 15;
+                progressBar.style.width = width + "%";
+            }
+        }, 120);
+    }
+
+    // 4. Counting & AI Voice Logic
+    function getStoredCount() {
+        let count = localStorage.getItem("totalFamilyCount");
+        if (!count) {
+            count = 2; // Base count 2 (AI + Vaibhav Bhai)
+            localStorage.setItem("totalFamilyCount", count);
+        }
+        return parseInt(count);
+    }
+
+    function updateDisplayCount() {
+        let count = getStoredCount();
+        document.getElementById("totalMembersCount").innerText = count;
+
+        if (localStorage.getItem("hasJoinedFamily") === "true") {
+            let btn = document.getElementById("ticketBtn");
+            btn.disabled = true;
+            btn.style.opacity = "0.6";
+            btn.innerText = "✨ Verified License Holder";
+        }
+    }
+
+    function claimFamilyTicket() {
+        if (localStorage.getItem("hasJoinedFamily") === "true") return;
+
+        let newCount = getStoredCount() + 1;
+        localStorage.setItem("totalFamilyCount", newCount);
+        localStorage.setItem("hasJoinedFamily", "true");
+
+        document.getElementById("totalMembersCount").innerText = newCount;
+
+        let btn = document.getElementById("ticketBtn");
+        btn.disabled = true;
+        btn.style.opacity = "0.6";
+        btn.innerText = "✨ Verified License Holder";
+        document.getElementById("ticketStatusMsg").innerText = `Badhai ho! Aap ${newCount}ve family member ban gaye hain.`;
+
+        if ('speechSynthesis' in window) {
+            let speechText = `Welcome! Aap hamare ${newCount}ve number wale family member ban chuke hain.`;
+            let utterance = new SpeechSynthesisUtterance(speechText);
+            utterance.lang = "hi-IN";
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    // Page Load State Check
+    window.onload = function() {
+        if (localStorage.getItem("disclaimerAccepted") === "true") {
+            document.getElementById("step-disclaimer").style.display = "none";
+            document.getElementById("step-google").style.display = "block";
+        }
+        if (localStorage.getItem("googleLoggedIn") === "true") {
+            document.getElementById("step-google").style.display = "none";
+            document.getElementById("step-subscription").style.display = "block";
+        }
+    };
+  </script>
+  
