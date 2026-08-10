@@ -234,6 +234,45 @@
             document.getElementById('userRespectPopup').style.display = 'none';
         }
     </script>
+<!-- Yahan par global content aur videos screen par play hoke dikhenge -->
+<div id="master-live-screen" style="margin: 20px; padding: 15px; background: #0b0b0b; border: 2px solid #00ff00; border-radius: 10px; color: #fff;">
+    <h3 style="color: #00ff00; margin-bottom: 10px;">⚡ AI Studio Live Output & Global Stream</h3>
+    <div id="dynamic-video-grid" style="display: flex; gap: 15px; flex-wrap: wrap;">
+        <p style="color: #888;">Kisi bhi tool par click karein, global content aur video yahin chalega...</p>
+    </div>
+</div>
 
+<script>
+    // Yeh function aapke har ek button ko Environment + Proxy se jodega
+    async function runStudioTool(toolName) {
+        const grid = document.getElementById('dynamic-video-grid');
+        grid.innerHTML = `<p style="color: yellow;">Connecting Environment APIs & Global Proxy for ${toolName}...</p>`;
+
+        try {
+            const response = await fetch(`/api/execute-tool/${toolName}`);
+            const result = await response.json();
+
+            if(result.status === "SUCCESS") {
+                grid.innerHTML = ""; // Purana message hatayein
+                
+                // Global content aur videos ko screen par live dikhana aur play karna
+                result.mediaContent.forEach(item => {
+                    grid.innerHTML += `
+                        <div style="background: #1a1a1a; padding: 10px; border-radius: 6px; width: 220px; border: 1px solid #333;">
+                            <p style="font-size: 13px; color: #00ff00; margin-bottom: 8px; font-weight: bold;">${item.title}</p>
+                            <video width="100%" controls autoplay muted style="border-radius: 4px;">
+                                <source src="${item.url}" type="video/mp4">
+                                Your browser does not support video playback.
+                            </video>
+                        </div>
+                    `;
+                });
+            }
+        } catch (err) {
+            grid.innerHTML = `<p style="color: red;">Connection Error: Proxy ya Backend se data nahi aa paya.</p>`;
+        }
+    }
+</script>
+    
 </body>
 </html>
