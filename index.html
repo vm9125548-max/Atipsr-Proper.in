@@ -32,41 +32,54 @@
 </head>
 <body>
 
+
     <h1>🚀 AI DYNAMIC STUDIO 🚀</h1>
-    <p>Select your tool and let the AI do the magic instantly.</p>
+<p>Select your tool and let the AI do the magic</p>
 
-    <!-- STUDIO GRID (Tools) -->
-    <div class="studio-grid" id="studio-grid-section">
-        <div class="feature-card" onclick="runTool('visualizer')">
-            <h3>Unlimited Visualizer Generating</h3>
-            <p>Transform audio/video into dynamic full-screen visualizers.</p>
-        </div>
-        <div class="feature-card" onclick="runTool('emoji')">
-            <h3>Unlimited Emoji Generating</h3>
-            <p>Create custom moving and dancing emojis on the fly.</p>
-        </div>
-        <div class="feature-card" onclick="runTool('text-mover')">
-            <h3>Unlimited Text Movers Generating</h3>
-            <p>Animate text with stylish moving cinematic motion effects.</p>
-        </div>
-        <div class="feature-card" onclick="runTool('logo-mover')">
-            <h3>Unlimited Logo Mover Generating</h3>
-            <p>Give your brand logo smooth rotating and waving animations.</p>
-        </div>
-        <div class="feature-card" onclick="runTool('sticker-moving')">
-            <h3 style="color: #00ffcc;">🟢 Unlimited Sticker Moving Generator</h3>
-            <p>Convert static stickers into seamless moving animations instantly.</p>
-        </div>
+<!-- STUDIO GRID (Tools) -->
+<div class="studio-grid" id="studio-grid-section">
+    <div class="feature-card" onclick="runStudioTool('Unlimited-Visualizer')">
+        <h3>Unlimited Visualizer Generating</h3>
+        <p>Transform audio/video into dynamic full-screen visual effects</p>
     </div>
+    
+    <div class="feature-card" onclick="runStudioTool('Unlimited-Emoji')">
+        <h3>Unlimited Emoji Generating</h3>
+        <p>Create custom moving and dancing emoji animations</p>
+    </div>
+    
+    <div class="feature-card" onclick="runStudioTool('Unlimited-Text-Movers')">
+        <h3>Unlimited Text Movers Generating</h3>
+        <p>Animate text with stylish moving cinematic effects</p>
+    </div>
+    
+    <div class="feature-card" onclick="runStudioTool('Unlimited-Logo-Mover')">
+        <h3>Unlimited Logo Mover Generating</h3>
+        <p>Give your brand logo smooth rotating 3D motion</p>
+    </div>
+    
+    <div class="feature-card" onclick="runStudioTool('Unlimited-Sticker-Moving')">
+        <h3 style="color: #00ffcc;">🟢 Unlimited Sticker Generating</h3>
+        <p>Convert static stickers into seamless motion assets</p>
+    </div>
+</div>
 
-    <!-- SEARCH BOX & OPTIONS -->
-    <div class="search-section" id="setting-comment-section">
-        <input type="text" id="mainSearchBox" class="search-input" placeholder="यहाँ खोजें (Search features or tools)...">
-        <div class="options-row">
-            <button class="option-btn btn-fake" onclick="selectMode('fake')">Fake Mode</button>
-            <button class="option-btn btn-official" onclick="selectMode('official')">Official Mode</button>
-        </div>
+<!-- SEARCH BOX & OPTIONS -->
+<div class="search-section" id="setting-comment-section">
+    <input type="text" id="mainSearchBox" placeholder="Enter text or link to process..." class="search-input">
+    <div class="options-row">
+        <button class="option-btn btn-fake" onclick="handleFreeProcess()">Free / Break Mode</button>
+        <button class="option-btn btn-official" onclick="handlePaidProcess()">Direct Paid Mode</button>
     </div>
+</div>
+
+<!-- 5-TIER AI CHAT BOX (Placed directly below search) -->
+<div class="ai-chat-box" id="ai-chat-box-section">
+    <div class="ai-header">
+        <!-- Chat header content -->
+    </div>
+</div>
+    
 
     <!-- 5-TIER AI CHAT BOX (Placed directly below search & options) -->
     <div class="ai-chat-box" id="ai-chat-box-section">
