@@ -287,6 +287,27 @@
         }
     }
 </script>
-    
+    <!-- Atipsr Pro: Auto History & Activity Tracker Integration -->
+    <script type="module">
+        import { HistoryTracker } from './HistoryTracker.js';
+
+        // 1. पेज लोड होते ही ट्रैक करें
+        window.addEventListener('load', () => {
+            const pageName = window.location.pathname.split('/').pop() || 'index.html';
+            HistoryTracker.logActivity('Page Visit', 'User opened: ' + pageName);
+        });
+
+        // 2. हर बटन या लिंक के क्लिक को ट्रैक करें
+        document.addEventListener('click', (event) => {
+            const targetElement = event.target.closest('button') || event.target.closest('a');
+            if (targetElement) {
+                const actionText = targetElement.innerText || targetElement.getAttribute('aria-label') || 'Button/Link';
+                HistoryTracker.logActivity('Action Click', 'Clicked on: ' + actionText.trim());
+            }
+        });
+    </script>
+</body>
+</html>
+
 </body>
 </html>
