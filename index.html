@@ -31,7 +31,77 @@
     </style>
 </head>
 <body>
-<iframe src="studio-auth.html" style="width: 100%; max-width: 650px; height: 580px; border: none; background: transparent; display: block; margin: 0 auto;"></iframe>
+<!-- ========================================== -->
+<!-- 🎵 MUSIC MY HOBBY - LIVE PLAYER & AD SHIELD -->
+<!-- ========================================== -->
+
+<div style="background: #141414; padding: 20px; border-radius: 12px; border: 2px solid #00ffcc; max-width: 450px; margin: 20px auto; text-align: center; color: #fff;">
+    
+    <h3 style="color: #00ffcc; margin-top: 0;">🎧 Music My Hobby - Studio</h3>
+    <p style="font-size: 13px; color: #aaa;">GitHub के "music my hobby" फोल्डर से जुड़े हुए रीमिक्स गाने</p>
+    
+    <!-- गाने की लिस्ट और प्लेयर (जो सीधे आपके 'music my hobby' फोल्डर से जुड़ा है) -->
+    <div id="songsListContainer" style="text-align: left;">
+        <h4 style="color: #00ff00; border-bottom: 1px solid #333; padding-bottom: 5px;">🎵 Live Catalog</h4>
+        
+        <!-- गाना 1: Dulari Badi Dulari -->
+        <div style="background: #1a1a1a; padding: 12px; border-radius: 8px; border: 1px solid #333; margin-bottom: 15px;">
+            <p style="font-size: 14px; color: #00ff00; font-weight: bold; margin-bottom: 8px;">🎵 Dulari Badi Dulari (DJ Remix)</p>
+            
+            <!-- यहाँ पाथ सीधा आपके 'music my hobby' फोल्डर से जुड़ा है -->
+            <audio controls style="width: 100%; margin-bottom: 10px;">
+                <source src="./music my hobby/Dulari Badi Dulari Pawan Singh Bhojpuri song DJ Remix Mixing Star.in-MP3.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+
+            <!-- डाउनलोड और शेयर बटन (9 सेकंड ऐड प्रोटेक्शन के साथ) -->
+            <div style="display: flex; gap: 8px;">
+                <button onclick="secureAction('download', './music my hobby/Dulari Badi Dulari Pawan Singh Bhojpuri song DJ Remix Mixing Star.in-MP3.mp3', 'Dulari_Badi_Dulari.mp3')" style="background: #00ffcc; color: #000; border: none; padding: 8px 12px; font-weight: bold; border-radius: 5px; cursor: pointer; flex: 1; font-size: 12px;">
+                    📥 Download (Watch 9s Ad)
+                </button>
+                <button onclick="secureAction('share', './music my hobby/Dulari Badi Dulari Pawan Singh Bhojpuri song DJ Remix Mixing Star.in-MP3.mp3', 'Dulari_Badi_Dulari.mp3')" style="background: #ffaa00; color: #000; border: none; padding: 8px 12px; font-weight: bold; border-radius: 5px; cursor: pointer; flex: 1; font-size: 12px;">
+                    🔗 Share (Watch 9s Ad)
+                </button>
+            </div>
+        </div>
+
+        <!-- नोट: जब आप भविष्य में GitHub के 'music my hobby' फोल्डर में कोई नया गाना डालें, 
+             तो बस ऊपर वाले डिब्बे को कॉपी करके नीचे पेस्ट कर दें और गाने का नाम बदल दें, 
+             वह अपने आप वेबसाइट पर दिखने लगेगा! -->
+    </div>
+</div>
+
+<script>
+    // डाउनलोड और शेयर करते वक्त 9 सेकंड का विज्ञापन (Ad) दिखाने का सिस्टम
+    function secureAction(actionType, fileUrl, fileName) {
+        alert("[ सिस्टम ]: कमाई और फ्री मोड के लिए विज्ञापन (Ad) चालू है। कृपया 9 सेकंड प्रतीक्षा करें...");
+
+        // समय को 2 सेकंड से बढ़ाकर 9 सेकंड (9000 मिलीसेकंड) कर दिया गया है
+        setTimeout(() => {
+            if (actionType === 'download') {
+                const link = document.createElement('a');
+                link.href = fileUrl;
+                link.download = fileName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                console.log("9s Ad passed, file downloaded safely.");
+            } else if (actionType === 'share') {
+                if (navigator.share) {
+                    navigator.share({
+                        title: fileName,
+                        text: 'इस जबरदस्त रीमिक्स गाने को 'music my hobby' से सुनें!',
+                        url: window.location.href,
+                    }).catch(() => {});
+                } else {
+                    prompt("इस लिंक को कॉपी करके दोस्तों के साथ शेयर करें:", window.location.href);
+                }
+                console.log("9s Ad passed, share link unlocked.");
+            }
+        }, 9000); // 정확히 9 सेकण्ड का टाइमर
+    }
+</script>
+    <iframe src="studio-auth.html" style="width: 100%; max-width: 650px; height: 580px; border: none; background: transparent; display: block; margin: 0 auto;"></iframe>
     
 
     <h1>🚀 AI DYNAMIC STUDIO 🚀</h1>
