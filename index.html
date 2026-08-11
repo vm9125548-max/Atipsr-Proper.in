@@ -306,6 +306,18 @@
             }
         });
     </script>
+    <script>
+        async function connectToServer() {
+            try {
+                const response = await fetch('/api/bridge/YouTube');
+                const data = await response.json();
+                console.log("Server Connection Successful:", data);
+            } catch (error) {
+                console.error("Server Connection Failed:", error);
+            }
+        }
+        window.onload = connectToServer;
+    </script>
 </body>
 </html>
 
