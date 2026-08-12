@@ -317,7 +317,18 @@
             }
         }
         window.onload = connectToServer;
+    </script>    <!-- Atipsr Pro: MasterBridge Connector Integration -->
+    <script type="module">
+        import { MasterBridge } from './lib/MasterBridge.js';
+
+        // यह आपके बटन्स और स्टूडियो टूल्स को सीधे एपीआई ब्रिज से जोड़ देगा
+        window.runStudioTool = async function(toolName) {
+            console.log("Connecting tool via MasterBridge:", toolName);
+            const response = await MasterBridge.call('YouTube', 'execute', { tool: toolName });
+            return response;
+        };
     </script>
+    
 </body>
 </html>
 
