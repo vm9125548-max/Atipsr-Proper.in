@@ -1,37 +1,34 @@
 import os
 import time
 import logging
-import asyncio
-from flask import Flask
+from flask import Flask, request
 from threading import Thread
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ContextTypes
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ContextTypes
 
 # Logging setup
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-# Flask server to keep Render service alive 24/7
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "YOUR_TELEGRAM_BOT_TOKEN_HERE")
+PORT = int(os.environ.get("PORT", 8080))
+
+# Flask server
 app_flask = Flask('')
 
 @app_flask.route('/')
 def home():
-    return "Mix Maker & Vainex Ultra Editor Pro Bot with Auto-Broadcast is Live & Running!"
-
-def run_flask():
-    port = int(os.environ.get("PORT", 8080))
-    app_flask.run(host='0.0.0.0', port=port)
+    return "Mix Maker & Vainex Ultra Editor Pro Bot is Live & Running!"
 
 # Base Prices & Penalties
 BASE_SAMPLE_PRICE = 50   
 BASE_FULL_PRICE = 250    
-CHAT_PENALTY = 5         # 1 मिनट की बातचीत पर ₹5 सर्वर पेनल्टी
+CHAT_PENALTY = 5         
 
-# यूजर की चैट का समय, परमानेंट लेजर और जुड़े हुए सभी यूजर्स की लिस्ट (Broadcast Storage)
 user_chat_sessions = {}
 transaction_ledger = []  
-all_bot_users = set()    # बोट से जुड़ने वाले सभी यूनिक यूजर्स की आईडी यहाँ सेव होगी
+all_bot_users = set()    
 
-# Google Drive के सुरक्षित लिंक्स (कृतांत वाचस्पति जी के प्रोजेक्ट के लिए)
 SAMPLE_DRIVE_LINK = "https://drive.google.com/file/d/your_sample_clip_id/view"
 FULL_TRACK_DRIVE_LINK = "https://drive.google.com/file/d/your_full_track_id/view"
 
@@ -39,7 +36,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     user_name = update.effective_user.first_name
     
-    # यूजर को ब्रॉडकास्ट लिस्ट में जोड़ लो ताकि नया गाना आने पर मैसेज मिल सके
     all_bot_users.add(user_id)
     user_chat_sessions[user_id] = time.time()
     
@@ -79,15 +75,12 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     qr_image_path = "father_qr.jpg"
     
     if query.data == 'buy_sample':
-        caption = (
-            f"💳 **25-Second Clip Payment (₹{final_sample_price})**\n\n"
-        )
+        caption = f"💳 **25-Second Clip Payment (₹{final_sample_price})**\n\n"
         if is_penalized:
             caption += "⚠️ *(नोट: 1 मिनट से ज्यादा बातचीत करने के कारण इसमें ₹5 सर्वर-कॉस्ट पेनल्टी जोड़ी गई है)*\n\n"
         caption += "1. ऊपर दिए गए PhonePe QR कोड को स्कैन करके भुगतान करें。\n2. पेमेंट का मैसेज आते ही नीचे **'Confirm Payment'** बटन दबाएं।"
         
         keyboard = [[InlineKeyboardButton("✅ Confirm Payment & Release File", callback_data='release_sample')]]
-        
         try:
             with open(qr_image_path, 'rb') as qr_photo:
                 await query.message.reply_photo(photo=qr_photo, caption=caption, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
@@ -95,15 +88,12 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await query.message.reply_text(f"⚠️ QR इमेज लोड करने में दिक्कत आई। (Error: {e})")
 
     elif query.data == 'buy_full':
-        caption = (
-            f"🚀 **Full Master Track Payment (₹{final_full_price})**\n\n"
-        )
+        caption = f"🚀 **Full Master Track Payment (₹{final_full_price})**\n\n"
         if is_penalized:
             caption += "⚠️ *(नोट: 1 मिनट से ज्यादा समय तक बातचीत करने के कारण इसमें ₹5 सर्वर-कॉस्ट पेनल्टी जोड़ी गई है)*\n\n"
         caption += "1. ऊपर दिए गए PhonePe QR कोड को स्कैन करके भुगतान करें。\n2. पेमेंट का मैसेज वेरीफाई होने के बाद नीचे **'Confirm Payment'** बटन दबाएं।"
         
         keyboard = [[InlineKeyboardButton("✅ Confirm Payment & Release File", callback_data='release_full')]]
-        
         try:
             with open(qr_image_path, 'rb') as qr_photo:
                 await query.message.reply_photo(photo=qr_photo, caption=caption, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
@@ -112,14 +102,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == 'release_sample':
         timestamp_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-        transaction_ledger.append({
-            "time": timestamp_str,
-            "user_id": user_id,
-            "name": user_full_name,
-            "item": "25s Demo Clip",
-            "price": final_sample_price
-        })
-        
+        transaction_ledger.append({"time": timestamp_str, "user_id": user_id, "name": user_full_name, "item": "25s Demo Clip", "price": final_sample_price})
         await query.message.reply_text(
             f"🔒 **Pro-Level Security Verification:**\n"
             f"पिताजी के फोन पर पेमेंट का SMS क्रॉस-चेक कर लिया गया है।\n\n"
@@ -129,14 +112,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == 'release_full':
         timestamp_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-        transaction_ledger.append({
-            "time": timestamp_str,
-            "user_id": user_id,
-            "name": user_full_name,
-            "item": "Full Master Track",
-            "price": final_full_price
-        })
-        
+        transaction_ledger.append({"time": timestamp_str, "user_id": user_id, "name": user_full_name, "item": "Full Master Track", "price": final_full_price})
         await query.message.reply_text(
             f"🔒 **Pro-Level Security Verification:**\n"
             f"पिताजी के UPI अकाउंट पर राशि सफलतापूर्वक प्राप्त हो चुकी है।\n\n"
@@ -152,46 +128,36 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "• ट्रैक हमेशा के लिए आपके नाम पर पेटेंट रहेगा।"
         )
 
-# एडमिन के लिए नया गाना ब्रॉडकास्ट करने का कमांड: /notify [गाने का नाम]
 async def broadcast_new_song(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = update.effective_user.id
-    
-    # यहाँ आप अपनी खुद की Telegram Admin ID डाल सकते हैं या कोई भी चेक लगा सकते हैं
-    # अभी यह आपके लिए खुला है ताकि आप जब चाहें नया गाना ब्रॉडकास्ट कर सकें
     args = context.args
     if not args:
         await update.message.reply_text("⚠️ कृपया गाने का नाम साथ में लिखें। उदाहरण: `/notify देवरा निहारे छतिया Pawan Singh`", parse_mode='Markdown')
         return
         
     song_name = " ".join(args)
-    
     broadcast_message = (
         f"📢 **नया गाना रीमिक्स अपलोड हो चुका है!**\n\n"
         f"🎵 **सॉन्ग:** {song_name} (DJ Remix Version)\n"
         f"✨ **कृतांत वाचस्पति** जी ने यह शानदार रीमिक्स अपलोड कर दिया है!\n\n"
         f"👇 आप इसे तुरंत सुनने और लेने के लिए नीचे क्लिक कर सकते हैं:"
     )
-    
-    keyboard = [[InlineKeyboardButton("🎧 अभी ट्रैक प्राप्त करें (/start)", callback_data='buy_full')]
-    ]
+    keyboard = [[InlineKeyboardButton("🎧 अभी ट्रैक प्राप्त करें (/start)", callback_data='buy_full')]]
     
     success_count = 0
-    fail_count = 0
-    
-    # जुड़े हुए सभी यूजर्स को एक-एक करके मैसेज भेजना
     for uid in all_bot_users:
         try:
             await context.bot.send_message(chat_id=uid, text=broadcast_message, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
             success_count += 1
-        except Exception as e:
-            fail_count += 1
+        except Exception:
+            pass
             
-    await update.message.reply_text(f"✅ ब्रॉडकास्ट सफल!\n• कुल भेजे गए: {success_count}\n• असफल: {fail_count}")
+    await update.message.reply_text(f"✅ ब्रॉडकास्ट सफल!\n• कुल भेजे गए लोगों को संदेश मिला: {success_count}")
 
-# स्मार्ट चैट हैंडलर और एडमिन लेजर चेकर
 async def shop_assistant(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not update.message or not update.message.text:
+        return
     user_id = update.effective_user.id
-    all_bot_users.add(user_id)  # हर एक्टिव यूजर को स्टोर करते रहो
+    all_bot_users.add(user_id)
     
     current_time = time.time()
     if user_id not in user_chat_sessions:
@@ -224,22 +190,28 @@ async def shop_assistant(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
     await update.message.reply_text(reply)
 
-def main():
-    BOT_TOKEN = os.environ.get("BOT_TOKEN", "YOUR_TELEGRAM_BOT_TOKEN_HERE")
+# Global Application instance for polling
+application = None
+
+def run_telegram_bot():
+    global application
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     
-    app = ApplicationBuilder().token(BOT_TOKEN).build()
-
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("notify", broadcast_new_song))  # नया गाना ब्रॉडकास्ट करने का कमांड
-    app.add_handler(CallbackQueryHandler(button_handler))
-    app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), shop_assistant))
-
-    t = Thread(target=run_flask)
-    t.start()
-
-    print("Mix Maker & Vainex Ultra Editor Pro Bot with Broadcast Running...")
-    app.run_polling()
+    application = Application.builder().token(BOT_TOKEN).build()
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("notify", broadcast_new_song))
+    application.add_handler(CallbackQueryHandler(button_handler))
+    application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), shop_assistant))
+    
+    logger.info("Starting bot polling...")
+    application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 if __name__ == '__main__':
-    main()
+    # Start Telegram Bot in a separate background thread so Flask can run freely on PORT
+    t = Thread(target=run_telegram_bot, daemon=True)
+    t.start()
+    
+    print(f"Flask server running on port {PORT}...")
+    app_flask.run(host='0.0.0.0', port=PORT)
     
