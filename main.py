@@ -2,9 +2,8 @@ import os
 import time
 import logging
 from flask import Flask, request
-from threading import Thread
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ContextTypes
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 
 # Logging setup
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
@@ -12,13 +11,14 @@ logger = logging.getLogger(__name__)
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "YOUR_TELEGRAM_BOT_TOKEN_HERE")
 PORT = int(os.environ.get("PORT", 8080))
+WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "") # Render का यूआरएल + /webhook
 
 # Flask server
 app_flask = Flask('')
 
 @app_flask.route('/')
 def home():
-    return "Mix Maker & Vainex Ultra Editor Pro Bot is Live & Running!"
+    return "Mix Maker & Vainex Ultra Editor Pro Bot (Webhook Mode) is Live & Running!"
 
 # Base Prices & Penalties
 BASE_SAMPLE_PRICE = 50   
@@ -32,7 +32,24 @@ all_bot_users = set()
 SAMPLE_DRIVE_LINK = "https://drive.google.com/file/d/your_sample_clip_id/view"
 FULL_TRACK_DRIVE_LINK = "https://drive.google.com/file/d/your_full_track_id/view"
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+# Telegram Application global setup
+application = None
+
+async def setup_bot():
+    global application
+    application = Application.builder().token(BOT_TOKEN).build()
+    
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("notify", broadcast_new_song))
+    application.add_handler(CallbackQueryHandler(button_handler))
+    application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), shop_assistant))
+    
+    await application.initialize()
+    if WEBHOOK_URL:
+        await application.bot.set_webhook(url=WEBHOOK_URL)
+        logger.info(f"Webhook set to: {WEBHOOK_URL}")
+
+async def start(update: Update, context):
     user_id = update.effective_user.id
     user_name = update.effective_user.first_name
     
@@ -57,7 +74,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     await update.message.reply_text(welcome_text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
 
-async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def button_handler(update: Update, context):
     query = update.callback_query
     await query.answer()
     
@@ -128,7 +145,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "• ट्रैक हमेशा के लिए आपके नाम पर पेटेंट रहेगा।"
         )
 
-async def broadcast_new_song(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def broadcast_new_song(update: Update, context):
     args = context.args
     if not args:
         await update.message.reply_text("⚠️ कृपया गाने का नाम साथ में लिखें। उदाहरण: `/notify देवरा निहारे छतिया Pawan Singh`", parse_mode='Markdown')
@@ -153,7 +170,7 @@ async def broadcast_new_song(update: Update, context: ContextTypes.DEFAULT_TYPE)
             
     await update.message.reply_text(f"✅ ब्रॉडकास्ट सफल!\n• कुल भेजे गए लोगों को संदेश मिला: {success_count}")
 
-async def shop_assistant(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def shop_assistant(update: Update, context):
     if not update.message or not update.message.text:
         return
     user_id = update.effective_user.id
@@ -190,28 +207,20 @@ async def shop_assistant(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
     await update.message.reply_text(reply)
 
-# Global Application instance for polling
-application = None
-
-def run_telegram_bot():
-    global application
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    
-    application = Application.builder().token(BOT_TOKEN).build()
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("notify", broadcast_new_song))
-    application.add_handler(CallbackQueryHandler(button_handler))
-    application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), shop_assistant))
-    
-    logger.info("Starting bot polling...")
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
+# Flask Webhook Route
+@app_flask.route('/webhook', methods=['POST'])
+def webhook():
+    if application:
+        json_string = request.get_data().decode('utf-8')
+        update = Update.de_json(json_string, application.bot)
+        application.update_queue.put_nowait(update)
+    return 'OK'
 
 if __name__ == '__main__':
-    # Start Telegram Bot in a separate background thread so Flask can run freely on PORT
-    t = Thread(target=run_telegram_bot, daemon=True)
-    t.start()
+    import asyncio
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(setup_bot())
     
-    print(f"Flask server running on port {PORT}...")
+    print(f"Flask Webhook server running on port {PORT}...")
     app_flask.run(host='0.0.0.0', port=PORT)
     
