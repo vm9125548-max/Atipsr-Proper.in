@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "YOUR_TELEGRAM_BOT_TOKEN_HERE")
 PORT = int(os.environ.get("PORT", 8080))
-WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "") # Render का यूआरएल + /webhook
+WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "")
 
 # Flask server
 app_flask = Flask('')
@@ -218,9 +218,13 @@ def webhook():
 
 if __name__ == '__main__':
     import asyncio
-    loop = asyncio.get_event_loop()
+    try:
+        loop = asyncio.get_event_loop()
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
     loop.run_until_complete(setup_bot())
     
     print(f"Flask Webhook server running on port {PORT}...")
     app_flask.run(host='0.0.0.0', port=PORT)
-    
