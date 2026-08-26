@@ -224,20 +224,3 @@ if __name__ == '__main__':
     print(f"Flask Webhook server running on port {PORT}...")
     app_flask.run(host='0.0.0.0', port=PORT)
     
-# Flask Webhook Route
-@app_flask.route('/webhook', methods=['POST'])
-def webhook():
-    if application:
-        json_string = request.get_data().decode('utf-8')
-        update = Update.de_json(json_string, application.bot)
-        application.update_queue.put_nowait(update)
-    return 'OK'
-
-if __name__ == '__main__':
-    import asyncio
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(setup_bot())
-    
-    print(f"Flask Webhook server running on port {PORT}...")
-    app_flask.run(host='0.0.0.0', port=PORT)
-    
