@@ -9,8 +9,8 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Mess
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# ATIPSR official Bot Token directly embedded securely
-BOT_TOKEN = "7726195506:AAGabXS8RX5MhFZ8Bx2Ysx6SXJWf6b9ip_4"
+# ATIPSR official Bot Token loaded securely from environment variables
+BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
 PORT = int(os.environ.get("PORT", 8080))
 WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "")
 
@@ -38,6 +38,10 @@ application = None
 
 async def setup_bot():
     global application
+    if not BOT_TOKEN:
+        logger.error("CRITICAL ERROR: BOT_TOKEN is missing from environment variables!")
+        return
+        
     application = Application.builder().token(BOT_TOKEN).build()
     
     application.add_handler(CommandHandler("start", start))
@@ -108,7 +112,7 @@ async def button_handler(update: Update, context):
         caption = f"🚀 **Full Master Track Payment (₹{final_full_price})**\n\n"
         if is_penalized:
             caption += "⚠️ *(नोट: 1 मिनट से ज्यादा समय तक बातचीत करने के कारण इसमें ₹5 सर्वर-कॉस्ट पेनल्टी जोड़ी गई है)*\n\n"
-        caption += "1. ऊपर दिए गए PhonePe QR कोड को स्कैन करके भुगतान करें。\n2. पेमेंट का मैसेज वेरीफाई होने के बाद नीचे **'Confirm Payment'** बटन दबाएं।"
+        caption += "1. ऊपर दिए गए PhonePe QR कोड को स्कैन करके भुगतान करें।\n2. पेमेंट का मैसेज वेरीफाई होने के बाद नीचे **'Confirm Payment'** बटन दबाएं।"
         
         keyboard = [[InlineKeyboardButton("✅ Confirm Payment & Release File", callback_data='release_full')]]
         try:
@@ -192,7 +196,15 @@ async def shop_assistant(update: Update, context):
             await update.message.reply_text(ledger_text, parse_mode='Markdown')
         return
 
-    if any(word in user_text for word in ['kyon', 'penality', 'extra', 'charge', 'क्यों', 'एक्स्ट्रा', 'पेनल्टी', 'चार्ज']):
+    # Check if someone asks who made the bot or about the creators/owner
+    if any(word in user_text for word in ['kisne banaya', 'who made', 'owner', 'malik', 'creator', 'किसने बनाया', 'मालिक', 'कौन है', 'कृतांत', 'kritant']):
+        reply = (
+            "🤖 **परिचय (Bot Identity):**\n\n"
+            "मैं **ATIPSR APK Official**, **Vainex Ultra Editor**, **ODGU OTT प्लेटफॉर्म**, **Pepord AI Super Web** और **Mix Maker Official** का मुख्य बोट हूँ!\n\n"
+            "✨ हम सब के मालिक और जन्मदाता **कृतांत वाचस्पति** जी हैं।न्हीं के मार्गदर्शन और आशीर्वाद से यह पूरा तकनीकी साम्राज्य चलता है!\n\n"
+            "👉 /start दबाकर अपना रीमिक्स ट्रैक प्राप्त करें!"
+        )
+    elif any(word in user_text for word in ['kyon', 'penality', 'extra', 'charge', 'क्यों', 'एक्स्ट्रा', 'पेनल्टी', 'चार्ज']):
         reply = (
             "💡 **₹5 एक्स्ट्रा चार्ज या पेनल्टी क्यों लगती है?**\n\n"
             "जनाब, हमारी सुरक्षा 'Pro' लेवल की है। बोट पर आते ही अगर आपने 1 मिनट से ज्यादा बातचीत या पूछताछ में लगा दिया, तो हमारे 24/7 चलने वाले सर्वर पर लोड बढ़ जाता है। इसलिए यह मामूली सा चार्ज सर्वर का खर्चा उठाने के लिए है!\n\n"
@@ -228,3 +240,4 @@ if __name__ == '__main__':
     
     print(f"Flask Webhook server running on port {PORT}...")
     app_flask.run(host='0.0.0.0', port=PORT)
+    
