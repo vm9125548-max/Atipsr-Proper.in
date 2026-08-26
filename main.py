@@ -9,7 +9,8 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Mess
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-BOT_TOKEN = os.environ.get("BOT_TOKEN", "YOUR_TELEGRAM_BOT_TOKEN_HERE")
+# ATIPSR official Bot Token directly embedded securely
+BOT_TOKEN = "7726195506:AAGabXS8RX5MhFZ8Bx2Ysx6SXJWf6b9ip_4"
 PORT = int(os.environ.get("PORT", 8080))
 WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "")
 
@@ -18,7 +19,7 @@ app_flask = Flask('')
 
 @app_flask.route('/')
 def home():
-    return "Mix Maker & Vainex Ultra Editor Pro Bot (Webhook Mode) is Live & Running!"
+    return "ATIPSR official Bot (Webhook Mode) is Live & Running!"
 
 # Base Prices & Penalties
 BASE_SAMPLE_PRICE = 50   
@@ -58,8 +59,7 @@ async def start(update: Update, context):
     
     welcome_text = (
         f"प्रणाम {user_name} जी!\n\n"
-        f"🛡️ **MIX MAKER IRON-CLAD PRO SECURE SHOP** 🛡️\n"
-        f"*(By कृतांत वाचस्पति)*\n"
+        f"🛡️ **ATIPSR OFFICIAL SECURE SHOP** 🛡️\n"
         f"--------------------------------------------------\n"
         f"⚡ **100% Pro-Level Security & Instant Verification**\n\n"
         f"🔥 आपके लिए ही हर एक गाना बिल्कुल नए और यूनिक तरीके से रीमिक्स किया जाता है, जो हमेशा के लिए आपके नाम पर पेटेंट हो जाता है!\n\n"
@@ -95,7 +95,7 @@ async def button_handler(update: Update, context):
         caption = f"💳 **25-Second Clip Payment (₹{final_sample_price})**\n\n"
         if is_penalized:
             caption += "⚠️ *(नोट: 1 मिनट से ज्यादा बातचीत करने के कारण इसमें ₹5 सर्वर-कॉस्ट पेनल्टी जोड़ी गई है)*\n\n"
-        caption += "1. ऊपर दिए गए PhonePe QR कोड को स्कैन करके भुगतान करें。\n2. पेमेंट का मैसेज आते ही नीचे **'Confirm Payment'** बटन दबाएं।"
+        caption += "1. ऊपर दिए गए PhonePe QR कोड को स्कैन करके भुगतान करें।\n2. पेमेंट का मैसेज आते ही नीचे **'Confirm Payment'** बटन दबाएं।"
         
         keyboard = [[InlineKeyboardButton("✅ Confirm Payment & Release File", callback_data='release_sample')]]
         try:
@@ -139,7 +139,7 @@ async def button_handler(update: Update, context):
 
     elif query.data == 'info':
         await query.message.reply_text(
-            "🛡️ **कृतांत वाचस्पति Iron-Clad Pro Security Policy**\n\n"
+            "🛡️ **ATIPSR Official Security Policy**\n\n"
             "• हमारे सभी ट्रांजैक्शन सीधे सुरक्षित बैंक अकाउंट और पिताजी के फोन के SMS अलर्ट से लिंक्ड हैं। बिना असली पेमेंट के कोई पत्ता भी नहीं हिल सकता।\n"
             "• 1 मिनट से ज्यादा बातचीत या पूछताछ करने पर ₹5 सर्वर-कॉस्ट पेनल्टी स्वतः जुड़ जाती है।\n"
             "• ट्रैक हमेशा के लिए आपके नाम पर पेटेंट रहेगा।"
@@ -155,7 +155,7 @@ async def broadcast_new_song(update: Update, context):
     broadcast_message = (
         f"📢 **नया गाना रीमिक्स अपलोड हो चुका है!**\n\n"
         f"🎵 **सॉन्ग:** {song_name} (DJ Remix Version)\n"
-        f"✨ **कृतांत वाचस्पति** जी ने यह शानदार रीमिक्स अपलोड कर दिया है!\n\n"
+        f"✨ **ATIPSR Official** ने यह शानदार रीमिक्स अपलोड कर दिया है!\n\n"
         f"👇 आप इसे तुरंत सुनने और लेने के लिए नीचे क्लिक कर सकते हैं:"
     )
     keyboard = [[InlineKeyboardButton("🎧 अभी ट्रैक प्राप्त करें (/start)", callback_data='buy_full')]]
@@ -195,12 +195,12 @@ async def shop_assistant(update: Update, context):
     if any(word in user_text for word in ['kyon', 'penality', 'extra', 'charge', 'क्यों', 'एक्स्ट्रा', 'पेनल्टी', 'चार्ज']):
         reply = (
             "💡 **₹5 एक्स्ट्रा चार्ज या पेनल्टी क्यों लगती है?**\n\n"
-            "जनाब, हमारी सुरक्षा 'Iron-Clad Pro' लेवल की है। बोट पर आते ही अगर आपने 1 मिनट से ज्यादा बातचीत या पूछताछ में लगा दिया, तो हमारे 24/7 चलने वाले सर्वर पर लोड बढ़ जाता है। इसलिए यह मामूली सा चार्ज सर्वर का खर्चा उठाने के लिए है!\n\n"
+            "जनाब, हमारी सुरक्षा 'Pro' लेवल की है। बोट पर आते ही अगर आपने 1 मिनट से ज्यादा बातचीत या पूछताछ में लगा दिया, तो हमारे 24/7 चलने वाले सर्वर पर लोड बढ़ जाता है। इसलिए यह मामूली सा चार्ज सर्वर का खर्चा उठाने के लिए है!\n\n"
             "बिना समय गंवाए /start दबाकर अपना पेटेंटेड ट्रैक बुक करें!"
         )
     else:
         reply = (
-            "✨ बात बिल्कुल सही है आपके साथ! हमारे यहाँ का हर एक रीमिक्स पूरी तरह यूनिक और आपके नाम पर पेटेंट होता है—दूसरा कोई इसे इस्तेमाल नहीं कर सकता, वरना कृतांत वाचस्पति खुद कॉपीराइट मार देंगे!\n\n"
+            "✨ बात बिल्कुल सही है आपके साथ! हमारे यहाँ का हर एक रीमिक्स पूरी तरह यूनिक और आपके नाम पर पेटेंट होता है—दूसरा कोई इसे इस्तेमाल नहीं कर सकता!\n\n"
             "💬 **विशेष सूचना:** बोट पर 1 मिनट से ज्यादा बातचीत या पूछताछ करने पर सर्वर के रखरखाव हेतु ₹5 की अतिरिक्त लागत जुड़ जाती है।\n\n"
             "👉 /start दबाकर तुरंत अपना ट्रैक प्राप्त करें!"
         )
