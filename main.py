@@ -1,6 +1,8 @@
 import os
 import time
 import logging
+import threading
+import asyncio
 from flask import Flask, request
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
@@ -13,12 +15,16 @@ logger = logging.getLogger(__name__)
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
 PORT = int(os.environ.get("PORT", 8080))
 
-# Flask server
+# Flask server setup
 app_flask = Flask('')
 
 @app_flask.route('/')
 def home():
     return "ATIPSR official Bot is Live & Running!"
+
+@app_flask.route('/webhook', methods=['POST'])
+def webhook():
+    return 'OK', 200
 
 # Base Prices & Penalties
 BASE_SAMPLE_PRICE = 50   
@@ -32,9 +38,7 @@ all_bot_users = set()
 SAMPLE_DRIVE_LINK = "https://drive.google.com/file/d/your_sample_clip_id/view"
 FULL_TRACK_DRIVE_LINK = "https://drive.google.com/file/d/your_full_track_id/view"
 
-# Telegram Application global setup
-application = None
-
+# Telegram Bot Handlers
 async def start(update: Update, context):
     user_id = update.effective_user.id
     user_name = update.effective_user.first_name
@@ -80,7 +84,7 @@ async def button_handler(update: Update, context):
         caption = f"💳 **25-Second Clip Payment (₹{final_sample_price})**\n\n"
         if is_penalized:
             caption += "⚠️ *(नोट: 1 मिनट से ज्यादा बातचीत करने के कारण इसमें ₹5 सर्वर-कॉस्ट पेनल्टी जोड़ी गई है)*\n\n"
-        caption += "1. ऊपर दिए गए PhonePe QR कोड को स्कैन करके भुगतान करें।\n2. पेमेंट का मैसेज आते ही नीचे **'Confirm Payment'** बटन दबाएं।"
+        caption += "1. ऊपर दिए गए PhonePe QR कोड को स्कैन करके भुगतान करें。\n2. पेमेंट का मैसेज आते ही नीचे **'Confirm Payment'** बटन दबाएं।"
         
         keyboard = [[InlineKeyboardButton("✅ Confirm Payment & Release File", callback_data='release_sample')]]
         try:
@@ -93,7 +97,7 @@ async def button_handler(update: Update, context):
         caption = f"🚀 **Full Master Track Payment (₹{final_full_price})**\n\n"
         if is_penalized:
             caption += "⚠️ *(नोट: 1 मिनट से ज्यादा समय तक बातचीत करने के कारण इसमें ₹5 सर्वर-कॉस्ट पेनल्टी जोड़ी गई है)*\n\n"
-        caption += "1. ऊपर दिए गए PhonePe QR कोड को स्कैन करके भुगतान करें।\n2. पेमेंट का मैसेज वेरीफाई होने के बाद नीचे **'Confirm Payment'** बटन दबाएं।"
+        caption += "1. ऊपर दिए गए PhonePe QR कोड को स्कैन करके भुगतान करें。\n2. पेमेंट का मैसेज वेरीफाई होने के बाद नीचे **'Confirm Payment'** बटन दबाएं।"
         
         keyboard = [[InlineKeyboardButton("✅ Confirm Payment & Release File", callback_data='release_full')]]
         try:
@@ -199,37 +203,30 @@ async def shop_assistant(update: Update, context):
         
     await update.message.reply_text(reply)
 
-# Flask Webhook Route
-@app_flask.route('/webhook', methods=['POST'])
-def webhook():
-    if application:
-        json_string = request.get_data().decode('utf-8')
-        update = Update.de_json(json_string, application.bot)
-        application.update_queue.put_nowait(update)
-    return 'OK'
+# Background Runner for Flask Web Server (Render Health Check Ke Liye)
+def run_flask():
+    app_flask.run(host='0.0.0.0', port=PORT, use_reloader=False)
+
+# Main Telegram Bot Polling Function
+def run_telegram_bot():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    
+    application = Application.builder().token(BOT_TOKEN).build()
+    
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("notify", broadcast_new_song))
+    application.add_handler(CallbackQueryHandler(button_handler))
+    application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), shop_assistant))
+    
+    logger.info("Starting Telegram Bot Polling...")
+    application.run_polling()
 
 if __name__ == '__main__':
-    import asyncio
-    try:
-        loop = asyncio.get_event_loop()
-    except RuntimeError:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        
-    async def main():
-        global application
-        application = Application.builder().token(BOT_TOKEN).build()
-        
-        application.add_handler(CommandHandler("start", start))
-        application.add_handler(CommandHandler("notify", broadcast_new_song))
-        application.add_handler(CallbackQueryHandler(button_handler))
-        application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), shop_assistant))
-        
-        await application.initialize()
-        print("Bot initialized successfully!")
-
-    loop.run_until_complete(main())
+    # Flask को बैकग्राउंड थ्रेड में चलाना ताकि Render पोर्ट खुला रहे
+    flask_thread = threading.Thread(target=run_flask)
+    flask_thread.daemon = True
+    flask_thread.start()
     
-    print(f"Flask Webhook server running on port {PORT}...")
-    app_flask.run(host='0.0.0.0', port=PORT)
-        
+    # मुख्य थ्रेड में Telegram बोट को चलाना ताकि वह लगातार मैसेज सुने
+    run_telegram_bot()
