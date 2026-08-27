@@ -241,3 +241,24 @@ if __name__ == '__main__':
     
     print(f"Flask Webhook server running on port {PORT}...")
     app_flask.run(host='0.0.0.0', port=PORT)
+async def setup_bot():
+    global application
+    if not BOT_TOKEN:
+        logger.error("CRITICAL ERROR: BOT_TOKEN is missing from environment variables!")
+        return
+        
+    application = Application.builder().token(BOT_TOKEN).build()
+    
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("notify", broadcast_new_song))
+    application.add_handler(CallbackQueryHandler(button_handler))
+    application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), shop_assistant))
+    
+    await application.initialize()
+    if WEBHOOK_URL:
+        # यह लाइन खुद-ब-खुद Telegram के सर्वर पर वेबहुक सेट कर देगी!
+        success = await application.bot.set_webhook(url=WEBHOOK_URL)
+        if success:
+            logger.info(f"Webhook successfully set to: {WEBHOOK_URL}")
+        else:
+            logger.error("Failed to set webhook!")
