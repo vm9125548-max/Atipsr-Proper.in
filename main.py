@@ -21,7 +21,7 @@ PORT = int(os.environ.get("PORT", 8080))
 # VPN / Proxy Configuration (सर्वर की लोकेशन गुप्त और सुरक्षित रखने के लिए)
 PROXY_URL = os.environ.get("PROXY_URL", None)
 
-# Gemini AI Configuration
+# Gemini AI Configuration (मास्टर AI दिमाग)
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
     ai_model = genai.GenerativeModel('gemini-1.5-flash')
@@ -64,11 +64,11 @@ async def start(update: Update, context):
         f"🛡️ **ATIPSR OFFICIAL SECURE SHOP** 🛡️\n"
         f"--------------------------------------------------\n"
         f"⚡ **100% Pro-Level Security, AI Enabled & VPN Protected**\n\n"
-        f"🔥 आपके लिए ही हर एक गाना बिल्कुल नए और यूनिक तरीके से रीमिक्स किया जाता है, जो हमेशा के लिए आपके नाम पर पेटेंट हो जाता है!\n\n"
+        f"🔥 आपके लिए ही हर एक गाना बिल्कुल नए और यूनिक तरीके से रीमिक्स किया गया है, जो सीधे **Mix Maker** द्वारा तैयार और पेटेंट किया गया है!\n\n"
         f"👇 बिना समय गंवाए नीचे से अपना विकल्प चुनें:"
     )
     
-    # आपके पुराने विकल्प और बिल्कुल सबसे नीचे जोड़े गए आपके दोनों नए पेमेंट बटन
+    # आपके सभी पुराने और नए पेमेंट बटन सुरक्षित हैं
     keyboard = [
         [InlineKeyboardButton(f"💳 Buy 25s Demo Clip (₹{BASE_SAMPLE_PRICE})", callback_data='buy_sample')],
         [InlineKeyboardButton(f"🚀 Buy Full Master Track (₹{BASE_FULL_PRICE})", callback_data='buy_full')],
@@ -122,7 +122,6 @@ async def button_handler(update: Update, context):
         except Exception as e:
             await query.message.reply_text(f"⚠️ QR इमेज लोड करने में दिक्कत आई। (Error: {e})")
 
-    # आपके बताए गए दोनों नए अलग पेमेंट ऑप्शन (PhonePe और ATIPSR Pay)
     elif query.data == 'pay_phonepe':
         caption = f"💳 **PhonePe Payment Gateway (₹{final_full_price})**\n\n1. ऊपर दिए गए QR कोड को स्कैन करके भुगतान करें।\n2. भुगतान के बाद नीचे कन्फर्म बटन दबाएं।"
         keyboard = [[InlineKeyboardButton("✅ Confirm Payment", callback_data='confirm_transfer')]]
@@ -161,7 +160,6 @@ async def button_handler(update: Update, context):
             f"📁 मास्टर फाइल यहाँ से डाउनलोड करें:\n{FULL_TRACK_DRIVE_LINK}"
         )
 
-    # आपके निर्देशानुसार बिल्कुल सटीक सिक्योर ट्रांसफर मैसेज
     elif query.data == 'confirm_transfer':
         timestamp_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         await query.message.reply_text(
@@ -188,7 +186,7 @@ async def broadcast_new_song(update: Update, context):
     broadcast_message = (
         f"📢 **नया गाना रीमिक्स अपलोड हो चुका है!**\n\n"
         f"🎵 **सॉन्ग:** {song_name} (DJ Remix Version)\n"
-        f"✨ **ATIPSR Official** ने यह शानदार रीमिक्स अपलोड कर दिया है!\n\n"
+        f"✨ **Mix Maker** ने यह शानदार रीमिक्स खुद तैयार किया है!\n\n"
         f"👇 आप इसे तुरंत सुनने और लेने के लिए नीचे क्लिक कर सकते हैं:"
     )
     keyboard = [[InlineKeyboardButton("🎧 अभी ट्रैक प्राप्त करें (/start)", callback_data='buy_full')]]
@@ -203,6 +201,7 @@ async def broadcast_new_song(update: Update, context):
             
     await update.message.reply_text(f"✅ ब्रॉडकास्ट सफल!\n• कुल भेजे गए लोगों को संदेश मिला: {success_count}")
 
+# 🧠 मास्टर AI "Mix Maker" शॉप असिस्टेंट (जो हर मैसेज को सीधे प्रोसेस करके जवाब देगा)
 async def shop_assistant(update: Update, context):
     if not update.message or not update.message.text:
         return
@@ -215,6 +214,7 @@ async def shop_assistant(update: Update, context):
         
     user_text = update.message.text.lower()
     
+    # 1. लेजर या रिकॉर्ड देखने के लिए
     if 'ledger' in user_text or 'record' in user_text or 'कच्चा चिट्ठा' in user_text:
         if not transaction_ledger:
             await update.message.reply_text("📂 अभी तक लेजर में कोई ट्रांजैक्शन दर्ज नहीं हुआ है।")
@@ -225,13 +225,16 @@ async def shop_assistant(update: Update, context):
             await update.message.reply_text(ledger_text, parse_mode='Markdown')
         return
 
-    # यदि AI API Key मौजूद है, तो Gemini AI से स्मार्ट जवाब मँगवाएँगे
+    # 2. असली AI दिमाग (Gemini AI) - जो हर यूजर के सवाल का सीधा और कड़क जवाब देगा
     if ai_model:
         try:
             prompt = (
-                f"तुम 'ATIPSR Official' के स्मार्ट और सख्त सुरक्षा वाले AI मैनेजर हो। "
-                f"इस दुकान के मालिक और जन्मदाता कृतांत वाचस्पति जी हैं। "
-                f"यूजर का मैसेज यह है: '{update.message.text}'. इसे प्रोफेशनल तरीके से हिंदी में जवाब दो।"
+                f"तुम 'Mix Maker' (ATIPSR Official) के मुख्य AI रीमिक्सर और मैनेजर हो। "
+                f"इस बात को हमेशा याद रखो कि सारे गाने और रीमिक्स तुमने (यानी Mix Maker ने) खुद अपने हाथों से तैयार किए हैं। "
+                f"कोई यूजर तुमसे किसी भी तरह की बात करे, तुम्हें हमेशा एक शांत, प्रोफेशनल और सख्त जवाब देना है। "
+                f"यूजर का मैसेज यह है: '{update.message.text}'. "
+                f"साथ ही यह ध्यान रखो कि बोट पर 1 मिनट से ज्यादा बातचीत करने पर सर्वर-कॉस्ट के रूप में ₹5 की पेनल्टी लगती है। "
+                f"इस पूरी जानकारी के साथ यूजर के सवाल का एकदम सटीक और शानदार जवाब हिंदी में दो।"
             )
             response = ai_model.generate_content(prompt)
             await update.message.reply_text(response.text)
@@ -239,30 +242,14 @@ async def shop_assistant(update: Update, context):
         except Exception as e:
             logger.error(f"Gemini AI Error: {e}")
 
-    # Fallback पुराने जवाब
-    if any(word in user_text for word in ['kisne banaya', 'who made', 'owner', 'malik', 'creator', 'किसने बनाया', 'मालिक', 'कौन है', 'कृतांत', 'kritant']):
-        reply = (
-            "🤖 **परिचय (Bot Identity):**\n\n"
-            "मैं **ATIPSR APK Official**, **Vainex Ultra Editor**, **ODGU OTT प्लेटफॉर्म**, **Pepord AI Super Web** और **Mix Maker Official** का मुख्य बोट हूँ!\n\n"
-            "✨ हम सब के मालिक और जन्मदाता **कृतांत वाचस्पति** जी हैं। उन्हीं के मार्गदर्शन से यह पूरा तकनीकी साम्राज्य चलता है!\n\n"
-            "👉 /start दबाकर अपना रीमिक्स ट्रैक प्राप्त करें!"
-        )
-    elif any(word in user_text for word in ['kyon', 'penality', 'extra', 'charge', 'क्यों', 'एक्स्ट्रा', 'पेनल्टी', 'चार्ज']):
-        reply = (
-            "💡 **₹5 एक्स्ट्रा चार्ज या पेनल्टी क्यों लगती है?**\n\n"
-            "जनाब, हमारी सुरक्षा 'Pro' लेवल की है। बोट पर आते ही अगर आपने 1 मिनट से ज्यादा बातचीत या पूछताछ में लगा दिया, तो सर्वर पर लोड बढ़ जाता है। इसलिए यह मामूली सा चार्ज सर्वर का खर्चा उठाने के लिए है!\n\n"
-            "बिना समय गंवाए /start दबाकर अपना पेटेंटेड ट्रैक बुक करें!"
-        )
-    else:
-        reply = (
-            "✨ बात बिल्कुल सही है आपके साथ! हमारे यहाँ का हर एक रीमिक्स पूरी तरह यूनिक और आपके नाम पर पेटेंट होता है—दूसरा कोई इसे इस्तेमाल नहीं कर सकता!\n\n"
-            "💬 **विशेष सूचना:** बोट पर 1 मिनट से ज्यादा बातचीत या पूछताछ करने पर सर्वर के रखरखाव हेतु ₹5 की अतिरिक्त लागत जुड़ जाती है।\n\n"
-            "👉 /start दबाकर तुरंत अपना ट्रैक प्राप्त करें!"
-        )
-        
-    await update.message.reply_text(reply)
+    # 3. बैकअप जवाब (अगर किसी वजह से AI काम न करे)
+    await update.message.reply_text(
+        "✨ **Mix Maker Official:**\n\n"
+        "आपका गाना पूरी सुरक्षा के साथ हमारे सर्वर पर तैयार है। आप ऊपर दिए गए विकल्पों से अपना ट्रैक प्राप्त कर सकते हैं!\n\n"
+        "⚠️ *(नोट: 1 मिनट से अधिक बातचीत पर सर्वर रखरखाव हेतु ₹5 अतिरिक्त लागत जुड़ती है)*"
+    )
 
-# Background Runner for Flask Web Server (Render Health Check Ke Liye)
+# Background Runner for Flask Web Server
 def run_flask():
     app_flask.run(host='0.0.0.0', port=PORT, use_reloader=False)
 
@@ -273,7 +260,6 @@ def run_telegram_bot():
     
     builder = Application.builder().token(BOT_TOKEN)
     
-    # यदि आपने प्रॉक्सी या वीपीएन सेट किया है, तो टेलीग्राम बोट उसे खुद-ब-खुद इस्तेमाल करेगा
     if PROXY_URL:
         builder.proxy(PROXY_URL)
         builder.get_updates_proxy(PROXY_URL)
@@ -290,10 +276,8 @@ def run_telegram_bot():
     application.run_polling()
 
 if __name__ == '__main__':
-    # Flask को बैकग्राउंड थ्रेड में चलाना ताकि Render पोर्ट खुला रहे
     flask_thread = threading.Thread(target=run_flask)
     flask_thread.daemon = True
     flask_thread.start()
     
-    # मुख्य थ्रेड में Telegram बोट को चलाना ताकि वह लगातार मैसेज सुने
     run_telegram_bot()
