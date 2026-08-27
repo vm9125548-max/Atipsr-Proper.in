@@ -1,5 +1,4 @@
 import os
-
 import time
 import logging
 from flask import Flask, request
@@ -13,14 +12,13 @@ logger = logging.getLogger(__name__)
 # ATIPSR official Bot Token loaded securely from environment variables
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
 PORT = int(os.environ.get("PORT", 8080))
-WEBHOOK_URL = os.environ.get("WEBHOOK_URL", "")
 
 # Flask server
 app_flask = Flask('')
 
 @app_flask.route('/')
 def home():
-    return "ATIPSR official Bot (Webhook Mode) is Live & Running!"
+    return "ATIPSR official Bot is Live & Running!"
 
 # Base Prices & Penalties
 BASE_SAMPLE_PRICE = 50   
@@ -36,24 +34,6 @@ FULL_TRACK_DRIVE_LINK = "https://drive.google.com/file/d/your_full_track_id/view
 
 # Telegram Application global setup
 application = None
-
-async def setup_bot():
-    global application
-    if not BOT_TOKEN:
-        logger.error("CRITICAL ERROR: BOT_TOKEN is missing from environment variables!")
-        return
-        
-    application = Application.builder().token(BOT_TOKEN).build()
-    
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("notify", broadcast_new_song))
-    application.add_handler(CallbackQueryHandler(button_handler))
-    application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), shop_assistant))
-    
-    await application.initialize()
-    if WEBHOOK_URL:
-        await application.bot.set_webhook(url=WEBHOOK_URL)
-        logger.info(f"Webhook set to: {WEBHOOK_URL}")
 
 async def start(update: Update, context):
     user_id = update.effective_user.id
@@ -197,12 +177,11 @@ async def shop_assistant(update: Update, context):
             await update.message.reply_text(ledger_text, parse_mode='Markdown')
         return
 
-    # Check if someone asks who made the bot or about the creators/owner
     if any(word in user_text for word in ['kisne banaya', 'who made', 'owner', 'malik', 'creator', 'किसने बनाया', 'मालिक', 'कौन है', 'कृतांत', 'kritant']):
         reply = (
             "🤖 **परिचय (Bot Identity):**\n\n"
             "मैं **ATIPSR APK Official**, **Vainex Ultra Editor**, **ODGU OTT प्लेटफॉर्म**, **Pepord AI Super Web** और **Mix Maker Official** का मुख्य बोट हूँ!\n\n"
-            "✨ हम सब के मालिक और जन्मदाता **कृतांत वाचस्पति** जी हैं।न्हीं के मार्गदर्शन और आशीर्वाद से यह पूरा तकनीकी साम्राज्य चलता है!\n\n"
+            "✨ हम सब के मालिक और जन्मदाता **कृतांत वाचस्पति** जी हैं। उन्हीं के मार्गदर्शन और आशीर्वाद से यह पूरा तकनीकी साम्राज्य चलता है!\n\n"
             "👉 /start दबाकर अपना रीमिक्स ट्रैक प्राप्त करें!"
         )
     elif any(word in user_text for word in ['kyon', 'penality', 'extra', 'charge', 'क्यों', 'एक्स्ट्रा', 'पेनल्टी', 'चार्ज']):
@@ -237,28 +216,19 @@ if __name__ == '__main__':
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         
-    loop.run_until_complete(setup_bot())
+    async def main():
+        global application
+        application = Application.builder().token(BOT_TOKEN).build()
+        
+        application.add_handler(CommandHandler("start", start))
+        application.add_handler(CommandHandler("notify", broadcast_new_song))
+        application.add_handler(CallbackQueryHandler(button_handler))
+        application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), shop_assistant))
+        
+        await application.initialize()
+        print("Bot initialized successfully!")
+
+    loop.run_until_complete(main())
     
     print(f"Flask Webhook server running on port {PORT}...")
     app_flask.run(host='0.0.0.0', port=PORT)
-async def setup_bot():
-    global application
-    if not BOT_TOKEN:
-        logger.error("CRITICAL ERROR: BOT_TOKEN is missing from environment variables!")
-        return
-        
-    application = Application.builder().token(BOT_TOKEN).build()
-    
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("notify", broadcast_new_song))
-    application.add_handler(CallbackQueryHandler(button_handler))
-    application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), shop_assistant))
-    
-    await application.initialize()
-    if WEBHOOK_URL:
-        # यह लाइन खुद-ब-खुद Telegram के सर्वर पर वेबहुक सेट कर देगी!
-        success = await application.bot.set_webhook(url=WEBHOOK_URL)
-        if success:
-            logger.info(f"Webhook successfully set to: {WEBHOOK_URL}")
-        else:
-            logger.error("Failed to set webhook!")
