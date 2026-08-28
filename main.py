@@ -1,4 +1,4 @@
-import os 
+import os
 import time
 import logging
 import threading
@@ -21,10 +21,10 @@ PORT = int(os.environ.get("PORT", 8080))
 # VPN / Proxy Configuration (सर्वर की लोकेशन गुप्त और सुरक्षित रखने के लिए)
 PROXY_URL = os.environ.get("PROXY_URL", None)
 
-# Gemini AI Configuration (मास्टर AI दिमाग - सीधे आपकी पर्यावरण वाली API Key पर कॉल करेगा)
+# Gemini AI Configuration (यहाँ मॉडल का नाम बदलकर gemini-pro कर दिया गया है ताकि 404 एरर न आए)
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
-    ai_model = genai.GenerativeModel('gemini-1.5-flash')
+    ai_model = genai.GenerativeModel('gemini-pro')
 else:
     ai_model = None
 
@@ -200,7 +200,7 @@ async def broadcast_new_song(update: Update, context):
             
     await update.message.reply_text(f"✅ ब्रॉडकास्ट सफल!\n• कुल भेजे गए लोगों को संदेश मिला: {success_count}")
 
-# 🧠 स्कैंड AI "Mix Maker" शॉप असिस्टेंट - जो हर गड़बड़ को स्कैन करके साफ़ बताएगा
+# 🧠 स्कैंड AI "Mix Maker" शॉप असिस्टेंट
 async def shop_assistant(update: Update, context):
     if not update.message or not update.message.text:
         return
@@ -229,7 +229,7 @@ async def shop_assistant(update: Update, context):
     if not GEMINI_API_KEY:
         await update.message.reply_text(
             "⚠️ **स्कैन रिपोर्ट: API Key गायब है!**\n"
-            "Render के Environment Variables में `GEMINI_API_KEY` सेट नहीं की गई है, इसलिए एआई काम नहीं कर पा रहा है।"
+            "Render के Environment Variables में `GEMINI_API_KEY` सेट नहीं की गई है।"
         )
         return
 
@@ -254,14 +254,13 @@ async def shop_assistant(update: Update, context):
             logger.error(f"Gemini AI Error: {e}")
             await update.message.reply_text(
                 f"⚠️ **स्कैन रिपोर्ट (तकनीकी एरर):**\n"
-                f"एआई को कॉल करते समय यह समस्या आई है:\n`{e}`\n\n"
-                f"कृपया जाँच लें कि आपने जो API Key डाली है वह सही और एक्टिव है या नहीं।"
+                f"एआई को कॉल करते समय यह समस्या आई है:\n`{e}`"
             )
             return
 
     # 4. यदि मॉडल लोड नहीं हुआ
     await update.message.reply_text(
-        "⚠️ **स्कैन रिपोर्ट:** `ai_model` इनिशियलाइज नहीं हो पाया है। कृपया कोड या की चेक करें।"
+        "⚠️ **स्कैन रिपोर्ट:** `ai_model` इनिशियलाइज नहीं हो पाया है।"
     )
 
 # Background Runner for Flask Web Server
@@ -296,3 +295,4 @@ if __name__ == '__main__':
     flask_thread.start()
     
     run_telegram_bot()
+    
