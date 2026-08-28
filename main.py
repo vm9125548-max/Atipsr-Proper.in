@@ -200,7 +200,7 @@ async def broadcast_new_song(update: Update, context):
             
     await update.message.reply_text(f"✅ ब्रॉडकास्ट सफल!\n• कुल भेजे गए लोगों को संदेश मिला: {success_count}")
 
-# 🧠 मास्टर AI "Mix Maker" शॉप असिस्टेंट - जो सीधे आपकी API Key से कॉल करेगा
+# 🧠 स्कैंड AI "Mix Maker" शॉप असिस्टेंट - जो हर गड़बड़ को स्कैन करके साफ़ बताएगा
 async def shop_assistant(update: Update, context):
     if not update.message or not update.message.text:
         return
@@ -211,10 +211,11 @@ async def shop_assistant(update: Update, context):
     if user_id not in user_chat_sessions:
         user_chat_sessions[user_id] = current_time
         
-    user_text = update.message.text.lower()
+    user_text = update.message.text.strip()
+    user_text_lower = user_text.lower()
     
     # 1. लेजर या रिकॉर्ड देखने के लिए
-    if 'ledger' in user_text or 'record' in user_text or 'कच्चा चिट्ठा' in user_text:
+    if 'ledger' in user_text_lower or 'record' in user_text_lower or 'कच्चा चिट्ठा' in user_text_lower:
         if not transaction_ledger:
             await update.message.reply_text("📂 अभी तक लेजर में कोई ट्रांजैक्शन दर्ज नहीं हुआ है।")
         else:
@@ -224,27 +225,43 @@ async def shop_assistant(update: Update, context):
             await update.message.reply_text(ledger_text, parse_mode='Markdown')
         return
 
-    # 2. असली AI दिमाग (Gemini AI) - सीधे आपकी एनवायरनमेंट वाली की पर कॉल करेगा
+    # 2. स्कैन करके चेक करना कि API Key मौजूद है या नहीं
+    if not GEMINI_API_KEY:
+        await update.message.reply_text(
+            "⚠️ **स्कैन रिपोर्ट: API Key गायब है!**\n"
+            "Render के Environment Variables में `GEMINI_API_KEY` सेट नहीं की गई है, इसलिए एआई काम नहीं कर पा रहा है।"
+        )
+        return
+
+    # 3. असली AI दिमाग से जवाब मंगाना और स्कैन करना
     if ai_model:
         try:
             prompt = (
                 f"तुम 'Mix Maker' (ATIPSR Official) के मुख्य AI रीमिक्सर और मैनेजर हो। "
                 f"सारे गाने तुमने (यानी Mix Maker ने) खुद अपने हाथों से तैयार किए हैं। "
-                f"यूजर का मैसेज यह है: '{update.message.text}'. "
+                f"यूजर का मैसेज यह है: '{user_text}'. "
                 f"इस बात का ध्यान रखो कि बोट पर 1 मिनट से ज्यादा बातचीत करने पर सर्वर-कॉस्ट के रूप में ₹5 की पेनल्टी लगती है। "
                 f"यूजर के सवाल का एकदम सटीक, प्रोफेशनल और शानदार जवाब हिंदी में दो।"
             )
             response = ai_model.generate_content(prompt)
-            await update.message.reply_text(response.text)
-            return
+            if response and response.text:
+                await update.message.reply_text(response.text)
+                return
+            else:
+                await update.message.reply_text("⚠️ **स्कैन रिपोर्ट:** एआई मॉडल से कोई रिस्पॉन्स नहीं मिला।")
+                return
         except Exception as e:
             logger.error(f"Gemini AI Error: {e}")
+            await update.message.reply_text(
+                f"⚠️ **स्कैन रिपोर्ट (तकनीकी एरर):**\n"
+                f"एआई को कॉल करते समय यह समस्या आई है:\n`{e}`\n\n"
+                f"कृपया जाँच लें कि आपने जो API Key डाली है वह सही और एक्टिव है या नहीं।"
+            )
+            return
 
-    # 3. बैकअप जवाब (अगर कभी एआई में कोई दिक्कत आए)
+    # 4. यदि मॉडल लोड नहीं हुआ
     await update.message.reply_text(
-        "✨ **Mix Maker Official:**\n\n"
-        "आपका गाना पूरी सुरक्षा के साथ हमारे सर्वर पर तैयार है। आप ऊपर दिए गए विकल्पों से अपना ट्रैक प्राप्त कर सकते हैं!\n\n"
-        "⚠️ *(नोट: 1 मिनट से अधिक बातचीत पर सर्वर रखरखाव हेतु ₹5 अतिरिक्त लागत जुड़ती है)*"
+        "⚠️ **स्कैन रिपोर्ट:** `ai_model` इनिशियलाइज नहीं हो पाया है। कृपया कोड या की चेक करें।"
     )
 
 # Background Runner for Flask Web Server
