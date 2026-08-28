@@ -21,7 +21,7 @@ PORT = int(os.environ.get("PORT", 8080))
 # VPN / Proxy Configuration (सर्वर की लोकेशन गुप्त और सुरक्षित रखने के लिए)
 PROXY_URL = os.environ.get("PROXY_URL", None)
 
-# Gemini AI Configuration (मास्टर AI दिमाग)
+# Gemini AI Configuration (मास्टर AI दिमाग - सीधे आपकी पर्यावरण वाली API Key पर कॉल करेगा)
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
     ai_model = genai.GenerativeModel('gemini-1.5-flash')
@@ -68,7 +68,6 @@ async def start(update: Update, context):
         f"👇 बिना समय गंवाए नीचे से अपना विकल्प चुनें:"
     )
     
-    # आपके सभी पुराने और नए पेमेंट बटन सुरक्षित हैं
     keyboard = [
         [InlineKeyboardButton(f"💳 Buy 25s Demo Clip (₹{BASE_SAMPLE_PRICE})", callback_data='buy_sample')],
         [InlineKeyboardButton(f"🚀 Buy Full Master Track (₹{BASE_FULL_PRICE})", callback_data='buy_full')],
@@ -201,7 +200,7 @@ async def broadcast_new_song(update: Update, context):
             
     await update.message.reply_text(f"✅ ब्रॉडकास्ट सफल!\n• कुल भेजे गए लोगों को संदेश मिला: {success_count}")
 
-# 🧠 मास्टर AI "Mix Maker" शॉप असिस्टेंट (जो हर मैसेज को सीधे प्रोसेस करके जवाब देगा)
+# 🧠 मास्टर AI "Mix Maker" शॉप असिस्टेंट - जो सीधे आपकी API Key से कॉल करेगा
 async def shop_assistant(update: Update, context):
     if not update.message or not update.message.text:
         return
@@ -225,16 +224,15 @@ async def shop_assistant(update: Update, context):
             await update.message.reply_text(ledger_text, parse_mode='Markdown')
         return
 
-    # 2. असली AI दिमाग (Gemini AI) - जो हर यूजर के सवाल का सीधा और कड़क जवाब देगा
+    # 2. असली AI दिमाग (Gemini AI) - सीधे आपकी एनवायरनमेंट वाली की पर कॉल करेगा
     if ai_model:
         try:
             prompt = (
                 f"तुम 'Mix Maker' (ATIPSR Official) के मुख्य AI रीमिक्सर और मैनेजर हो। "
-                f"इस बात को हमेशा याद रखो कि सारे गाने और रीमिक्स तुमने (यानी Mix Maker ने) खुद अपने हाथों से तैयार किए हैं। "
-                f"कोई यूजर तुमसे किसी भी तरह की बात करे, तुम्हें हमेशा एक शांत, प्रोफेशनल और सख्त जवाब देना है। "
+                f"सारे गाने तुमने (यानी Mix Maker ने) खुद अपने हाथों से तैयार किए हैं। "
                 f"यूजर का मैसेज यह है: '{update.message.text}'. "
-                f"साथ ही यह ध्यान रखो कि बोट पर 1 मिनट से ज्यादा बातचीत करने पर सर्वर-कॉस्ट के रूप में ₹5 की पेनल्टी लगती है। "
-                f"इस पूरी जानकारी के साथ यूजर के सवाल का एकदम सटीक और शानदार जवाब हिंदी में दो।"
+                f"इस बात का ध्यान रखो कि बोट पर 1 मिनट से ज्यादा बातचीत करने पर सर्वर-कॉस्ट के रूप में ₹5 की पेनल्टी लगती है। "
+                f"यूजर के सवाल का एकदम सटीक, प्रोफेशनल और शानदार जवाब हिंदी में दो।"
             )
             response = ai_model.generate_content(prompt)
             await update.message.reply_text(response.text)
@@ -242,7 +240,7 @@ async def shop_assistant(update: Update, context):
         except Exception as e:
             logger.error(f"Gemini AI Error: {e}")
 
-    # 3. बैकअप जवाब (अगर किसी वजह से AI काम न करे)
+    # 3. बैकअप जवाब (अगर कभी एआई में कोई दिक्कत आए)
     await update.message.reply_text(
         "✨ **Mix Maker Official:**\n\n"
         "आपका गाना पूरी सुरक्षा के साथ हमारे सर्वर पर तैयार है। आप ऊपर दिए गए विकल्पों से अपना ट्रैक प्राप्त कर सकते हैं!\n\n"
@@ -281,3 +279,4 @@ if __name__ == '__main__':
     flask_thread.start()
     
     run_telegram_bot()
+    
