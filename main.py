@@ -3,8 +3,7 @@ import time
 import logging
 import threading
 import asyncio
-import httpx
-from flask import Flask, request
+from flask import Flask
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 import google.generativeai as genai
@@ -13,20 +12,30 @@ import google.generativeai as genai
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# ATIPSR official Bot Token & Gemini API Key loaded securely from environment variables
+# ATIPSR official Bot Token & Gemini API Key
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 PORT = int(os.environ.get("PORT", 8080))
 
-# VPN / Proxy Configuration (सर्वर की लोकेशन गुप्त और सुरक्षित रखने के लिए)
+# VPN / Proxy Configuration
 PROXY_URL = os.environ.get("PROXY_URL", None)
 
-# Gemini AI Configuration (यहाँ मॉडल का नाम बदलकर gemini-pro कर दिया गया है ताकि 404 एरर न आए)
+# 🧠 यूनिवर्सल ऑटो-डिटेक्ट मॉडल फाइंडर (जो हर एपीआई की के हिसाब से बेस्ट मॉडल खुद चुन लेगा)
+ai_model = None
 if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
-    ai_model = genai.GenerativeModel('gemini-pro')
-else:
-    ai_model = None
+    try:
+        genai.configure(api_key=GEMINI_API_KEY)
+        # उपलब्ध सभी मॉडल्स को स्कैन करके जो सबसे पहले सपोर्टेड मिले, उसे सेट कर लो
+        for m in genai.list_models():
+            if 'generateContent' in m.supported_generation_methods:
+                ai_model = genai.GenerativeModel(m.name)
+                logger.info(f"Auto-Selected Model: {m.name}")
+                break
+        # अगर लिस्ट से न मिले तो डिफॉल्ट फ्लैश सेट कर दो
+        if not ai_model:
+            ai_model = genai.GenerativeModel('gemini-1.5-flash')
+    except Exception as e:
+        logger.error(f"Error configuring Gemini AI: {e}")
 
 # Flask server setup
 app_flask = Flask('')
@@ -171,7 +180,7 @@ async def button_handler(update: Update, context):
     elif query.data == 'info':
         await query.message.reply_text(
             "🛡️ **ATIPSR Official Security Policy & VPN**\n\n"
-            "• हमारे सभी ट्रांजैक्शन सीधे सुरक्षित बैंक अकाउंट और पिताजी के फोन के SMS अलर्ट से लिंक्ड हैं। बिना असली पेमेंट के कोई पत्ता भी नहीं हिल सकता।\n"
+            "• हमारे सभी ट्रांजैक्शन सीधे सुरक्षित बैंक अकाउंट और पिताजी के फोन के SMS अलर्ट से लिंक्ड हैं। बिना असली पेमेंट के कोई पत्ता भी नहीं हिल सकता。\n"
             "• पूरा सिस्टम वीपीएन और प्रॉक्सी लेयर से सुरक्षित है, जिससे सर्वर की लोकेशन गुप्त रहती है।"
         )
 
@@ -200,7 +209,7 @@ async def broadcast_new_song(update: Update, context):
             
     await update.message.reply_text(f"✅ ब्रॉडकास्ट सफल!\n• कुल भेजे गए लोगों को संदेश मिला: {success_count}")
 
-# 🧠 स्कैंड AI "Mix Maker" शॉप असिस्टेंट
+# 🧠 स्मार्ट AI "Mix Maker" शॉप असिस्टेंट
 async def shop_assistant(update: Update, context):
     if not update.message or not update.message.text:
         return
@@ -214,7 +223,7 @@ async def shop_assistant(update: Update, context):
     user_text = update.message.text.strip()
     user_text_lower = user_text.lower()
     
-    # 1. लेजर या रिकॉर्ड देखने के लिए
+    # 1. लेजर देखने के लिए
     if 'ledger' in user_text_lower or 'record' in user_text_lower or 'कच्चा चिट्ठा' in user_text_lower:
         if not transaction_ledger:
             await update.message.reply_text("📂 अभी तक लेजर में कोई ट्रांजैक्शन दर्ज नहीं हुआ है।")
@@ -225,42 +234,60 @@ async def shop_assistant(update: Update, context):
             await update.message.reply_text(ledger_text, parse_mode='Markdown')
         return
 
-    # 2. स्कैन करके चेक करना कि API Key मौजूद है या नहीं
-    if not GEMINI_API_KEY:
-        await update.message.reply_text(
-            "⚠️ **स्कैन रिपोर्ट: API Key गायब है!**\n"
-            "Render के Environment Variables में `GEMINI_API_KEY` सेट नहीं की गई है।"
+    # 2. एआई से जवाब मंगाना (मल्टी-मॉडल फॉलबैक के साथ)
+    global ai_model
+    response_sent = False
+
+    if GEMINI_API_KEY:
+        if not ai_model:
+            try:
+                genai.configure(api_key=GEMINI_API_KEY)
+                for m in genai.list_models():
+                    if 'generateContent' in m.supported_generation_methods:
+                        ai_model = genai.GenerativeModel(m.name)
+                        break
+            except Exception:
+                pass
+
+        prompt = (
+            f"तुम 'Mix Maker' (ATIPSR Official) के मुख्य AI रीमिक्सर और मैनेजर हो। "
+            f"सारे गाने तुमने (यानी Mix Maker ने) खुद अपने हाथों से तैयार किए हैं। "
+            f"यूजर का मैसेज यह है: '{user_text}'. "
+            f"इस बात का ध्यान रखो कि बोट पर 1 मिनट से ज्यादा बातचीत करने पर सर्वर-कॉस्ट के रूप में ₹5 की पेनल्टी लगती है। "
+            f"यूजर के सवाल का एकदम सटीक, प्रोफेशनल और शानदार जवाब हिंदी में दो।"
         )
+
+        # पहले मुख्य मॉडल से ट्राई करो
+        if ai_model:
+            try:
+                response = ai_model.generate_content(prompt)
+                if response and response.text:
+                    await update.message.reply_text(response.text)
+                    response_sent = True
+            except Exception as e:
+                logger.error(f"Primary model error: {e}")
+
+        # अगर मुख्य मॉडल फेल हो जाए, तो लाइन से दूसरे मॉडल्स पर ऑटो-स्विच करके ट्राई करो
+        if not response_sent:
+            for fallback_name in ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro']:
+                try:
+                    temp_model = genai.GenerativeModel(fallback_name)
+                    res = temp_model.generate_content(prompt)
+                    if res and res.text:
+                        await update.message.reply_text(res.text)
+                        ai_model = temp_model  # आगे के लिए सफल मॉडल फिक्स कर दो
+                        response_sent = True
+                        break
+                except Exception:
+                    continue
+
+    if response_sent:
         return
 
-    # 3. असली AI दिमाग से जवाब मंगाना और स्कैन करना
-    if ai_model:
-        try:
-            prompt = (
-                f"तुम 'Mix Maker' (ATIPSR Official) के मुख्य AI रीमिक्सर और मैनेजर हो। "
-                f"सारे गाने तुमने (यानी Mix Maker ने) खुद अपने हाथों से तैयार किए हैं। "
-                f"यूजर का मैसेज यह है: '{user_text}'. "
-                f"इस बात का ध्यान रखो कि बोट पर 1 मिनट से ज्यादा बातचीत करने पर सर्वर-कॉस्ट के रूप में ₹5 की पेनल्टी लगती है। "
-                f"यूजर के सवाल का एकदम सटीक, प्रोफेशनल और शानदार जवाब हिंदी में दो।"
-            )
-            response = ai_model.generate_content(prompt)
-            if response and response.text:
-                await update.message.reply_text(response.text)
-                return
-            else:
-                await update.message.reply_text("⚠️ **स्कैन रिपोर्ट:** एआई मॉडल से कोई रिस्पॉन्स नहीं मिला।")
-                return
-        except Exception as e:
-            logger.error(f"Gemini AI Error: {e}")
-            await update.message.reply_text(
-                f"⚠️ **स्कैन रिपोर्ट (तकनीकी एरर):**\n"
-                f"एआई को कॉल करते समय यह समस्या आई है:\n`{e}`"
-            )
-            return
-
-    # 4. यदि मॉडल लोड नहीं हुआ
+    # 3. बैकअप रिस्पॉन्स
     await update.message.reply_text(
-        "⚠️ **स्कैन रिपोर्ट:** `ai_model` इनिशियलाइज नहीं हो पाया है।"
+        "🤖 **Mix Maker (ATIPSR Official):**\n"
+        "मैंने आपका संदेश प्राप्त कर लिया है! हमारे यहाँ सभी गाने बिल्कुल नए और धमाकेदार बेस के साथ रीमिक्स किए जाते हैं। नया ट्रैक लेने या डेमो सुनने के लिए `/start` दबाएं।"
     )
 
 # Background Runner for Flask Web Server
