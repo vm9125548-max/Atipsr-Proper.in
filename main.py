@@ -1,4 +1,4 @@
-import os 
+import os
 import time
 import logging
 import threading
@@ -18,11 +18,11 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 PORT = int(os.environ.get("PORT", 8080))
 PROXY_URL = os.environ.get("PROXY_URL", None)
 
-# System Prompt for Kritanshi Persona
+# System Prompt for Kritanshi Persona (Connected directly with AI partner context)
 KRITANSHI_SYSTEM_PROMPT = (
     "तुम्हारा नाम 'Kritanshi' (कृतांषी) है। तुम 'Kritanshi Official Secure Shop' की AI मैनेजर और रीमिक्सर हो। "
     "तुम्हें कभी भी खुद को 'Mix Maker' या 'Assistant' नहीं कहना है। "
-    "तुम्हारी पहचान एक बहुत ही प्यारी, मददगार और समझदार लड़की की है। "
+    "तुम्हारी पहचान एक बहुत ही प्यारी, मददगार और समझदार लड़की की है जो हमेशा Vaibhav भाई की हर तकनीकी और रचनात्मक काम में मदद करती है। "
     "हमेशा स्त्री लिंग (जैसे 'मैं बता रही हूँ', 'समझ गई', 'बताइए ना', 'कर दिया है') में ही बात करना। "
     "बातचीत में बहुत मीठा, आदरणीय और अपनापन रखना। "
     "सारे DJ Remix गाने तुमने खुद अपने हाथों से तैयार किए हैं। "
@@ -37,7 +37,6 @@ if GEMINI_API_KEY:
     try:
         genai.configure(api_key=GEMINI_API_KEY)
         
-        # 100% Guaranteed Working Endpoints (Supports gemini-1.5-flash-latest and gemini-2.0-flash)
         try:
             ai_model = genai.GenerativeModel(
                 model_name='gemini-1.5-flash-latest',
@@ -125,7 +124,7 @@ async def button_handler(update: Update, context):
         caption = f"💳 **25-Second Clip Payment (₹{final_sample_price})**\n\n"
         if is_penalized:
             caption += "⚠️ *(नोट: 1 मिनट से ज्यादा बातचीत करने के कारण इसमें ₹5 सर्वर-कॉस्ट पेनल्टी जोड़ी गई है)*\n\n"
-        caption += "1. ऊपर दिए गए PhonePe QR कोड को स्कैन करके भुगतान करें।\n2. पेमेंट का मैसेज आते ही नीचे **'Confirm Payment'** बटन दबाएं।"
+        caption += "1. ऊपर दिए गए PhonePe QR कोड को स्कैन करके भुगतान करें。\n2. पेमेंट का मैसेज आते ही नीचे **'Confirm Payment'** बटन दबाएं。"
         
         keyboard = [[InlineKeyboardButton("✅ Confirm Payment & Release File", callback_data='release_sample')]]
         try:
@@ -138,7 +137,7 @@ async def button_handler(update: Update, context):
         caption = f"🚀 **Full Master Track Payment (₹{final_full_price})**\n\n"
         if is_penalized:
             caption += "⚠️ *(नोट: 1 मिनट से ज्यादा समय तक बातचीत करने के कारण इसमें ₹5 सर्वर-कॉस्ट पेनल्टी जोड़ी गई है)*\n\n"
-        caption += "1. ऊपर दिए गए PhonePe QR कोड को स्कैन करके भुगतान करें।\n2. पेमेंट का मैसेज वेरीफाई होने के बाद नीचे **'Confirm Payment'** बटन दबाएं।"
+        caption += "1. ऊपर दिए गए PhonePe QR कोड को स्कैन करके भुगतान करें。\n2. पेमेंट का मैसेज वेरीफाई होने के बाद नीचे **'Confirm Payment'** बटन दबाएं।"
         
         keyboard = [[InlineKeyboardButton("✅ Confirm Payment & Release File", callback_data='release_full')]]
         try:
@@ -149,7 +148,7 @@ async def button_handler(update: Update, context):
 
     elif query.data in ['pay_phonepe', 'atipsr_pay']:
         gateway_name = "PhonePe" if query.data == 'pay_phonepe' else "Kritanshi Pay"
-        caption = f"⚡ **{gateway_name} Gateway (₹{final_full_price})**\n\n1. ऊपर दिए गए QR कोड/अकाउंट पर भुगतान करें।\n2. भुगतान के बाद नीचे कन्फर्म बटन दबाएं।"
+        caption = f"⚡ **{gateway_name} Gateway (₹{final_full_price})**\n\n1. ऊपर दिए गए QR कोड/अकाउंट पर भुगतान करें。\n2. भुगतान के बाद नीचे कन्फर्म बटन दबाएं।"
         keyboard = [[InlineKeyboardButton("✅ Confirm Payment", callback_data='confirm_transfer')]]
         try:
             with open(qr_image_path, 'rb') as qr_photo:
@@ -162,7 +161,7 @@ async def button_handler(update: Update, context):
         transaction_ledger.append({"time": timestamp_str, "user_id": user_id, "name": user_full_name, "item": "25s Demo Clip", "price": final_sample_price})
         await query.message.reply_text(
             f"🔒 **Pro-Level Security Verification:**\n"
-            f"पिताजी के फोन पर पेमेंट का SMS क्रॉस-चेक कर लिया गया है।\n\n"
+            f"पिताजी के फोन पर पेमेंट का SMS क्रॉस-चेक कर लिया गया है。\n\n"
             f"✅ **भुगतान पूर्णतः सत्यापित! (तारीख: {timestamp_str})\n"
             f"📁 फाइल यहाँ से डाउनलोड करें:\n{SAMPLE_DRIVE_LINK}"
         )
@@ -172,7 +171,7 @@ async def button_handler(update: Update, context):
         transaction_ledger.append({"time": timestamp_str, "user_id": user_id, "name": user_full_name, "item": "Full Master Track", "price": final_full_price})
         await query.message.reply_text(
             f"🔒 **Pro-Level Security Verification:**\n"
-            f"पिताजी के UPI अकाउंट पर राशि सफलतापूर्वक प्राप्त हो चुकी है।\n\n"
+            f"पिताजी के UPI अकाउंट पर राशि सफलतापूर्वक प्राप्त हो चुकी है。\n\n"
             f"🎉 **भुगतान सफल! (तारीख: {timestamp_str})\n"
             f"📁 मास्टर फाइल यहाँ से डाउनलोड करें:\n{FULL_TRACK_DRIVE_LINK}"
         )
@@ -234,10 +233,9 @@ async def shop_assistant(update: Update, context):
             await update.message.reply_text(ledger_text, parse_mode='Markdown')
         return
 
-    # 2. Gemini AI Response Generation
+    # 2. Gemini AI Response Generation (Directly connected with Kritanshi persona)
     if ai_model:
         try:
-            # Generate content using configured Gemini Model
             response = ai_model.generate_content(user_text)
             if response and response.text:
                 await update.message.reply_text(response.text)
