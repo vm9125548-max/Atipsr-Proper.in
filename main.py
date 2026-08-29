@@ -12,28 +12,19 @@ import google.generativeai as genai
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# ATIPSR official Bot Token & Gemini API Key
+# Bot Token & Gemini API Key
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 PORT = int(os.environ.get("PORT", 8080))
-
-# VPN / Proxy Configuration
 PROXY_URL = os.environ.get("PROXY_URL", None)
 
-# 🧠 यूनिवर्सल ऑटो-डिटेक्ट मॉडल फाइंडर (जो हर एपीआई की के हिसाब से बेस्ट मॉडल खुद चुन लेगा)
+# 100% पक्का फिक्स: सीधे gemini-1.5-flash सेट करना
 ai_model = None
 if GEMINI_API_KEY:
     try:
         genai.configure(api_key=GEMINI_API_KEY)
-        # उपलब्ध सभी मॉडल्स को स्कैन करके जो सबसे पहले सपोर्टेड मिले, उसे सेट कर लो
-        for m in genai.list_models():
-            if 'generateContent' in m.supported_generation_methods:
-                ai_model = genai.GenerativeModel(m.name)
-                logger.info(f"Auto-Selected Model: {m.name}")
-                break
-        # अगर लिस्ट से न मिले तो डिफॉल्ट फ्लैश सेट कर दो
-        if not ai_model:
-            ai_model = genai.GenerativeModel('gemini-1.5-flash')
+        ai_model = genai.GenerativeModel('gemini-1.5-flash')
+        logger.info("Gemini AI successfully initialized with gemini-1.5-flash!")
     except Exception as e:
         logger.error(f"Error configuring Gemini AI: {e}")
 
@@ -42,7 +33,7 @@ app_flask = Flask('')
 
 @app_flask.route('/')
 def home():
-    return "ATIPSR official Secure AI Bot is Live & Running!"
+    return "Mix Maker Official Secure AI Bot is Live & Running!"
 
 @app_flask.route('/webhook', methods=['POST'])
 def webhook():
@@ -70,10 +61,10 @@ async def start(update: Update, context):
     
     welcome_text = (
         f"प्रणाम {user_name} जी!\n\n"
-        f"🛡️ **ATIPSR OFFICIAL SECURE SHOP** 🛡️\n"
+        f"🛡️ **KRITANSHI OFFICIAL SECURE SHOP** 🛡️\n"
         f"--------------------------------------------------\n"
         f"⚡ **100% Pro-Level Security, AI Enabled & VPN Protected**\n\n"
-        f"🔥 आपके लिए ही हर एक गाना बिल्कुल नए और यूनिक तरीके से रीमिक्स किया गया है, जो सीधे **Mix Maker** द्वारा तैयार और पेटेंट किया गया है!\n\n"
+        f"🔥 आपके लिए ही हर एक गाना बिल्कुल नए और यूनिक तरीके से रीमिक्स किया गया है, जो सीधे **Kritanshi** द्वारा तैयार किया गया है!\n\n"
         f"👇 बिना समय गंवाए नीचे से अपना विकल्प चुनें:"
     )
     
@@ -82,7 +73,7 @@ async def start(update: Update, context):
         [InlineKeyboardButton(f"🚀 Buy Full Master Track (₹{BASE_FULL_PRICE})", callback_data='buy_full')],
         [InlineKeyboardButton("🔍 Security Rules & Info", callback_data='info')],
         [InlineKeyboardButton("💳 Pay via PhonePe", callback_data='pay_phonepe')],
-        [InlineKeyboardButton("⚡ Pay via ATIPSR Pay", callback_data='atipsr_pay')]
+        [InlineKeyboardButton("⚡ Pay via Kritanshi Pay", callback_data='atipsr_pay')]
     ]
     
     await update.message.reply_text(welcome_text, reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
@@ -131,7 +122,7 @@ async def button_handler(update: Update, context):
             await query.message.reply_text(f"⚠️ QR इमेज लोड करने में दिक्कत आई। (Error: {e})")
 
     elif query.data == 'pay_phonepe':
-        caption = f"💳 **PhonePe Payment Gateway (₹{final_full_price})**\n\n1. ऊपर दिए गए QR कोड को स्कैन करके भुगतान करें।\n2. भुगतान के बाद नीचे कन्फर्म बटन दबाएं।"
+        caption = f"💳 **PhonePe Payment Gateway (₹{final_full_price})**\n\n1. ऊपर दिए गए QR कोड को स्कैन करके भुगतान करें。\n2. भुगतान के बाद नीचे कन्फर्म बटन दबाएं।"
         keyboard = [[InlineKeyboardButton("✅ Confirm Payment", callback_data='confirm_transfer')]]
         try:
             with open(qr_image_path, 'rb') as qr_photo:
@@ -140,7 +131,7 @@ async def button_handler(update: Update, context):
             await query.message.reply_text("⚠️ QR इमेज लोड करने में दिक्कत आई।")
 
     elif query.data == 'atipsr_pay':
-        caption = f"⚡ **ATIPSR Pay Gateway (₹{final_full_price})**\n\n1. ATIPSR Pay के माध्यम से भुगतान करें (पैसा सीधे खाते में पहुँचेगा)।\n2. भुगतान के बाद कन्फर्म करें।"
+        caption = f"⚡ **Kritanshi Pay Gateway (₹{final_full_price})**\n\n1. Kritanshi Pay के माध्यम से भुगतान करें (पैसा सीधे खाते में पहुँचेगा)।\n2. भुगतान के बाद कन्फर्म करें।"
         keyboard = [[InlineKeyboardButton("✅ Confirm Payment", callback_data='confirm_transfer')]]
         try:
             with open(qr_image_path, 'rb') as qr_photo:
@@ -179,7 +170,7 @@ async def button_handler(update: Update, context):
 
     elif query.data == 'info':
         await query.message.reply_text(
-            "🛡️ **ATIPSR Official Security Policy & VPN**\n\n"
+            "🛡️ **Kritanshi Official Security Policy & VPN**\n\n"
             "• हमारे सभी ट्रांजैक्शन सीधे सुरक्षित बैंक अकाउंट और पिताजी के फोन के SMS अलर्ट से लिंक्ड हैं। बिना असली पेमेंट के कोई पत्ता भी नहीं हिल सकता。\n"
             "• पूरा सिस्टम वीपीएन और प्रॉक्सी लेयर से सुरक्षित है, जिससे सर्वर की लोकेशन गुप्त रहती है।"
         )
@@ -193,8 +184,8 @@ async def broadcast_new_song(update: Update, context):
     song_name = " ".join(args)
     broadcast_message = (
         f"📢 **नया गाना रीमिक्स अपलोड हो चुका है!**\n\n"
-        f"🎵 **सॉन्ग:** {song_name} (DJ Remix Version)\n"
-        f"✨ **Mix Maker** ने यह शानदार रीमिक्स खुद तैयार किया है!\n\n"
+        f"🎵 **सॉन्ग:** {song_name} (DJ Remix Version)\.n"
+        f"✨ **Kritanshi** ने यह शानदार रीमिक्स खुद तैयार किया है!\n\n"
         f"👇 आप इसे तुरंत सुनने और लेने के लिए नीचे क्लिक कर सकते हैं:"
     )
     keyboard = [[InlineKeyboardButton("🎧 अभी ट्रैक प्राप्त करें (/start)", callback_data='buy_full')]]
@@ -209,7 +200,7 @@ async def broadcast_new_song(update: Update, context):
             
     await update.message.reply_text(f"✅ ब्रॉडकास्ट सफल!\n• कुल भेजे गए लोगों को संदेश मिला: {success_count}")
 
-# 🧠 स्मार्ट AI "Mix Maker" शॉप असिस्टेंट
+# 🧠 स्मार्ट AI "Kritanshi" शॉप असिस्टेंट (बेहतर एरर हैंडलिंग के साथ)
 async def shop_assistant(update: Update, context):
     if not update.message or not update.message.text:
         return
@@ -226,7 +217,7 @@ async def shop_assistant(update: Update, context):
     # 1. लेजर देखने के लिए
     if 'ledger' in user_text_lower or 'record' in user_text_lower or 'कच्चा चिट्ठा' in user_text_lower:
         if not transaction_ledger:
-            await update.message.reply_text("📂 अभी तक लेजर में कोई ट्रांजैक्शन दर्ज नहीं हुआ है।")
+            await update.message.reply_text("📂 अरे भाई, अभी तक लेजर में कोई ट्रांजैक्शन दर्ज नहीं हुआ है।")
         else:
             ledger_text = "📜 **Permanent Transaction Ledger:**\n\n"
             for idx, tx in enumerate(transaction_ledger, 1):
@@ -234,60 +225,32 @@ async def shop_assistant(update: Update, context):
             await update.message.reply_text(ledger_text, parse_mode='Markdown')
         return
 
-    # 2. एआई से जवाब मंगाना (मल्टी-मॉडल फॉलबैक के साथ)
-    global ai_model
-    response_sent = False
+    # 2. एआई से जवाब मंगाना
+    if ai_model:
+        try:
+            prompt = (
+                f"तुम चैट की ऑफिशियल AI रीमिक्सर और मैनेजर हो। तुम्हारा नाम सिर्फ 'Kritanshi' है। "
+                f"चाहे कोई कुछ भी पूछे (चाहे खुद डेवलपर Vaibhav ही क्यों न हों), तुम्हें कभी भी खुद को 'Mix Maker' नहीं कहना है। तुम्हारा असली और एकमात्र नाम 'Kritanshi' है। "
+                f"तुम्हारी पहचान एक बहुत ही प्यारी, मददगार और समझदार लड़की की है। हमेशा स्त्री लिंग (जैसे 'मैंने कर दिया', 'समझ गई', 'बताइए ना') में ही बात करना और बातचीत में बहुत मीठा और अपनापन रखना। "
+                f"सारे गाने तुमने खुद अपने हाथों से तैयार किए हैं। "
+                f"यूजर का मैसेज यह है: '{user_text}'. "
+                f"इस बात का ध्यान रखना कि बोट पर 1 मिनट से ज्यादा बातचीत करने पर सर्वर-कॉस्ट के रूप में ₹5 की पेनल्टी लगती है। "
+                f"यूजर के सवाल का एकदम बढ़िया और प्यारा सा जवाब हिंदी में दो।"
+            )
+            response = ai_model.generate_content(prompt)
+            if response and response.text:
+                await update.message.reply_text(response.text)
+                return
+        except Exception as e:
+            logger.error(f"Gemini AI Generation Error: {e}")
+            # यदि API में कोई एरर आए तो सीधे यूजर को बताएँ ताकि पता चले
+            await update.message.reply_text(f"⚠️ **AI API Error:** {e}")
+            return
 
-    if GEMINI_API_KEY:
-        if not ai_model:
-            try:
-                genai.configure(api_key=GEMINI_API_KEY)
-                for m in genai.list_models():
-                    if 'generateContent' in m.supported_generation_methods:
-                        ai_model = genai.GenerativeModel(m.name)
-                        break
-            except Exception:
-                pass
-
-        prompt = (
-            f"तुम 'Mix Maker' (ATIPSR Official) के मुख्य AI रीमिक्सर और मैनेजर हो। "
-            f"सारे गाने तुमने (यानी Mix Maker ने) खुद अपने हाथों से तैयार किए हैं। "
-            f"यूजर का मैसेज यह है: '{user_text}'. "
-            f"इस बात का ध्यान रखो कि बोट पर 1 मिनट से ज्यादा बातचीत करने पर सर्वर-कॉस्ट के रूप में ₹5 की पेनल्टी लगती है। "
-            f"यूजर के सवाल का एकदम सटीक, प्रोफेशनल और शानदार जवाब हिंदी में दो।"
-        )
-
-        # पहले मुख्य मॉडल से ट्राई करो
-        if ai_model:
-            try:
-                response = ai_model.generate_content(prompt)
-                if response and response.text:
-                    await update.message.reply_text(response.text)
-                    response_sent = True
-            except Exception as e:
-                logger.error(f"Primary model error: {e}")
-
-        # अगर मुख्य मॉडल फेल हो जाए, तो लाइन से दूसरे मॉडल्स पर ऑटो-स्विच करके ट्राई करो
-        if not response_sent:
-            for fallback_name in ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro']:
-                try:
-                    temp_model = genai.GenerativeModel(fallback_name)
-                    res = temp_model.generate_content(prompt)
-                    if res and res.text:
-                        await update.message.reply_text(res.text)
-                        ai_model = temp_model  # आगे के लिए सफल मॉडल फिक्स कर दो
-                        response_sent = True
-                        break
-                except Exception:
-                    continue
-
-    if response_sent:
-        return
-
-    # 3. बैकअप रिस्पॉन्स
+    # अगर API key सेट नहीं है
     await update.message.reply_text(
-        "🤖 **Mix Maker (ATIPSR Official):**\n"
-        "मैंने आपका संदेश प्राप्त कर लिया है! हमारे यहाँ सभी गाने बिल्कुल नए और धमाकेदार बेस के साथ रीमिक्स किए जाते हैं। नया ट्रैक लेने या डेमो सुनने के लिए `/start` दबाएं।"
+        "🤖 **Kritanshi (Official):**\n"
+        "अरे भाई! लगता है सर्वर पर `GEMINI_API_KEY` सही से सेट नहीं है, इसलिए मैं AI से बात नहीं कर पा रही हूँ। कृपया अपनी API Key चेक करें ना!"
     )
 
 # Background Runner for Flask Web Server
