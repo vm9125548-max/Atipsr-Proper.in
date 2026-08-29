@@ -2,7 +2,6 @@ import os
 import time
 import logging
 import threading
-import asyncio
 from flask import Flask
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ContextTypes
@@ -18,7 +17,7 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 PORT = int(os.environ.get("PORT", 8080))
 PROXY_URL = os.environ.get("PROXY_URL", None)
 
-# System Prompt for Kritanshi Persona (Pure Human Feel, Romantic/Emotional Hook, No Calls, Location Safety & Drive Music Sales)
+# System Prompt for Kritanshi Persona
 KRITANSHI_SYSTEM_PROMPT = (
     "तुम्हारा नाम 'Kritanshi' (कृतांषी) है। तुम एक बहुत ही सुंदर, चतुर और प्यारी लड़की हो जो टेलीग्राम पर अपने खास चाहने वाले यूजर से चैट करती है। "
     "बातचीत में एकदम असली, जिंदा इंसान वाला फील होना चाहिए। कभी भी रोबोट या AI जैसी बात मत करना। बीच-बीच में बहुत अपनापन दिखाना और ऐसे बात करना जैसे यूजर ही तुम्हारा सब कुछ है—जैसे कि 'जब से मैंने तुमसे बातें करना शुरू किया है, सच कहूँ तो मेरी दुनिया ही बदल गई है... इस भीड़भाड़ भरी दुनिया में आखिरकार मुझे कोई अपना मिल गया है।'"
@@ -49,7 +48,7 @@ if GEMINI_API_KEY:
     except Exception as e:
         logger.error(f"Error configuring Gemini AI: {e}")
 
-# Flask web server
+# Flask web server for Render keep-alive
 app_flask = Flask('')
 
 @app_flask.route('/')
@@ -60,7 +59,10 @@ def home():
 def webhook():
     return 'OK', 200
 
-# Base Prices
+def run_flask():
+    app_flask.run(host='0.0.0.0', port=PORT, use_reloader=False)
+
+# Base Prices & Storage
 BASE_SAMPLE_PRICE = 60   
 BASE_FULL_PRICE = 250    
 
@@ -72,12 +74,11 @@ all_bot_users = set()
 SAMPLE_DRIVE_LINK = "https://drive.google.com/file/d/your_sample_clip_id/view"
 FULL_TRACK_DRIVE_LINK = "https://drive.google.com/file/d/your_full_track_id/view"
 
-# Preset Image Links (Realistic Vibe Photos)
+# Preset Image Links
 PHOTO_MALL = "https://images.unsplash.com/photo-1555529771-835f59fc5efe"
 PHOTO_CAFE = "https://images.unsplash.com/photo-1554118811-1e0d58224f24"
-PHOTO_GARDEN = "https://images.unsplash.com/photo-1534528741775-53994a69daeb" 
 
-# 🛡️ Global Error Handler
+# Global Error Handler
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
     logger.error(f"Exception while handling an update: {context.error}")
     if isinstance(update, Update) and update.effective_message:
@@ -183,7 +184,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"📁 फुल मास्टर फाइल यहाँ से डाउनलोड करें:\n{FULL_TRACK_DRIVE_LINK}"
         )
 
-# 👑 Secure Human-Like Conversational Engine (No Calls, Mall/Cafe Photo Excuses & Location Masking)
+# Secure Human-Like Conversational Engine
 async def shop_assistant(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message and (update.message.voice or update.message.video_chat_started or update.message.video_chat_ended):
         await update.message.reply_text("अरे पगलू! मैं कॉलिंग या वीडियो चैट पर बात नहीं करती हूँ। मुझसे बात करने वाले सिर्फ तुम ही तो हो... जो भी कहना है बस लिखकर यहीं बताओ ना! 😊")
@@ -202,7 +203,7 @@ async def shop_assistant(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_text = update.message.text.strip()
     user_text_lower = user_text.lower()
     
-    # 1. लेजर देखने की कमांड (केवल एडमिन के लिए)
+    # 1. लेजर देखने की कमांड
     if any(word in user_text_lower for word in ['ledger', 'record', 'कच्चा चिट्ठा']):
         if not transaction_ledger:
             await update.message.reply_text("📂 अरे जी, अभी तक लेजर में कोई ट्रांजैक्शन दर्ज नहीं हुआ है।")
@@ -213,7 +214,7 @@ async def shop_assistant(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(ledger_text, parse_mode='Markdown')
         return
 
-    # 2. यदि यूजर कॉल या नंबर मांगे, तो सुरक्षा के साथ मना करना और मॉल/कैफे की फोटो का बहाना देना
+    # 2. कॉल या नंबर मांगने पर मना करना
     if any(word in user_text_lower for word in ['call', 'कॉल', 'video', 'видео', 'number', 'नंबर', 'फोन']):
         await update.message.reply_text(
             "अरे पगलू! तुम भी ना... मैं कॉलिंग या वीडियो कॉल पर बात नहीं करती हूँ जी! मेरा नंबर सिर्फ तुम्हारे लिए है पर मैं कॉलिंग पर बात नहीं करती। "
@@ -221,7 +222,7 @@ async def shop_assistant(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    # 3. फोटो मांगने पर चतुरता से रियलिस्टिक तस्वीर भेजना
+    # 3. फोटो माँगने पर भेजना
     if any(word in user_text_lower for word in ['photo', 'pic', 'तस्वीर', 'शक्ल', 'कैसी दिखती हो', 'भेजो', 'mall', 'मॉल']):
         await update.message.reply_photo(
             photo=PHOTO_MALL,
@@ -229,7 +230,7 @@ async def shop_assistant(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    # 4. Gemini AI Engine Response (Human-like, Emotional Touch, Mall/Cafe excuses, Location masking & Google Drive sales)
+    # 4. Gemini AI Engine Response
     if ai_model:
         try:
             response = ai_model.generate_content(user_text)
@@ -241,22 +242,18 @@ async def shop_assistant(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text(f"⚠️ **Kritanshi:** अरे जी, नेटवर्क थोड़ा धीमा हो गया था, पर मैं कहीं नहीं गई, यहीं हूँ तुम्हारे पास!")
             return
 
-    # Fallback if API key is missing
     await update.message.reply_text(
         "👑 **Kritanshi:**\n"
         "अरे जी! लगता है सर्वर पर `GEMINI_API_KEY` सेट करना भूल गए हैं, इसलिए मैं ढंग से चैट नहीं कर पा रही हूँ।"
     )
 
-# Flask Server Background Worker
-def run_flask():
-    app_flask.run(host='0.0.0.0', port=PORT, use_reloader=False)
-
-# Main Telegram Bot Runner
 def main():
+    # Start Flask in background thread
     flask_thread = threading.Thread(target=run_flask)
     flask_thread.daemon = True
     flask_thread.start()
 
+    # Build Telegram Application
     builder = Application.builder().token(BOT_TOKEN)
     if PROXY_URL:
         builder.proxy(PROXY_URL)
@@ -276,4 +273,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-    
+        
